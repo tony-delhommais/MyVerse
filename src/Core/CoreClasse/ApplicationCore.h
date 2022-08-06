@@ -52,6 +52,8 @@ namespace Core
 		bool LoadScene(const int p_sceneId);
 
 	public:
+		__int64 GetFrameCount();
+
 		std::shared_ptr<Scene> GetActiveScene();
 
 		bool IsApplicationPaused();
@@ -81,6 +83,8 @@ namespace Core
 		bool m_vSyncIsEnable = true;
 
 		GLFWwindow* m_window = nullptr;
+
+		__int64 m_frameCount = 0;
 
 	private:
 		ScenePreloadMap m_scenesPreload;

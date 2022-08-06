@@ -24,6 +24,11 @@ namespace Core
 		return ApplicationCore::instance().LoadScene(p_sceneId);
 	}
 
+	__int64 Application::GetFrameCount()
+	{
+		return ApplicationCore::instance().GetFrameCount();
+	}
+
 	std::shared_ptr<Scene> Application::GetActiveScene()
 	{
 		return ApplicationCore::instance().GetActiveScene();

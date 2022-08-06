@@ -147,7 +147,7 @@ namespace Core
 
         auto entitiesToRender = m_entityQuadTree->GetEntitiesOnCircleArea(m_renderCamera->GetDynamicEntityRenderingArea());
 
-        glm::mat4 VPMatrix = m_renderCamera->GetProjectionMatrix() * m_renderCamera->GetViewMatrix();
+        glm::mat4 VPMatrix = m_renderCamera->GetViewProjectionMatrix();
         glm::mat4 id = glm::mat4(1);
 
         for(auto& entity : entitiesToRender)

@@ -34,6 +34,8 @@ namespace Core
 		static bool LoadScene(const int p_sceneId);
 
 	public:
+		__int64 GetFrameCount();
+
 		static std::shared_ptr<Scene> GetActiveScene();
 
 		static bool IsApplicationPaused();

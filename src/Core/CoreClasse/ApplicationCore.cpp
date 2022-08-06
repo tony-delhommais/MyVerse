@@ -97,6 +97,7 @@ namespace Core
 
 			do
 			{
+				m_frameCount ++;
 				__int64 deltaTime = Clock::instance().GetNanosecondStopWatchTime("MainLoop");
 				float secondDeltaTime = (float)(deltaTime / 1000000.0);
 				Clock::instance().ResetStopWatch("MainLoop");
@@ -237,6 +238,11 @@ namespace Core
 		m_sceneToLoad = p_sceneId;
 
 		return true;
+	}
+
+	__int64 ApplicationCore::GetFrameCount()
+	{
+		return m_frameCount;
 	}
 
 	std::shared_ptr<Scene> ApplicationCore::GetActiveScene()

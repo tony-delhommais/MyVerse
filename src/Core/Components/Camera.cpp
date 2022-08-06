@@ -83,6 +83,11 @@ namespace Core
 		return m_projectionMatrix;
 	}
 
+	glm::mat4 Camera::GetViewProjectionMatrix()
+	{
+		return m_projectionMatrix * GetViewMatrix();
+	}
+
 	void Camera::UpdateProjectionMatrix()
 	{
 		m_projectionMatrix = glm::perspective(

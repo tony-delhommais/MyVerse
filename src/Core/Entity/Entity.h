@@ -46,8 +46,8 @@ namespace Core
         std::list<std::shared_ptr<Entity>> FindChildsWithTag(const std::string& p_tag);
 
         void Translate(const glm::vec3& p_position);
+        void Rotate(const glm::quat& p_rotation);
         void RotateEuler(const glm::vec3& p_eulerRotation, bool p_useDegree = true);
-        //void Rotate(const glm::quat& p_rotation);
         void Scale(const glm::vec3& p_scale);
 
         glm::vec3 Forward();
@@ -118,20 +118,20 @@ namespace Core
         void SetPrefabReferenceUuid(const UUIDv4::UUID& p_prefabReferenceUuid);
 		bool IsEntityReferencedToAPrefab();
 
-        glm::mat4& GetLocalTransform();
+        glm::mat4 GetLocalTransform();
         glm::mat4 GetWorldTransform();
 
         void SetLocalPosition(const glm::vec3& p_position);
         glm::vec3 GetLocalPosition();
         glm::vec3 GetWorldPosition();
 
-        //void SetLocalRotation(const glm::quat& p_rotation);
-        //glm::quat GetLocalRotation();
+        void SetLocalRotation(const glm::quat& p_rotation);
+        glm::quat GetLocalRotation();
         glm::quat GetWorldRotation();
-        glm::vec3 GetWorldEulerRotation(bool p_useDegree = true);
 
-        void SetLocalEulerRotation(const glm::vec3 p_eulerRotation, bool p_useDegree = true);
+        void SetLocalEulerRotation(const glm::vec3& p_eulerRotation, bool p_useDegree = true);
         glm::vec3 GetLocalEulerRotation(bool p_useDegree = true);
+        glm::vec3 GetWorldEulerRotation(bool p_useDegree = true);
 
         void SetLocalScale(const glm::vec3 p_scale);
         glm::vec3 GetLocalScale();
@@ -146,8 +146,12 @@ namespace Core
         void ComputeLocalTransform();
         void DecomposeWorldTransform();
 
+    private:
         EntityExecutionState m_currentEntityExecutionState = EntityExecutionState::PreAwake;
         EntityExecutionState m_wantedEntityExecutionState = EntityExecutionState::Update;
+
+        __int64 m_decomposeWorldTransformLastCompute = 0;
+        __int64 m_getWorldTransformLastCompute = 0;
 
 		bool m_isActive = true;
 		std::string m_tag = "None";
@@ -163,8 +167,10 @@ namespace Core
         glm::vec3 m_localRotation;
         glm::vec3 m_localScale;
 
+        glm::mat4 m_worldTransform;
+
         glm::vec3 m_worldPosition;
-        glm::quat m_worldRotation;
+        glm::vec3 m_worldRotation;
         glm::vec3 m_worldScale;
 
 		std::shared_ptr<MeshRenderer> m_meshRenderer;

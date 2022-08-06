@@ -272,23 +272,20 @@ namespace Core
         ComputeLocalTransform();
     }
 
+    void Entity::Rotate(const glm::quat& p_rotation)
+    {
+        m_localRotation += glm::eulerAngles(p_rotation);
+
+        ComputeLocalTransform();
+    }
+
     void Entity::RotateEuler(const glm::vec3& p_eulerRotation, bool p_useDegree)
     {
-        /*if (p_useDegree) m_localRotation *= glm::quat(glm::radians(p_eulerRotation));
-        else m_localRotation *= glm::quat(p_eulerRotation);*/
-
         if (p_useDegree) m_localRotation += glm::radians(p_eulerRotation);
         else m_localRotation += p_eulerRotation;
 
         ComputeLocalTransform();
     }
-
-    /*void Entity::Rotate(const glm::quat& p_rotation)
-    {
-        m_localRotation *= p_rotation;
-
-        ComputeLocalTransform();
-    }*/
 
     void Entity::Scale(const glm::vec3& p_scale)
     {
@@ -446,7 +443,7 @@ namespace Core
 	{
 		if (m_isActive)
 		{
-			glm::mat4 model = p_parentModel * GetLocalTransform();
+			glm::mat4 model = p_parentModel * GetWorldTransform();
 
             if (m_meshRenderer)
             {
@@ -508,19 +505,26 @@ namespace Core
         return prefabRefStruct != nullptr;
 	}
 
-    glm::mat4& Entity::GetLocalTransform()
+    glm::mat4 Entity::GetLocalTransform()
     {
+        ComputeLocalTransform();
+
         return m_localTransform;
     }
 
     glm::mat4 Entity::GetWorldTransform()
     {
+        if (m_getWorldTransformLastCompute == ApplicationCore::instance().GetFrameCount()) return m_worldTransform;
+        m_getWorldTransformLastCompute = ApplicationCore::instance().GetFrameCount();
+
+        m_worldTransform = m_localTransform;
+
         if (GetParent())
         {
-            return GetParent()->GetWorldTransform() * m_localTransform;
+            m_worldTransform = GetParent()->GetWorldTransform() * m_localTransform;
         }
 
-        return m_localTransform;
+        return m_worldTransform;
     }
 
     void Entity::SetLocalPosition(const glm::vec3& p_position)
@@ -542,38 +546,27 @@ namespace Core
         return m_worldPosition;
     }
 
-    /*void Entity::SetLocalRotation(const glm::quat& p_rotation)
+    void Entity::SetLocalRotation(const glm::quat& p_rotation)
     {
-        m_localRotation = p_rotation;
+        m_localRotation = glm::eulerAngles(p_rotation);
 
         ComputeLocalTransform();
     }
 
     glm::quat Entity::GetLocalRotation()
     {
-        return m_localRotation;
-    }*/
+        return glm::quat(m_localRotation);
+    }
 
     glm::quat Entity::GetWorldRotation()
     {
         DecomposeWorldTransform();
 
-        return m_worldRotation;
+        return glm::quat(m_worldRotation);
     }
 
-    glm::vec3 Entity::GetWorldEulerRotation(bool p_useDegree)
+    void Entity::SetLocalEulerRotation(const glm::vec3& p_eulerRotation, bool p_useDegree)
     {
-        DecomposeWorldTransform();
-
-        if (p_useDegree) return glm::degrees(glm::eulerAngles(m_worldRotation));
-        else return glm::eulerAngles(m_worldRotation);
-    }
-
-    void Entity::SetLocalEulerRotation(const glm::vec3 p_eulerRotation, bool p_useDegree)
-    {
-        /*if (p_useDegree) m_localRotation = glm::quat(glm::radians(p_eulerRotation));
-        else m_localRotation = glm::quat(p_eulerRotation);*/
-
         if (p_useDegree) m_localRotation = glm::radians(p_eulerRotation);
         else m_localRotation = p_eulerRotation;
 
@@ -582,11 +575,16 @@ namespace Core
 
     glm::vec3 Entity::GetLocalEulerRotation(bool p_useDegree)
     {
-        /*if (p_useDegree) return glm::degrees(glm::eulerAngles(m_localRotation));
-        else return glm::eulerAngles(m_localRotation);*/
-
         if (p_useDegree) return glm::degrees(m_localRotation);
         else return m_localRotation;
+    }
+
+    glm::vec3 Entity::GetWorldEulerRotation(bool p_useDegree)
+    {
+        DecomposeWorldTransform();
+
+        if (p_useDegree) return glm::degrees(m_worldRotation);
+        else return m_worldRotation;
     }
 
     void Entity::SetLocalScale(const glm::vec3 p_scale)
@@ -666,10 +664,15 @@ namespace Core
 
     void Entity::DecomposeWorldTransform()
     {
+        if (m_decomposeWorldTransformLastCompute == ApplicationCore::instance().GetFrameCount()) return;
+        m_decomposeWorldTransformLastCompute = ApplicationCore::instance().GetFrameCount();
+
         glm::vec3 skew;
         glm::vec4 perspective;
+        glm::quat rotation;
 
-        glm::decompose(GetWorldTransform(), m_worldScale, m_worldRotation, m_worldPosition, skew, perspective);
+        glm::decompose(GetWorldTransform(), m_worldScale, rotation, m_worldPosition, skew, perspective);
+        m_worldRotation = glm::eulerAngles(rotation);
     }
 
 } // Core
