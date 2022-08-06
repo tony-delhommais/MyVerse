@@ -244,6 +244,16 @@ namespace Core
 		return m_activeScene;
 	}
 
+	bool ApplicationCore::IsApplicationPaused()
+	{
+		return m_applicationIsPaused;
+	}
+
+	void ApplicationCore::SetApplicationPause(bool p_pauseState)
+	{
+		m_applicationIsPaused = p_pauseState;
+	}
+
 	bool ApplicationCore::ParseProjectSettings(const std::string& p_projectSettingsFilePath)
 	{
 		auto projectSettings = LoadJsonFile(p_projectSettingsFilePath);

@@ -4,15 +4,13 @@
 
 #include "Client/Scripts/PlayerMovementController.h"
 
-void PlayerMovementController::Start()
-{
-	//Input::SetCursorMode(GLFW_CURSOR_DISABLED);
-}
-
 void PlayerMovementController::Update(float p_deltaTime)
 {
-	UpdatePlayerPosition(p_deltaTime);
-	UpdateCameraRotation(p_deltaTime);
+	if (!Application::IsApplicationPaused())
+	{
+		UpdatePlayerPosition(p_deltaTime);
+		UpdateCameraRotation(p_deltaTime);
+	}
 }
 
 void PlayerMovementController::UpdatePlayerPosition(float p_deltaTime)

@@ -11,6 +11,21 @@
 	"LocalEntities": [
 		{
 			"Type": "Entity",
+			"Position": [ 0.0, 0.0, 0.0 ],
+			"Rotation": [ 0.0, 0.0, 0.0 ],
+			"Scale": [ 1.0, 1.0, 1.0 ],
+			"Components": [
+				{
+					"Type": "Script",
+					"Name": "GameSettings",
+					"Parameters": {
+
+					}
+				}
+			]
+		},
+		{
+			"Type": "Entity",
 			"Tag": "Player",
 			"Position": [ 0.0, 0.0, 0.0 ],
 			"Rotation": [ 0.0, 0.0, 0.0 ],

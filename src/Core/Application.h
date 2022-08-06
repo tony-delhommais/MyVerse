@@ -35,6 +35,9 @@ namespace Core
 
 	public:
 		static std::shared_ptr<Scene> GetActiveScene();
+
+		static bool IsApplicationPaused();
+		static void SetApplicationPause(bool p_pauseState);
 	};
 
 } // Core

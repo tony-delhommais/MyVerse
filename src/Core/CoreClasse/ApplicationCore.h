@@ -54,6 +54,9 @@ namespace Core
 	public:
 		std::shared_ptr<Scene> GetActiveScene();
 
+		bool IsApplicationPaused();
+		void SetApplicationPause(bool p_pauseState);
+
 	private:
 		bool ParseProjectSettings(const std::string& p_projectSettingsFilePath);
 		bool ParseGraphicsSettings(const std::string& p_graphicsSettingsFilePath);
@@ -79,10 +82,13 @@ namespace Core
 
 		GLFWwindow* m_window = nullptr;
 
+	private:
 		ScenePreloadMap m_scenesPreload;
 		int m_sceneToLoad = -1;
 
 		std::shared_ptr<Scene> m_activeScene;
+
+		bool m_applicationIsPaused = false;
 	};
 
 } // Core

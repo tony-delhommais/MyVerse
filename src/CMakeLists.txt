@@ -39,7 +39,7 @@ set(ENGINE_SOURCES
         )
 
 set(CLIENT_SOURCES
-        Client/Scripts/CameraFollowPlayer.cpp
+        Client/Scripts/GameSettings.cpp
         Client/Scripts/PlayerMovementController.cpp
         Client/Scripts/Rotation.cpp
         Client/Scripts/SpawnTest.cpp

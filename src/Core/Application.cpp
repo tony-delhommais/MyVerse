@@ -29,4 +29,14 @@ namespace Core
 		return ApplicationCore::instance().GetActiveScene();
 	}
 
+	bool Application::IsApplicationPaused()
+	{
+		return ApplicationCore::instance().IsApplicationPaused();
+	}
+
+	void Application::SetApplicationPause(bool p_pauseState)
+	{
+		ApplicationCore::instance().SetApplicationPause(p_pauseState);
+	}
+
 } // Core
