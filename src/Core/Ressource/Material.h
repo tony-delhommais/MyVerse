@@ -6,6 +6,7 @@
 #define MYVERSE_MATERIAL_H
 
 #include "Core/Utils/JsonUtils.h"
+#include "Core/Utils/MathUtils.h"
 
 #include "Core/Ressource/Texture.h"
 
@@ -32,6 +33,9 @@ namespace Core
 		void NotUse();
 
 	private:
+		bool m_useSolidColor = true;
+		glm::vec3 m_solidColor = glm::vec3(1.0);
+
 		bool m_invertTextures = true;
 
 		bool m_isDiffuseTextureSet = false;

@@ -35,6 +35,7 @@ namespace Core
 		bool IsShaderValid();
 
 		void SetUniformInt(const std::string& p_locationName, int p_value);
+		void SetUniformVec3(const std::string& p_locationName, const glm::vec3& p_value);
 		void SetUniformMat4(const std::string& p_locationName, const glm::mat4& p_value);
 
 	private:

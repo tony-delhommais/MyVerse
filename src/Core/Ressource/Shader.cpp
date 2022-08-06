@@ -97,6 +97,17 @@ namespace Core
 		glUniform1i(location, p_value);
 	}
 
+	void Shader::SetUniformVec3(const std::string& p_locationName, const glm::vec3& p_value)
+	{
+		if (!IsShaderValid()) return;
+
+		GLint location = FindUniformLinkId(p_locationName);
+
+		if (location == -1) return;
+
+		glUniform3fv(location, 1, glm::value_ptr(p_value));
+	}
+
 	void Shader::SetUniformMat4(const std::string& p_locationName, const glm::mat4& p_value)
 	{
 		if (!IsShaderValid()) return;
