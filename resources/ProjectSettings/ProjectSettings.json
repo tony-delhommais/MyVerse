@@ -1,0 +1,15 @@
+{
+	"ApplicationName": "MyVerse - OpenGL - Alpha Version",
+	"Axis": [
+		{
+			"Alias": "Forward",
+			"PositiveKey": 87,
+			"NegativeKey": 83
+		},
+		{
+			"Alias": "Right",
+			"PositiveKey": 68,
+			"NegativeKey": 65
+		}
+	]
+}

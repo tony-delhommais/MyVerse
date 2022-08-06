@@ -1,0 +1,27 @@
+{
+  "Type": "Entity",
+  "Tag": "Player",
+  "Position": [ 0.0, 0.0, 0.0 ],
+  "Rotation": [ 0.0, 0.0, 0.0 ],
+  "Scale": [ 1.0, 1.0, 1.0 ],
+  "Components": [
+    {
+      "Type": "MeshRenderer",
+      "Mesh": "43b87716-92f1-4a43-a2e5-8faf90ed2173",
+      "Materials": [
+        {
+          "Type": "Material",
+          "LinkId": 0,
+          "Uuid": "ab1c7700-4552-4d3b-8aaf-6cb3d77a1d31"
+        }
+      ]
+    },
+    {
+      "Type": "Script",
+      "Name": "PlayerMovementController",
+      "Parameters": {
+        "PlayerAcceleration": 0.6
+      }
+    }
+  ]
+}

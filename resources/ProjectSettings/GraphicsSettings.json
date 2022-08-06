@@ -1,0 +1,7 @@
+{
+  "EnableFullScreen": false,
+  "WindowWidth": 1600,
+  "WindowHeight": 900,
+  "EnableSuperSampling": true,
+  "EnableVSync": true
+}

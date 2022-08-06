@@ -1,0 +1,77 @@
+{
+	"QuadTreeSettings": {
+		"MaxDepth": 5,
+		"MaxEntity": 50,
+		"Area": {
+			"Location": [ 0.0, 0.0, 0.0 ],
+			"Width": 50.0,
+			"Height": 50.0
+		}
+	},
+	"LocalEntities": [
+		{
+			"Type": "Entity",
+			"Tag": "Player",
+			"Position": [ 0.0, 0.0, 0.0 ],
+			"Rotation": [ 0.0, 0.0, 0.0 ],
+			"Scale": [ 1.0, 1.0, 1.0 ],
+			"Components": [
+				{
+					"Type": "MeshRenderer",
+					"Mesh": "43b87716-92f1-4a43-a2e5-8faf90ed2173",
+					"Materials": [
+						{
+							"Type": "Material",
+							"LinkId": 0,
+							"Uuid": "ab1c7700-4552-4d3b-8aaf-6cb3d77a1d31"
+						}
+					]
+				},
+				{
+					"Type": "Script",
+					"Name": "PlayerMovementController",
+					"Parameters": {
+						"PlayerAcceleration": 1.0,
+						"PlayerMaxSpeed": 5.0,
+						"CameraRotationSpeed": 5.0
+					}
+				}
+			],
+			"Childs": [
+				{
+					"Type": "Entity",
+					"Tag": "MainCamera",
+					"Position": [ 0.0, 1.5, -2.5 ],
+					"Rotation": [ 20.0, 0.0, 0.0 ],
+					"Scale": [ 1.0, 1.0, 1.0 ],
+					"Components": [
+						{
+							"Type": "Camera",
+							"Fov": 60.0,
+							"Near": 0.01,
+							"Far": 100.0,
+							"DynamicEntityRenderingAreaRadius": 10.0
+						}
+					]
+				}
+			]
+		},
+		{
+			"Type": "Entity",
+			"Position": [ 0.0, 0.0, 0.0 ],
+			"Rotation": [ 0.0, 0.0, 0.0 ],
+			"Scale": [ 1.0, 1.0, 1.0 ],
+			"Components": [
+				{
+					"Type": "Script",
+					"Name": "SpawnTest",
+					"Parameters": {
+						"TestPrefabUuid": "53d6c4f2-a49b-47c5-aad3-ead69df327d6",
+						"X": 51,
+						"Y": 51
+					}
+				}
+			]
+		}
+	]
+}
