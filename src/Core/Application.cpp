@@ -4,7 +4,7 @@
 
 #include "Core/Application.h"
 
-#include "Core/CoreClasse/ApplicationCore.h"
+#include "Core/CoreClass/ApplicationCore.h"
 
 namespace Core
 {

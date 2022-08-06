@@ -4,7 +4,7 @@
 
 #include "Core/Input.h"
 
-#include "Core/CoreClasse/InputCore.h"
+#include "Core/CoreClass/InputCore.h"
 
 namespace Core
 {

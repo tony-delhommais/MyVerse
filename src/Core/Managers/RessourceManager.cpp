@@ -4,7 +4,7 @@
 
 #include "Core/Managers/RessourceManager.h"
 
-#include "Core/CoreClasse/RessourceManagerCore.h"
+#include "Core/CoreClass/RessourceManagerCore.h"
 
 namespace Core
 {

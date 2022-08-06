@@ -6,11 +6,8 @@
 
 void PlayerMovementController::Update(float p_deltaTime)
 {
-	if (!Application::IsApplicationPaused())
-	{
-		UpdatePlayerPosition(p_deltaTime);
-		UpdateCameraRotation(p_deltaTime);
-	}
+	UpdatePlayerPosition(p_deltaTime);
+	UpdateCameraRotation(p_deltaTime);
 }
 
 void PlayerMovementController::UpdatePlayerPosition(float p_deltaTime)
@@ -20,8 +17,14 @@ void PlayerMovementController::UpdatePlayerPosition(float p_deltaTime)
 	// D: (D) 68
 	// Q: (A) 65
 
-	float current_x_axis = Input::GetAxis("Right");
-	float current_y_axis = Input::GetAxis("Forward");
+	float current_x_axis = 0;
+	float current_y_axis = 0;
+
+	if (!Application::IsApplicationPaused())
+	{
+		current_x_axis = Input::GetAxis("Right");
+		current_y_axis = Input::GetAxis("Forward");
+	}
 
 	glm::vec3 direction = glm::vec3(0.0);
 
@@ -47,7 +50,14 @@ void PlayerMovementController::UpdatePlayerPosition(float p_deltaTime)
 
 void PlayerMovementController::UpdateCameraRotation(float p_deltaTime)
 {
-	GetEntity()->RotateEuler(glm::vec3(0.0, Input::GetMouseMovement().x, 0.0) * (cameraRotationSpeed * 2) / 100.0f);
+	glm::vec2 mouseMovement = glm::vec2(0.0);
+
+	if (!Application::IsApplicationPaused())
+	{
+		mouseMovement = Input::GetMouseMovement();
+	}
+
+	GetEntity()->RotateEuler(glm::vec3(0.0, mouseMovement.x, 0.0) * (cameraRotationSpeed * 2) / 100.0f);
 }
 
 bool PlayerMovementController::s_isRegistered = ScriptFactory::instance().Register("PlayerMovementController", [](JsonObject& parameters)

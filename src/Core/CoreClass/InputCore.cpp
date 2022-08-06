@@ -2,7 +2,7 @@
 // Created by Tony on 03/08/2022.
 //
 
-#include "Core/CoreClasse/InputCore.h"
+#include "Core/CoreClass/InputCore.h"
 
 #include "Core/Clock.h"
 

@@ -2,10 +2,10 @@
 // Created by Tony on 05/08/2022.
 //
 
-#include "Core/CoreClasse/ApplicationCore.h"
+#include "Core/CoreClass/ApplicationCore.h"
 
-#include "Core/CoreClasse/InputCore.h"
-#include "Core/CoreClasse/RessourceManagerCore.h"
+#include "Core/CoreClass/InputCore.h"
+#include "Core/CoreClass/RessourceManagerCore.h"
 
 namespace Core
 {

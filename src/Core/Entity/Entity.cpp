@@ -4,7 +4,7 @@
 
 #include "Core/Entity/Entity.h"
 
-#include "Core/CoreClasse/ApplicationCore.h"
+#include "Core/CoreClass/ApplicationCore.h"
 
 namespace Core
 {

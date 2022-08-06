@@ -2,9 +2,9 @@
 // Created by Tony on 04/08/2022.
 //
 
-#include "Core/CoreClasse/RessourceManagerCore.h"
+#include "Core/CoreClass/RessourceManagerCore.h"
 
-#include "Core/CoreClasse/ApplicationCore.h"
+#include "Core/CoreClass/ApplicationCore.h"
 
 #include "Core/Ressource/Material.h"
 #include "Core/Ressource/Mesh.h"

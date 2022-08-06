@@ -8,9 +8,9 @@ set(ENGINE_SOURCES
         Core/Components/MeshRenderer.cpp
         Core/Components/Script.cpp
 
-        Core/CoreClasse/ApplicationCore.cpp
-        Core/CoreClasse/InputCore.cpp
-        Core/CoreClasse/RessourceManagerCore.cpp
+        Core/CoreClass/ApplicationCore.cpp
+        Core/CoreClass/InputCore.cpp
+        Core/CoreClass/RessourceManagerCore.cpp
 
         Core/Entity/Entity.cpp
         Core/Entity/EntityQuadTree.cpp
