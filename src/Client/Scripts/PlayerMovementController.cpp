@@ -43,7 +43,7 @@ void PlayerMovementController::UpdatePlayerPosition(float p_deltaTime)
 
 	lerpUpdateTime += p_deltaTime * playerAcceleration;
 
-	playerVelocity = Lerp(playerVelocity, previousTargetDirectionalSpeed, lerpUpdateTime);
+	playerVelocity = Math::Lerp(playerVelocity, previousTargetDirectionalSpeed, lerpUpdateTime);
 
 	GetEntity()->Translate(playerVelocity * p_deltaTime);
 }
