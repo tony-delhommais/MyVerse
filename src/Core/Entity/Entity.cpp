@@ -150,21 +150,18 @@ namespace Core
         if(p_keepWorldTransform)
         {
             auto currentWorldPosition = GetWorldPosition();
-            //auto currentWorldRotation = GetWorldRotation();
             auto currentWorldRotation = GetWorldEulerRotation();
             auto currentWorldScale = GetWorldScale();
 
             if(!p_newParent)
             {
                 SetLocalPosition(currentWorldPosition);
-                //SetLocalRotation(currentWorldRotation);
                 SetLocalEulerRotation(currentWorldRotation);
                 SetLocalScale(currentWorldScale);
             }
             else
             {
                 SetLocalPosition(currentWorldPosition - p_newParent->GetWorldPosition());
-                //SetLocalRotation(currentWorldRotation - p_newParent->GetWorldRotation());
                 SetLocalEulerRotation(currentWorldRotation - p_newParent->GetWorldEulerRotation());
                 SetLocalScale(currentWorldScale - p_newParent->GetWorldScale());
             }

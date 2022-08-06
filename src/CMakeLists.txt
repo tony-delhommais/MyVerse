@@ -45,7 +45,7 @@ set(CLIENT_SOURCES
         Client/Scripts/SpawnTest.cpp
         )
 
-add_executable(MyVerse Client/main.cpp ${ENGINE_SOURCES} ${CLIENT_SOURCES})
+add_executable(MyVerse "Client/Client.cpp" ${ENGINE_SOURCES} ${CLIENT_SOURCES})
 
 target_link_libraries(MyVerse
         glad
