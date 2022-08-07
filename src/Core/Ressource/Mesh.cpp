@@ -77,6 +77,49 @@ namespace Core
 		return meshes;
 	}
 
+	std::shared_ptr<Mesh> Mesh::LoadFromChunckData(JsonObject& p_chunckData)
+	{
+		JsonObject meshData = GetParameterFromJsonObject(p_chunckData, "Land", true, false);
+		if(meshData == p_chunckData) return nullptr;
+
+		auto mesh = std::make_shared<Mesh>();
+
+		size_t nbFaces = 0;
+		size_t faceVerticeId = 0;
+
+		for (size_t i = 0; i < meshData.size(); i++)
+		{
+			VertexDescriptor vd;
+
+			vd.position.x = meshData[i][0];
+			vd.position.y = meshData[i][1];
+			vd.position.z = meshData[i][2];
+
+			mesh->m_vertices.push_back(vd);
+
+			faceVerticeId++;
+			if (faceVerticeId == 3)
+			{
+				mesh->m_faces.push_back(glm::ivec3(i - 2, i - 1, i - 0));
+
+				faceVerticeId = 0;
+				nbFaces++;
+			}
+		}
+
+		if (!mesh->GenerateVBO())
+		{
+#ifdef _DEBUG
+			Debug::LogWarning("Failed to generate VBO on a Chunck Mesh");
+#endif
+			return nullptr;
+		}
+
+		mesh->m_nbFaces = nbFaces;
+
+		return mesh;
+	}
+
 	void Mesh::RenderMesh()
 	{
 		if (m_VBO_id && m_EBO_id)

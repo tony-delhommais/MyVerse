@@ -6,6 +6,7 @@
 #define MYVERSE_CHUNCK_H
 
 #include "Core/Utils/Utils.h"
+#include "Core/Utils/JsonUtils.h"
 
 namespace Core
 {

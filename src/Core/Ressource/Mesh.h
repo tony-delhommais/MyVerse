@@ -6,6 +6,7 @@
 #define MYVERSE_MESH_H
 
 #include "Core/Utils/Utils.h"
+#include "Core/Utils/JsonUtils.h"
 #include "Core/Utils/MathUtils.h"
 #include "Core/Utils/GraphicsUtils.h"
 
@@ -37,6 +38,7 @@ namespace Core
 		~Mesh();
 
 		static std::vector<std::shared_ptr<Mesh>> LoadFromOBJ(const std::filesystem::path& p_path);
+		static std::shared_ptr<Mesh> LoadFromChunckData(JsonObject& p_chunckData);
 
 		void RenderMesh();
 

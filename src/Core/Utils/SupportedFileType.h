@@ -21,7 +21,8 @@ namespace Core
 		VERTEX_SHADER,
 		FRAGMENT_SHADER,
 		DATA,
-		TERRAIN_CHUNCK,
+		CHUNK,
+		TERRAIN,
 		MAX_VALUE
 	};
 

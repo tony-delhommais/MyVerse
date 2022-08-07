@@ -16,7 +16,7 @@ cell_height = chunck_height / y_cell_count
 x_min_chunck_coord = (-1 * chunck_width / 2) + (x_chunck_coord * chunck_width)
 y_min_chunck_coord = (-1 * chunck_height / 2) + (y_chunck_coord * chunck_height)
 
-output_file_name = "chunck_" + str(x_chunck_coord) + "_" + str(y_chunck_coord) + ".terrain"
+output_file_name = "chunck_" + str(x_chunck_coord) + "_" + str(y_chunck_coord) + ".chunck"
 
 
 def generate_rectangular():

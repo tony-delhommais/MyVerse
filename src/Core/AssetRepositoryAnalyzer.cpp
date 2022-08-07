@@ -22,7 +22,8 @@ namespace Core
             {".frag", SupportedFileType::FRAGMENT_SHADER},
             {".json", SupportedFileType::DATA},
             {".xml", SupportedFileType::DATA},
-            {".terrain", SupportedFileType::TERRAIN_CHUNCK},
+            {".chunk", SupportedFileType::CHUNK},
+            {".terrain", SupportedFileType::TERRAIN},
         };
 
         UUIDv4::UUIDGenerator<std::mt19937_64> uuidGenerator;
@@ -56,7 +57,7 @@ namespace Core
             if (metaJson["Type"] == (int)SupportedFileType::PREFAB ||
                 metaJson["Type"] == (int)SupportedFileType::VERTEX_SHADER ||
                 metaJson["Type"] == (int)SupportedFileType::FRAGMENT_SHADER ||
-                metaJson["Type"] == (int)SupportedFileType::TERRAIN_CHUNCK
+                metaJson["Type"] == (int)SupportedFileType::TERRAIN
                 ) metaJson["AlwaysLoaded"] = true;
             ////////////////////////////////////  FILE IS ALWAYS LOADED  ////////////////////////////////////
 

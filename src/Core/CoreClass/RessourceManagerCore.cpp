@@ -44,6 +44,7 @@ namespace Core
 			type == SupportedFileType::DIRECTORY ||
 			type == SupportedFileType::SHADER ||
 			type == SupportedFileType::DATA ||
+			type == SupportedFileType::CHUNK ||
 			type == SupportedFileType::MAX_VALUE
 			) return;
 

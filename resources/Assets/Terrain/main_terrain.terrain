@@ -1,0 +1,11 @@
+{
+  "ChunkWidth": 100.0,
+  "ChunkHeight": 100.0,
+  "Chunks": [
+    {
+      "IdX": 0,
+      "IdY": 0,
+      "ChunkUuid": "b2f1e550-da15-40f1-8367-6f43dbbb51ec"
+    }
+  ]
+}

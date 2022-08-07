@@ -19,7 +19,8 @@ set(ENGINE_SOURCES
 
         Core/Managers/RessourceManager.cpp
 
-        Core/Ressource/Chunck.cpp
+        Core/Ressource/Terrain/Chunck.cpp
+        Core/Ressource/Terrain/Terrain.cpp
         Core/Ressource/Material.cpp
         Core/Ressource/Mesh.cpp
         Core/Ressource/Prefab.cpp
