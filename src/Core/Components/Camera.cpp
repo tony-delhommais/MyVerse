@@ -20,15 +20,6 @@ namespace Core
 		UpdateProjectionMatrix();
 	}
 
-	Camera::Camera(std::shared_ptr<Camera> p_camera) : Component(p_camera)
-	{
-		m_fov = p_camera->m_fov;
-		m_nearPlan = p_camera->m_nearPlan;
-		m_farPlan = p_camera->m_farPlan;
-
-		m_projectionMatrix = p_camera->m_projectionMatrix;
-	}
-
 	std::shared_ptr<Camera> Camera::Make(JsonObject& p_componentProprety)
 	{
 		bool cameraIsValid = true;

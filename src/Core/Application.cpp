@@ -19,7 +19,7 @@ namespace Core
 		return ApplicationCore::instance().LoadScene(p_sceneAlias);
 	}
 
-	bool Application::LoadScene(const int p_sceneId)
+	bool Application::LoadScene(int p_sceneId)
 	{
 		return ApplicationCore::instance().LoadScene(p_sceneId);
 	}

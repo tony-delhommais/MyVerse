@@ -10,17 +10,7 @@
 namespace Core
 {
 
-	Material::Material(std::shared_ptr<Material> p_material)
-	{
-		m_useSolidColor = p_material->m_useSolidColor;
-		m_solidColor = p_material->m_solidColor;
-
-		m_invertTextures = p_material->m_invertTextures;
-
-		m_diffuseTextureUuid = p_material->m_diffuseTextureUuid;
-	}
-
-	std::shared_ptr<Material> Material::Load(const std::string& p_path)
+	std::shared_ptr<Material> Material::Load(const std::filesystem::path& p_path)
 	{
 		JsonObject materialStruct = LoadJsonFile(p_path);
 

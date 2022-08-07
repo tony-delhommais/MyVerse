@@ -9,7 +9,7 @@
 namespace Core
 {
 
-    CircleArea::CircleArea(const glm::vec3 &p_position, float p_radius) : Area(p_position)
+    CircleArea::CircleArea(const glm::vec3& p_position, float p_radius) : Area(p_position)
     {
         m_radius = p_radius;
     }

@@ -9,7 +9,7 @@
 namespace Core
 {
 
-	std::shared_ptr<Prefab> Prefab::Load(const UUIDv4::UUID& p_uuid, const std::string& p_path)
+	std::shared_ptr<Prefab> Prefab::Load(const UUIDv4::UUID& p_uuid, const std::filesystem::path& p_path)
 	{
 		auto data = LoadJsonFile(p_path);
 

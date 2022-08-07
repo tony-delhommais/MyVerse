@@ -18,16 +18,13 @@ namespace Core
 
 	int ApplicationCore::Initialize()
 	{
-		m_assetsFolder = RESOURCES_PATH + std::string("./Assets/");
-		m_projectSettingsFolder = RESOURCES_PATH + std::string("./ProjectSettings/");
-
-		std::string projectSettingsPath = m_projectSettingsFolder + std::string("./ProjectSettings.json");
+		auto projectSettingsPath = std::filesystem::path(RESOURCES_PATH + std::string("./ProjectSettings/ProjectSettings.json"));
 		if (!ParseProjectSettings(projectSettingsPath))
 		{
 			return 0;
 		}
 
-		std::string graphicsSettingsPath = m_projectSettingsFolder + std::string("./GraphicsSettings.json");
+		auto graphicsSettingsPath = std::filesystem::path(RESOURCES_PATH + std::string("./ProjectSettings/GraphicsSettings.json"));
 		if (!ParseGraphicsSettings(graphicsSettingsPath))
 		{
 			return 0;
@@ -76,7 +73,7 @@ namespace Core
 			for (int i = 0; i < m_sceneToLoad; i++) sceneToLoad++;
 
 			m_sceneToLoad = -1;
-			m_activeScene = Scene::Make(sceneToLoad->second);
+			m_activeScene = Scene::Make(sceneToLoad->second.string());
 
 			if (!m_activeScene)
 			{
@@ -187,20 +184,15 @@ namespace Core
 		glfwSetWindowShouldClose(m_window, GLFW_TRUE);
 	}
 
-	bool ApplicationCore::PreLoadScene(const std::string& p_sceneAlias, const std::string& p_scenePath)
+	bool ApplicationCore::PreLoadScene(const std::string& p_sceneAlias, const std::filesystem::path& p_scenePath)
 	{
-		std::fstream file;
-		file.open(p_scenePath, std::ios::in);
-
-		if (!file.is_open())
+		if (!std::filesystem::exists(p_scenePath))
 		{
 #ifdef _DEBUG
 			Debug::LogWarning("[Application] Unable to preload scene, config file not found");
 #endif
 			return false;
 		}
-
-		file.close();
 
 		auto ret = m_scenesPreload.insert(ScenePreloadMap::value_type(p_sceneAlias, p_scenePath));
 		if (ret.second == false)
@@ -230,7 +222,7 @@ namespace Core
 		return true;
 	}
 
-	bool ApplicationCore::LoadScene(const int p_sceneId)
+	bool ApplicationCore::LoadScene(int p_sceneId)
 	{
 		if (p_sceneId < 0 || p_sceneId >= m_scenesPreload.size())
 			return false;
@@ -260,7 +252,7 @@ namespace Core
 		m_applicationIsPaused = p_pauseState;
 	}
 
-	bool ApplicationCore::ParseProjectSettings(const std::string& p_projectSettingsFilePath)
+	bool ApplicationCore::ParseProjectSettings(const std::filesystem::path& p_projectSettingsFilePath)
 	{
 		auto projectSettings = LoadJsonFile(p_projectSettingsFilePath);
 		if (projectSettings.empty())
@@ -285,7 +277,7 @@ namespace Core
 		return true;
 	}
 
-	bool ApplicationCore::ParseGraphicsSettings(const std::string& p_graphicsSettingsFilePath)
+	bool ApplicationCore::ParseGraphicsSettings(const std::filesystem::path& p_graphicsSettingsFilePath)
 	{
 		auto graphicsSettings = LoadJsonFile(p_graphicsSettingsFilePath);
 		if (graphicsSettings.empty())

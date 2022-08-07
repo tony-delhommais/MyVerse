@@ -16,9 +16,7 @@ namespace Core
 
 	typedef nlohmann::json JsonObject;
 
-	JsonObject LoadJsonFile(const char* p_jsonFilePath);
-	JsonObject LoadJsonFile(const std::string& p_jsonFilePath);
-	JsonObject LoadJsonFile(const std::filesystem::path p_jsonFilePath);
+	JsonObject LoadJsonFile(const std::filesystem::path& p_jsonFilePath);
 
 	int GetParameterFromJsonObject(JsonObject& p_jsonObject, const char* p_parameter, int p_default);
 	int GetParameterFromJsonObject(JsonObject& p_jsonObject, const std::string& p_parameter, int p_default);

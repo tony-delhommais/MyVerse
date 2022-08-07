@@ -9,15 +9,6 @@
 namespace Core
 {
 
-	Mesh::Mesh(std::shared_ptr<Mesh> p_mesh)
-	{
-		m_vertices = p_mesh->m_vertices;
-		m_faces = p_mesh->m_faces;
-		m_nbFaces = p_mesh->m_nbFaces;
-
-		GenerateVBO();
-	}
-
 	Mesh::~Mesh()
 	{
 		if (m_VBO_id) glDeleteBuffers(1, &m_VBO_id);
@@ -28,10 +19,10 @@ namespace Core
 		m_faces.clear();
 	}
 
-	std::vector<std::shared_ptr<Mesh>> Mesh::LoadFromOBJ(const std::string& p_path)
+	std::vector<std::shared_ptr<Mesh>> Mesh::LoadFromOBJ(const std::filesystem::path& p_path)
 	{
 		objl::Loader loader;
-		bool isLoaded = loader.LoadFile(p_path);
+		bool isLoaded = loader.LoadFile(p_path.string());
 
 		std::vector<std::shared_ptr<Mesh>> meshes;
 

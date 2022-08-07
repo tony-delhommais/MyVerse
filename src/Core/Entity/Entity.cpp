@@ -327,7 +327,7 @@ namespace Core
         return glm::vec3(2 * (x * y - w * z), 1 - 2 * (x * x + z * z), 2 * (y * z + w * x));
     }
 
-    void Entity::InstantiatePrefab(UUIDv4::UUID& p_prefabUuid)
+    void Entity::InstantiatePrefab(const UUIDv4::UUID& p_prefabUuid)
 	{
 		auto prefab = RessourceManager::FindPrefab(p_prefabUuid);
 
@@ -584,7 +584,7 @@ namespace Core
         else return m_worldRotation;
     }
 
-    void Entity::SetLocalScale(const glm::vec3 p_scale)
+    void Entity::SetLocalScale(const glm::vec3& p_scale)
     {
         m_localScale = p_scale;
 

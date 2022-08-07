@@ -103,7 +103,7 @@ namespace Core
 		return false;
 	}
 
-	float InputCore::GetAxis(std::string p_axisName)
+	float InputCore::GetAxis(const std::string& p_axisName)
 	{
 		for (KeyAxis& keyAxis : m_keyAxis)
 		{

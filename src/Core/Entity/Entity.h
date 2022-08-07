@@ -12,8 +12,7 @@
 #include "Core/Managers/RessourceManager.h"
 
 #include "Core/Ressource/Prefab.h"
-
-#include "Core/Rendering/Scene.h"
+#include "Core/Ressource/Scene.h"
 
 #include "Core/Components/MeshRenderer.h"
 #include "Core/Components/Camera.h"
@@ -54,7 +53,7 @@ namespace Core
         glm::vec3 Right();
         glm::vec3 Up();
 
-        void InstantiatePrefab(UUIDv4::UUID& p_prefabUuid);
+        void InstantiatePrefab(const UUIDv4::UUID& p_prefabUuid);
 		void DestroyEntity();
 
 		bool AddComponent(std::shared_ptr<Component> p_component);
@@ -133,7 +132,7 @@ namespace Core
         glm::vec3 GetLocalEulerRotation(bool p_useDegree = true);
         glm::vec3 GetWorldEulerRotation(bool p_useDegree = true);
 
-        void SetLocalScale(const glm::vec3 p_scale);
+        void SetLocalScale(const glm::vec3& p_scale);
         glm::vec3 GetLocalScale();
         glm::vec3 GetWorldScale();
 

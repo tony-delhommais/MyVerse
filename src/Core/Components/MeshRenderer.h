@@ -31,7 +31,6 @@ namespace Core
 	{
 	public:
 		MeshRenderer() = default;
-		MeshRenderer(std::shared_ptr<MeshRenderer> p_meshRenderer);
 		~MeshRenderer() = default;
 
 	public:

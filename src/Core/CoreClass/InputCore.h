@@ -49,7 +49,7 @@ namespace Core
 
 		bool IsKeyDown(int p_keyCode);
 		bool IsKeyUp(int p_keyCode);
-		float GetAxis(std::string p_axisName);
+		float GetAxis(const std::string& p_axisName);
 
 		bool IsMouseButtonDown(int p_mouseButton);
 		bool IsMouseButtonUp(int p_mouseButton);

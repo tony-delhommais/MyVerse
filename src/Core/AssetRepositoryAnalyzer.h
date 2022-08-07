@@ -23,9 +23,9 @@ namespace Core
 		~AssetRepositoryAnalyzer() = default;
 
 	public:
-		static void GenerateMetaFilesOnAssetsFolder(const std::string& p_assetsFolder);
+		static void GenerateMetaFilesOnAssetsFolder(const std::filesystem::path& p_assetsFolder);
 
-		static void PreloadAssetsFiles(const std::string& p_assetsFolder);
+		static void PreloadAssetsFiles(const std::filesystem::path& p_assetsFolder);
 	};
 
 } // Core

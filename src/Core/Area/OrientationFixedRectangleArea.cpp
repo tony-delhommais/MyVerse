@@ -9,7 +9,7 @@
 namespace Core
 {
 
-    OrientationFixedRectangleArea::OrientationFixedRectangleArea(const glm::vec3 &p_position, float p_width, float p_height) : Area(p_position)
+    OrientationFixedRectangleArea::OrientationFixedRectangleArea(const glm::vec3& p_position, float p_width, float p_height) : Area(p_position)
     {
         m_width = p_width;
         m_height = p_height;

@@ -18,7 +18,7 @@ namespace Core
 
 		static bool IsKeyDown(int p_keyCode);
 		static bool IsKeyUp(int p_keyCode);
-		static float GetAxis(std::string p_axisName);
+		static float GetAxis(const std::string& p_axisName);
 
 		static bool IsMouseButtonDown(int p_mouseButton);
 		static bool IsMouseButtonUp(int p_mouseButton);

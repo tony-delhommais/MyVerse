@@ -19,7 +19,6 @@ namespace Core
 	{
 	public:
 		Camera();
-		Camera(std::shared_ptr<Camera> p_camera);
 		~Camera() = default;
 
 		static std::shared_ptr<Camera> Make(JsonObject& p_componentProprety);
@@ -40,7 +39,7 @@ namespace Core
 		float m_nearPlan = 0.01f;
 		float m_farPlan = 100.0f;
 
-		glm::mat4 m_projectionMatrix;
+		glm::mat4 m_projectionMatrix = glm::mat4(1.0);
 
 		float m_dynamicEntityRenderingAreaRadius = 5.0f;
 	};

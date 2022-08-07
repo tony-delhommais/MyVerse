@@ -24,7 +24,7 @@ namespace Core
 		return InputCore::instance().IsKeyUp(p_keyCode);
 	}
 
-	float Input::GetAxis(std::string p_axisName)
+	float Input::GetAxis(const std::string& p_axisName)
 	{
 		return InputCore::instance().GetAxis(p_axisName);
 	}

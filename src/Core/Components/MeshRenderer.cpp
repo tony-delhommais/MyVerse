@@ -12,11 +12,6 @@
 namespace Core
 {
 
-	MeshRenderer::MeshRenderer(std::shared_ptr<MeshRenderer> p_meshRenderer)
-	{
-		m_meshesMaterials = p_meshRenderer->m_meshesMaterials;
-	}
-
 	std::shared_ptr<MeshRenderer> MeshRenderer::Make(JsonObject& p_componentProprety)
 	{
 		if (GetParameterFromJsonObject(p_componentProprety, "Type", "Null") != "MeshRenderer")

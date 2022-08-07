@@ -23,11 +23,10 @@ namespace Core
 	{
 	public:
 		Material() = default;
-		Material(std::shared_ptr<Material> p_material);
 		~Material() = default;
 
 	public:
-		static std::shared_ptr<Material> Load(const std::string& p_path);
+		static std::shared_ptr<Material> Load(const std::filesystem::path& p_path);
 
 		void Use(std::shared_ptr<Shader> p_shader = nullptr);
 		void NotUse();

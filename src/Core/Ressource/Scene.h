@@ -20,7 +20,7 @@ namespace Core
 		Scene();
 		virtual ~Scene() = default;
 
-        static std::shared_ptr<Scene> Make(const std::string& p_scenePath);
+        static std::shared_ptr<Scene> Make(const std::filesystem::path& p_scenePath);
 
     public:
         void AddLocalEntity(std::shared_ptr<Entity> p_entity);

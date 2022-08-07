@@ -13,7 +13,8 @@
 
 #include "Core/Entity/Entity.h"
 
-#include "Core/Rendering/Scene.h"
+#include "Core/Ressource/Scene.h"
+
 #include "Core/Factories/ScriptFactory.h"
 
 #include "Core/Debug.h"
@@ -31,7 +32,7 @@ namespace Core
 		static void Quit();
 
 		static bool LoadScene(const std::string& p_sceneAlias);
-		static bool LoadScene(const int p_sceneId);
+		static bool LoadScene(int p_sceneId);
 
 	public:
 		__int64 GetFrameCount();

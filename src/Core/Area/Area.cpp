@@ -7,7 +7,7 @@
 namespace Core
 {
 
-    Area::Area(const glm::vec3 &p_position)
+    Area::Area(const glm::vec3& p_position)
     {
         m_position = p_position * glm::vec3(1.0, 0.0, 1.0);
     }

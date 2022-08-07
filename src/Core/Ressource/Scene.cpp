@@ -2,7 +2,7 @@
 // Created by Tony on 29/06/2022.
 //
 
-#include "Core/Rendering/Scene.h"
+#include "Core/Ressource/Scene.h"
 
 #include "Core/Entity/EntityQuadTree.h"
 
@@ -22,13 +22,13 @@ namespace Core
         m_renderCamera = std::make_shared<Camera>();
     }
 
-    std::shared_ptr<Scene> Scene::Make(const std::string& p_scenePath)
+    std::shared_ptr<Scene> Scene::Make(const std::filesystem::path& p_scenePath)
     {
         auto sceneJson = LoadJsonFile(p_scenePath);
         if (sceneJson.empty())
         {
 #ifdef _DEBUG
-            Debug::LogWarning("[SceneFactory] Unable to locate scene config file, trying at " + p_scenePath);
+            Debug::LogWarning("[SceneFactory] Unable to locate scene config file, trying at " + p_scenePath.string());
 #endif
             return nullptr;
         }
@@ -39,7 +39,7 @@ namespace Core
         if (!sceneQuadTree)
         {
 #ifdef _DEBUG
-            Debug::LogWarning("[SceneFactory] Failed to parse EntityQuadTree settings on scene " + p_scenePath);
+            Debug::LogWarning("[SceneFactory] Failed to parse EntityQuadTree settings on scene " + p_scenePath.string());
 #endif
             return nullptr;
         }

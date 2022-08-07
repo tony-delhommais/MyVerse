@@ -7,17 +7,7 @@
 namespace Core
 {
 
-	JsonObject LoadJsonFile(const char* p_jsonFilePath)
-	{
-		return LoadJsonFile(std::string(p_jsonFilePath));
-	}
-
-	JsonObject LoadJsonFile(const std::string& p_jsonFilePath)
-	{
-		return LoadJsonFile(std::filesystem::path(p_jsonFilePath));
-	}
-
-	JsonObject LoadJsonFile(const std::filesystem::path p_jsonFilePath)
+	JsonObject LoadJsonFile(const std::filesystem::path& p_jsonFilePath)
 	{
 		if(!std::filesystem::exists(p_jsonFilePath))
 			return JsonObject();

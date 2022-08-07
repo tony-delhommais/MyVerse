@@ -21,7 +21,7 @@ namespace Core
 		void Use(unsigned int p_channel = 0);
 		static void NotUse(unsigned int p_channel = 0);
 
-		static std::shared_ptr<Texture> Load(const std::string& p_path);
+		static std::shared_ptr<Texture> Load(const std::filesystem::path& p_path);
 
 	private:
 		GLuint m_openGL_id = 0;

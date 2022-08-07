@@ -17,7 +17,6 @@ namespace Core
 	{
 	public:
 		Component() = default;
-		Component(std::shared_ptr<Component> p_component);
 		virtual ~Component() = default;
 
 	public:
@@ -25,7 +24,7 @@ namespace Core
 		std::shared_ptr<Entity> GetEntity();
 
 	private:
-		std::shared_ptr<Entity> m_entity;
+		std::shared_ptr<Entity> m_entity = nullptr;
 	};
 
 } // Core

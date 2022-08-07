@@ -18,7 +18,8 @@
 #include "Core/Clock.h"
 #include "Core/Input.h"
 
-#include "Core/Rendering/Scene.h"
+#include "Core/Ressource/Scene.h"
+
 #include "Core/Factories/ScriptFactory.h"
 
 #ifdef _DEBUG
@@ -28,7 +29,7 @@
 namespace Core
 {
 
-	typedef std::map<std::string, std::string> ScenePreloadMap;
+	typedef std::map<std::string, std::filesystem::path> ScenePreloadMap;
 
 	class ApplicationCore
 	{
@@ -46,10 +47,10 @@ namespace Core
 
 		void Quit();
 
-		bool PreLoadScene(const std::string& p_sceneAlias, const std::string& p_scenePath);
+		bool PreLoadScene(const std::string& p_sceneAlias, const std::filesystem::path& p_scenePath);
 
 		bool LoadScene(const std::string& p_sceneAlias);
-		bool LoadScene(const int p_sceneId);
+		bool LoadScene(int p_sceneId);
 
 	public:
 		__int64 GetFrameCount();
@@ -60,17 +61,14 @@ namespace Core
 		void SetApplicationPause(bool p_pauseState);
 
 	private:
-		bool ParseProjectSettings(const std::string& p_projectSettingsFilePath);
-		bool ParseGraphicsSettings(const std::string& p_graphicsSettingsFilePath);
+		bool ParseProjectSettings(const std::filesystem::path& p_projectSettingsFilePath);
+		bool ParseGraphicsSettings(const std::filesystem::path& p_graphicsSettingsFilePath);
 
 		int Init_Glfw();
 
 		void SetupPipeline();
 
 	private:
-		std::string m_assetsFolder = RESOURCES_PATH;
-		std::string m_projectSettingsFolder = RESOURCES_PATH;
-
 		std::string m_applicationName = "Default";
 
 		bool m_fullScreenIsEnable = false;

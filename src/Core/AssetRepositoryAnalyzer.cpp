@@ -9,7 +9,7 @@
 namespace Core
 {
 
-    void AssetRepositoryAnalyzer::GenerateMetaFilesOnAssetsFolder(const std::string& p_assetsFolder)
+    void AssetRepositoryAnalyzer::GenerateMetaFilesOnAssetsFolder(const std::filesystem::path& p_assetsFolder)
     {
         std::map<std::string, SupportedFileType> supportedFiles = {
             {".scene", SupportedFileType::SCENE},
@@ -22,6 +22,7 @@ namespace Core
             {".frag", SupportedFileType::FRAGMENT_SHADER},
             {".json", SupportedFileType::DATA},
             {".xml", SupportedFileType::DATA},
+            {".terrain", SupportedFileType::TERRAIN_CHUNCK},
         };
 
         UUIDv4::UUIDGenerator<std::mt19937_64> uuidGenerator;
@@ -43,20 +44,20 @@ namespace Core
                 SupportedFileType fileType = supportedFiles[entry.path().extension().string()];
 
                 metaJson["Type"] = (
-                    fileType >= SupportedFileType::UNKNOWN &&
-                    fileType < SupportedFileType::MAX_VALUE ?
+                    fileType >= SupportedFileType::UNKNOWN && fileType < SupportedFileType::MAX_VALUE ?
                     (int)fileType : (int)SupportedFileType::UNKNOWN);
             }
             ////////////////////////////////////  FILE TYPE  ////////////////////////////////////
 
 
             ////////////////////////////////////  FILE IS ALWAYS LOADED  ////////////////////////////////////
+            metaJson["AlwaysLoaded"] = false;
+
             if (metaJson["Type"] == (int)SupportedFileType::PREFAB ||
                 metaJson["Type"] == (int)SupportedFileType::VERTEX_SHADER ||
-                metaJson["Type"] == (int)SupportedFileType::FRAGMENT_SHADER
+                metaJson["Type"] == (int)SupportedFileType::FRAGMENT_SHADER ||
+                metaJson["Type"] == (int)SupportedFileType::TERRAIN_CHUNCK
                 ) metaJson["AlwaysLoaded"] = true;
-
-            else metaJson["AlwaysLoaded"] = false;
             ////////////////////////////////////  FILE IS ALWAYS LOADED  ////////////////////////////////////
 
 
@@ -101,7 +102,7 @@ namespace Core
 #endif
     }
 
-    void AssetRepositoryAnalyzer::PreloadAssetsFiles(const std::string& p_assetsFolder)
+    void AssetRepositoryAnalyzer::PreloadAssetsFiles(const std::filesystem::path& p_assetsFolder)
     {
         for (const auto& entry : std::filesystem::recursive_directory_iterator(p_assetsFolder))
         {

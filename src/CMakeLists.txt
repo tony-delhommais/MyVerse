@@ -19,11 +19,11 @@ set(ENGINE_SOURCES
 
         Core/Managers/RessourceManager.cpp
 
-        Core/Rendering/Scene.cpp
-
+        Core/Ressource/Chunck.cpp
         Core/Ressource/Material.cpp
         Core/Ressource/Mesh.cpp
         Core/Ressource/Prefab.cpp
+        Core/Ressource/Scene.cpp
         Core/Ressource/Shader.cpp
         Core/Ressource/Texture.cpp
 

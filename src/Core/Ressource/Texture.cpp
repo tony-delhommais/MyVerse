@@ -29,10 +29,10 @@ namespace Core
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 
-	std::shared_ptr<Texture> Texture::Load(const std::string& p_path)
+	std::shared_ptr<Texture> Texture::Load(const std::filesystem::path& p_path)
 	{
 		int width, height, nrChannels;
-		unsigned char* data = stbi_load(p_path.c_str(), &width, &height, &nrChannels, 0);
+		unsigned char* data = stbi_load(p_path.string().c_str(), &width, &height, &nrChannels, 0);
 		if (!data)
 		{
 			return nullptr;

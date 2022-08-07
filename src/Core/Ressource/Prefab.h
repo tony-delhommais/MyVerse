@@ -24,7 +24,7 @@ namespace Core
 		~Prefab() = default;
 
 	public:
-		static std::shared_ptr<Prefab> Load(const UUIDv4::UUID& p_uuid, const std::string& p_path);
+		static std::shared_ptr<Prefab> Load(const UUIDv4::UUID& p_uuid, const std::filesystem::path& p_path);
 
 		std::shared_ptr<Entity> InstantiateNew();
 

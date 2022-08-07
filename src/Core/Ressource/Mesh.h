@@ -34,10 +34,9 @@ namespace Core
 	{
 	public:
 		Mesh() = default;
-		Mesh(std::shared_ptr<Mesh> p_mesh);
 		~Mesh();
 
-		static std::vector<std::shared_ptr<Mesh>> LoadFromOBJ(const std::string& p_path);
+		static std::vector<std::shared_ptr<Mesh>> LoadFromOBJ(const std::filesystem::path& p_path);
 
 		void RenderMesh();
 

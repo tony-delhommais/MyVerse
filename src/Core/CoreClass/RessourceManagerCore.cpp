@@ -25,7 +25,7 @@ namespace Core
 		return instance;
 	}
 
-	void RessourceManagerCore::PreloadRessource(const std::filesystem::path p_ressourceMetaPath)
+	void RessourceManagerCore::PreloadRessource(const std::filesystem::path& p_ressourceMetaPath)
 	{
 		if (!std::filesystem::exists(p_ressourceMetaPath)) return;
 
@@ -40,19 +40,20 @@ namespace Core
 
 		auto readType = (SupportedFileType)GetParameterFromJsonObject(jsonStruct, "Type", (int)SupportedFileType::UNKNOWN);
 		auto type = readType;
-		if (readType == SupportedFileType::UNKNOWN ||
-			readType == SupportedFileType::DIRECTORY ||
-			readType == SupportedFileType::SHADER ||
-			readType == SupportedFileType::DATA ||
-			readType == SupportedFileType::MAX_VALUE
+		if (type == SupportedFileType::UNKNOWN ||
+			type == SupportedFileType::DIRECTORY ||
+			type == SupportedFileType::SHADER ||
+			type == SupportedFileType::DATA ||
+			type == SupportedFileType::MAX_VALUE
 			) return;
 
-		if (readType == SupportedFileType::SCENE)
+		if (type == SupportedFileType::SCENE)
 		{
 			ApplicationCore::instance().PreLoadScene(p_ressourceMetaPath.stem().string(), ressourcePath.string());
+			return;
 		}
 
-		if (readType == SupportedFileType::VERTEX_SHADER || readType == SupportedFileType::FRAGMENT_SHADER)
+		if (type == SupportedFileType::VERTEX_SHADER || type == SupportedFileType::FRAGMENT_SHADER)
 		{
 			type = SupportedFileType::SHADER;
 		}
@@ -82,6 +83,10 @@ namespace Core
 					return;
 				}
 			}
+		}
+		else
+		{
+			if (type == SupportedFileType::SHADER) return;
 		}
 
 		RessourceMeta ressourceMeta;
@@ -122,7 +127,7 @@ namespace Core
 
 			for (auto& ressource : m_ressources)
 			{
-				if (Clock::instance().GetMillisecondStopWatchTime("RessourceManagerDeallocUpdateMaxTimer") > 150) break;
+				if (Clock::instance().GetMillisecondStopWatchTime("RessourceManagerDeallocUpdateMaxTimer") > 15) break;
 
 				if (!ressource.second.alwaysLoaded && ressource.second.isAllocated)
 				{
@@ -206,7 +211,7 @@ namespace Core
 		return ressourceMetaIt;
 	}
 
-	int RessourceManagerCore::GetReferenceCount(RessourceMeta& p_ressourceMeta)
+	int RessourceManagerCore::GetReferenceCount(const RessourceMeta& p_ressourceMeta)
 	{
 		if (!p_ressourceMeta.isAllocated) return 0;
 

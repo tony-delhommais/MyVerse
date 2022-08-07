@@ -49,7 +49,7 @@ namespace Core
 	public:
 		static RessourceManagerCore& instance();
 
-		void PreloadRessource(const std::filesystem::path p_ressourceMetaPath);
+		void PreloadRessource(const std::filesystem::path& p_ressourceMetaPath);
 
 		void ManagementLoop();
 
@@ -66,7 +66,7 @@ namespace Core
 	private:
 		RessourceMetaMap::iterator FindRessource(const UUIDv4::UUID& p_ressourceUuid, SupportedFileType p_wantedRessourceType);
 
-		int GetReferenceCount(RessourceMeta& p_ressourceMeta);
+		int GetReferenceCount(const RessourceMeta& p_ressourceMeta);
 
 		void AllocRessource(const UUIDv4::UUID& p_ressourceUuid, RessourceMeta& p_ressourceMeta);
 		void DeallocRessource(RessourceMeta& p_ressourceMeta);
