@@ -7,6 +7,7 @@ FetchContent_Declare(grpc
 
 set(FETCHCONTENT_QUIET OFF)
 FetchContent_MakeAvailable(grpc)
+include_directories(${grpc_SOURCE_DIR}/include)
 
 #FetchContent_GetProperties(grpc)
 #if(NOT grpc_POPULATED)

@@ -53,7 +53,7 @@ namespace Core
 		bool LoadScene(int p_sceneId);
 
 	public:
-		__int64 GetFrameCount();
+		long long GetFrameCount();
 
 		std::shared_ptr<Scene> GetActiveScene();
 
@@ -82,7 +82,7 @@ namespace Core
 
 		GLFWwindow* m_window = nullptr;
 
-		__int64 m_frameCount = 0;
+		long long m_frameCount = 0;
 
 	private:
 		ScenePreloadMap m_scenesPreload;

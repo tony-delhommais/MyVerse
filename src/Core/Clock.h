@@ -25,10 +25,10 @@ namespace Core
 	public:
 		float GetStopWatchTime(const std::string& p_stopWatchName);
 		float GetMillisecondStopWatchTime(const std::string& p_stopWatchName);
-		__int64 GetNanosecondStopWatchTime(const std::string& p_stopWatchName);
+		long long GetMicrosecondStopWatchTime(const std::string& p_stopWatchName);
 
 	private:
-		std::map<std::string, __int64> m_stopWatches;
+		std::map<std::string, long long> m_stopWatches;
 	};
 
 } // Core

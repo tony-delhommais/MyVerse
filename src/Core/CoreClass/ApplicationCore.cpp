@@ -84,18 +84,18 @@ namespace Core
 			}
 
 #ifdef _DEBUG
-			__int64 frameCount = 0;
+			long long frameCount = 0;
 
-			__int64 deltaMainLoop = 0;
-			__int64 deltaRessourceManagementLoop = 0;
-			__int64 deltaUpdateExecution = 0;
-			__int64 deltaRender = 0;
+			long long deltaMainLoop = 0;
+			long long deltaRessourceManagementLoop = 0;
+			long long deltaUpdateExecution = 0;
+			long long deltaRender = 0;
 #endif
 
 			do
 			{
 				m_frameCount ++;
-				__int64 deltaTime = Clock::instance().GetNanosecondStopWatchTime("MainLoop");
+				long long deltaTime = Clock::instance().GetMicrosecondStopWatchTime("MainLoop");
 				float secondDeltaTime = (float)(deltaTime / 1000000.0);
 				Clock::instance().ResetStopWatch("MainLoop");
 
@@ -110,7 +110,7 @@ namespace Core
 #endif
 				RessourceManagerCore::instance().ManagementLoop();
 #ifdef _DEBUG
-				deltaRessourceManagementLoop += Clock::instance().GetNanosecondStopWatchTime("RessourceManagementLoop");
+				deltaRessourceManagementLoop += Clock::instance().GetMicrosecondStopWatchTime("RessourceManagementLoop");
 #endif
 
 #ifdef _DEBUG
@@ -118,7 +118,7 @@ namespace Core
 #endif
 				m_activeScene->UpdateExecution(secondDeltaTime);
 #ifdef _DEBUG
-				deltaUpdateExecution += Clock::instance().GetNanosecondStopWatchTime("UpdateExecution");
+				deltaUpdateExecution += Clock::instance().GetMicrosecondStopWatchTime("UpdateExecution");
 #endif
 
 				m_activeScene->RemoveDestroyedLocalEntities();
@@ -128,7 +128,7 @@ namespace Core
 #endif
 				m_activeScene->Render();
 #ifdef _DEBUG
-				deltaRender += Clock::instance().GetNanosecondStopWatchTime("Render");
+				deltaRender += Clock::instance().GetMicrosecondStopWatchTime("Render");
 #endif
 
 				glfwSwapBuffers(m_window);
@@ -232,7 +232,7 @@ namespace Core
 		return true;
 	}
 
-	__int64 ApplicationCore::GetFrameCount()
+	long long ApplicationCore::GetFrameCount()
 	{
 		return m_frameCount;
 	}

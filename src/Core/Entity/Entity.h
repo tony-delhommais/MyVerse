@@ -149,8 +149,8 @@ namespace Core
         EntityExecutionState m_currentEntityExecutionState = EntityExecutionState::PreAwake;
         EntityExecutionState m_wantedEntityExecutionState = EntityExecutionState::Update;
 
-        __int64 m_decomposeWorldTransformLastCompute = 0;
-        __int64 m_getWorldTransformLastCompute = 0;
+        long long m_decomposeWorldTransformLastCompute = 0;
+        long long m_getWorldTransformLastCompute = 0;
 
 		bool m_isActive = true;
 		std::string m_tag = "None";
