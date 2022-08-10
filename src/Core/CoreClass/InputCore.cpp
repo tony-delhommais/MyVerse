@@ -4,7 +4,7 @@
 
 #include "Core/CoreClass/InputCore.h"
 
-#include "Core/Clock.h"
+#include "Core/Common/Clock.h"
 
 namespace Core
 {

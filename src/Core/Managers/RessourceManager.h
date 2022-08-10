@@ -14,7 +14,6 @@ namespace Core
 	class Material;
 	class Mesh;
 	class Prefab;
-	class Shader;
 	class Texture;
 
 	class RessourceManager
@@ -25,8 +24,6 @@ namespace Core
 		static std::shared_ptr<Texture> FindTexture(const UUIDv4::UUID& p_ressourceUuid);
 
 		static std::shared_ptr<Material> FindMaterial(const UUIDv4::UUID& p_ressourceUuid);
-
-		static std::shared_ptr<Shader> FindShader(const UUIDv4::UUID& p_ressourceUuid);
 
 		static std::shared_ptr<Prefab> FindPrefab(const UUIDv4::UUID& p_ressourceUuid);
 	};

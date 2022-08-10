@@ -8,8 +8,8 @@
 #include "Core/Utils/Utils.h"
 #include "Core/Utils/JsonUtils.h"
 
-#include "Core/Clock.h"
-#include "Core/Input.h"
+#include "Core/Common/Clock.h"
+#include "Core/Common/Input.h"
 
 #include "Core/Entity/Entity.h"
 
@@ -17,7 +17,7 @@
 
 #include "Core/Factories/ScriptFactory.h"
 
-#include "Core/Debug.h"
+#include "Core/Common/Debug.h"
 
 namespace Core
 {

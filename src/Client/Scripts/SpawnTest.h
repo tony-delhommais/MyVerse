@@ -5,7 +5,7 @@
 #ifndef MYVERSE_SPAWN_TEST_H
 #define MYVERSE_SPAWN_TEST_H
 
-#include "Core/Application.h"
+#include "Core/Common/Application.h"
 
 using namespace Core;
 

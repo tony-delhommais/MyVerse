@@ -2,7 +2,7 @@
 // Created by Tony on 29/06/2022.
 //
 
-#include "Core/Input.h"
+#include "Core/Common/Input.h"
 
 #include "Core/CoreClass/InputCore.h"
 

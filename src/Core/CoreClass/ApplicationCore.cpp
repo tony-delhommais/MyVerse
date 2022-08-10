@@ -18,30 +18,36 @@ namespace Core
 
 	int ApplicationCore::Initialize()
 	{
-		auto projectSettingsPath = std::filesystem::path(RESOURCES_PATH + std::string("./ProjectSettings/ProjectSettings.json"));
-		if (!ParseProjectSettings(projectSettingsPath))
+		if (!ParseProjectSettings())
 		{
 			return 0;
 		}
 
-		auto graphicsSettingsPath = std::filesystem::path(RESOURCES_PATH + std::string("./ProjectSettings/GraphicsSettings.json"));
-		if (!ParseGraphicsSettings(graphicsSettingsPath))
+		if (!ParseGraphicsSettings())
 		{
 			return 0;
 		}
 
-		if (!Init_Glfw())
+		if (!InitGlfw())
 		{
 			return 0;
 		}
 
-		SetupPipeline();
+		if (!SetupPipeline())
+		{
+			return 0;
+		}
+
+		if (!InitializeShader())
+		{
+			return 0;
+		}
 
 		InputCore::instance().Initialize(m_window);
 
-		AssetRepositoryAnalyzer::GenerateMetaFilesOnAssetsFolder(RESOURCES_PATH);
+		AssetRepositoryAnalyzer::GenerateMetaFilesOnAssetsFolder(ASSETS_PATH);
 
-		AssetRepositoryAnalyzer::PreloadAssetsFiles(RESOURCES_PATH);
+		AssetRepositoryAnalyzer::PreloadAssetsFiles(ASSETS_PATH);
 
 		return 1;
 	}
@@ -237,6 +243,11 @@ namespace Core
 		return m_frameCount;
 	}
 
+	std::shared_ptr<Shader> ApplicationCore::GetActiveShader()
+	{
+		return m_activeShader;
+	}
+
 	std::shared_ptr<Scene> ApplicationCore::GetActiveScene()
 	{
 		return m_activeScene;
@@ -252,9 +263,9 @@ namespace Core
 		m_applicationIsPaused = p_pauseState;
 	}
 
-	bool ApplicationCore::ParseProjectSettings(const std::filesystem::path& p_projectSettingsFilePath)
+	bool ApplicationCore::ParseProjectSettings()
 	{
-		auto projectSettings = LoadJsonFile(p_projectSettingsFilePath);
+		auto projectSettings = LoadJsonFile(std::filesystem::path(PROJECT_SETTINGS_PATH + std::string("./ProjectSettings.json")));
 		if (projectSettings.empty())
 		{
 #ifdef _DEBUG
@@ -277,9 +288,9 @@ namespace Core
 		return true;
 	}
 
-	bool ApplicationCore::ParseGraphicsSettings(const std::filesystem::path& p_graphicsSettingsFilePath)
+	bool ApplicationCore::ParseGraphicsSettings()
 	{
-		auto graphicsSettings = LoadJsonFile(p_graphicsSettingsFilePath);
+		auto graphicsSettings = LoadJsonFile(std::filesystem::path(PROJECT_SETTINGS_PATH + std::string("./GraphicsSettings.json")));
 		if (graphicsSettings.empty())
 		{
 #ifdef _DEBUG
@@ -297,10 +308,32 @@ namespace Core
 
 		m_vSyncIsEnable = GetParameterFromJsonObject(graphicsSettings, "EnableVSync", m_vSyncIsEnable);
 
+		auto vertexShaderStr = GetParameterFromJsonObject(graphicsSettings, "VertexShader", "Null");
+		auto fragmentShaderStr = GetParameterFromJsonObject(graphicsSettings, "FragmentShader", "Null");
+
+		if (vertexShaderStr == "Null" || fragmentShaderStr == "Null")
+		{
+#ifdef _DEBUG
+			Debug::LogError("[Application] Unable to locate shaders settings");
+#endif
+			return false;
+		}
+
+		m_vertexShaderPath = std::filesystem::path(PROJECT_SETTINGS_PATH + vertexShaderStr);
+		m_fragmentShaderPath = std::filesystem::path(PROJECT_SETTINGS_PATH + fragmentShaderStr);
+
+		if (!std::filesystem::exists(m_vertexShaderPath) || !std::filesystem::exists(m_fragmentShaderPath))
+		{
+#ifdef _DEBUG
+			Debug::LogError("[Application] Shaders path are invalid");
+#endif
+			return false;
+		}
+
 		return true;
 	}
 
-	int ApplicationCore::Init_Glfw()
+	bool ApplicationCore::InitGlfw()
 	{
 		GLenum res = glfwInit();
 
@@ -309,7 +342,7 @@ namespace Core
 #ifdef _DEBUG
 			Debug::LogError("[Application] Cannot initialize GLFW");
 #endif
-			return 0;
+			return false;
 		}
 
 		if (m_superSamplingIsEnable) glfwWindowHint(GLFW_SAMPLES, 4);
@@ -330,13 +363,13 @@ namespace Core
 #ifdef _DEBUG
 			Debug::LogError("[Application] glfwCreateWindow failed!");
 #endif
-			return 0;
+			return false;
 		}
 
-		return 1;
+		return true;
 	}
 
-	void ApplicationCore::SetupPipeline()
+	bool ApplicationCore::SetupPipeline()
 	{
 		glfwMakeContextCurrent(m_window);
 
@@ -357,6 +390,26 @@ namespace Core
 		glEnable(GL_CULL_FACE);
 
 		if (m_superSamplingIsEnable) glEnable(GL_MULTISAMPLE);
+
+		return true;
+	}
+
+	bool ApplicationCore::InitializeShader()
+	{
+		m_activeShader = std::make_shared<Shader>();
+
+		m_activeShader->SetShader(SupportedFileType::VERTEX_SHADER, m_vertexShaderPath);
+		m_activeShader->SetShader(SupportedFileType::FRAGMENT_SHADER, m_fragmentShaderPath);
+
+		if (!m_activeShader->IsShaderValid())
+		{
+#ifdef _DEBUG
+			Debug::LogError("[Application] Failed to create shader program");
+#endif
+			return false;
+		}
+
+		return true;
 	}
 
 } // Core

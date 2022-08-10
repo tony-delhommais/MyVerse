@@ -2,7 +2,7 @@
 // Created by Tony on 29/06/2022.
 //
 
-#include "Core/AssetRepositoryAnalyzer.h"
+#include "Core/Common/AssetRepositoryAnalyzer.h"
 
 #include "Core/CoreClass/RessourceManagerCore.h"
 

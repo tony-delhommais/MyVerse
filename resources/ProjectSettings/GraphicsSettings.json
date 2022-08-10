@@ -3,5 +3,7 @@
   "WindowWidth": 1600,
   "WindowHeight": 900,
   "EnableSuperSampling": true,
-  "EnableVSync": true
+  "EnableVSync": true,
+  "VertexShader": "./Shaders/Shader.vert",
+  "FragmentShader": "./Shaders/Shader.frag"
 }

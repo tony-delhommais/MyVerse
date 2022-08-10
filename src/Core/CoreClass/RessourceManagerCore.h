@@ -10,16 +10,14 @@
 #include "Core/Utils/JsonUtils.h"
 #include "Core/Utils/SupportedFileType.h"
 
-#include "Core/Clock.h"
+#include "Core/Common/Clock.h"
 
 namespace Core
 {
 
-	class Scene;
 	class Material;
 	class Mesh;
 	class Prefab;
-	class Shader;
 	class Texture;
 
 	struct RessourceMeta
@@ -34,7 +32,6 @@ namespace Core
 		std::vector<std::shared_ptr<Mesh>> meshes;
 		std::shared_ptr<Texture> texture = nullptr;
 		std::shared_ptr<Material> material = nullptr;
-		std::shared_ptr<Shader> shader = nullptr;
 		std::shared_ptr<Prefab> prefab = nullptr;
 	};
 
@@ -58,8 +55,6 @@ namespace Core
 		std::shared_ptr<Texture> FindTexture(const UUIDv4::UUID& p_ressourceUuid);
 
 		std::shared_ptr<Material> FindMaterial(const UUIDv4::UUID& p_ressourceUuid);
-
-		std::shared_ptr<Shader> FindShader(const UUIDv4::UUID& p_ressourceUuid);
 
 		std::shared_ptr<Prefab> FindPrefab(const UUIDv4::UUID& p_ressourceUuid);
 

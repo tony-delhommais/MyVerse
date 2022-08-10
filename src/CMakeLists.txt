@@ -3,6 +3,12 @@ set(ENGINE_SOURCES
         Core/Area/CircleArea.cpp
         Core/Area/OrientationFixedRectangleArea.cpp
 
+        Core/Common/Application.cpp
+        Core/Common/AssetRepositoryAnalyzer.cpp
+        Core/Common/Clock.cpp
+        Core/Common/Debug.cpp
+        Core/Common/Input.cpp
+
         Core/Components/Component.cpp
         Core/Components/Camera.cpp
         Core/Components/MeshRenderer.cpp
@@ -31,12 +37,6 @@ set(ENGINE_SOURCES
         Core/Utils/JsonUtils.cpp
         Core/Utils/MathUtils.cpp
         Core/Utils/Utils.cpp
-
-        Core/Application.cpp
-        Core/AssetRepositoryAnalyzer.cpp
-        Core/Clock.cpp
-        Core/Debug.cpp
-        Core/Input.cpp
         )
 
 set(CLIENT_SOURCES
@@ -60,4 +60,5 @@ target_include_directories(MyVerse PUBLIC
         $<INSTALL_INTERFACE:include>
         )
 
-target_compile_definitions(MyVerse PRIVATE RESOURCES_PATH="${CMAKE_CURRENT_SOURCE_DIR}/../resources")
+target_compile_definitions(MyVerse PRIVATE PROJECT_SETTINGS_PATH="${CMAKE_CURRENT_SOURCE_DIR}/../resources/ProjectSettings/")
+target_compile_definitions(MyVerse PRIVATE ASSETS_PATH="${CMAKE_CURRENT_SOURCE_DIR}/../resources/Assets/")

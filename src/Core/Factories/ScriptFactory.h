@@ -10,7 +10,7 @@
 #include "Core/Components/Script.h"
 
 #ifdef _DEBUG
-#include "Core/Debug.h"
+#include "Core/Common/Debug.h"
 #endif
 
 namespace Core

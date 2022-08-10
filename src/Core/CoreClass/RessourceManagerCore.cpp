@@ -9,11 +9,10 @@
 #include "Core/Ressource/Material.h"
 #include "Core/Ressource/Mesh.h"
 #include "Core/Ressource/Prefab.h"
-#include "Core/Ressource/Shader.h"
 #include "Core/Ressource/Texture.h"
 
 #ifdef _DEBUG
-#include "Core/Debug.h"
+#include "Core/Common/Debug.h"
 #endif
 
 namespace Core
@@ -38,11 +37,9 @@ namespace Core
 		auto jsonStruct = LoadJsonFile(p_ressourceMetaPath.string());
 		if (jsonStruct.empty()) return;
 
-		auto readType = (SupportedFileType)GetParameterFromJsonObject(jsonStruct, "Type", (int)SupportedFileType::UNKNOWN);
-		auto type = readType;
+		auto type = (SupportedFileType)GetParameterFromJsonObject(jsonStruct, "Type", (int)SupportedFileType::UNKNOWN);
 		if (type == SupportedFileType::UNKNOWN ||
 			type == SupportedFileType::DIRECTORY ||
-			type == SupportedFileType::SHADER ||
 			type == SupportedFileType::DATA ||
 			type == SupportedFileType::CHUNK ||
 			type == SupportedFileType::MAX_VALUE
@@ -54,11 +51,6 @@ namespace Core
 			return;
 		}
 
-		if (type == SupportedFileType::VERTEX_SHADER || type == SupportedFileType::FRAGMENT_SHADER)
-		{
-			type = SupportedFileType::SHADER;
-		}
-
 		std::string fileUuid = GetParameterFromJsonObject(jsonStruct, "Uuid", "None");
 		if (fileUuid == "None") return;
 		UUIDv4::UUID uuid = UUIDv4::UUID::fromStrFactory(fileUuid);
@@ -68,26 +60,11 @@ namespace Core
 		auto settings = GetParameterFromJsonObject(jsonStruct, "Settings", false, true);
 		if (settings != jsonStruct)
 		{
-			if (type == SupportedFileType::SHADER)
-			{
-				auto shaderLinkUuid = GetParameterFromJsonObject(settings, "ShaderUuid", "Null");
-				if (shaderLinkUuid == "Null") return;
-
-				uuid = UUIDv4::UUID::fromStrFactory(shaderLinkUuid);
-
-				auto shader = FindShader(uuid);
-
-				if (shader)
-				{
-					shader->SetShader(readType, ressourcePath);
-
-					return;
-				}
-			}
+			
 		}
 		else
 		{
-			if (type == SupportedFileType::SHADER) return;
+			
 		}
 
 		RessourceMeta ressourceMeta;
@@ -99,11 +76,6 @@ namespace Core
 		if (alwaysLoaded)
 		{
 			AllocRessource(uuid, ressourceMeta);
-		}
-
-		if (ressourceMeta.shader && type == SupportedFileType::SHADER)
-		{
-			ressourceMeta.shader->SetShader(readType, ressourcePath);
 		}
 
 		m_ressources.insert(RessourceMetaMap::value_type(uuid, ressourceMeta));
@@ -174,15 +146,6 @@ namespace Core
 		return ressourceMetaIt->second.material;
 	}
 
-	std::shared_ptr<Shader> RessourceManagerCore::FindShader(const UUIDv4::UUID& p_ressourceUuid)
-	{
-		auto ressourceMetaIt = FindRessource(p_ressourceUuid, SupportedFileType::SHADER);
-
-		if (ressourceMetaIt == m_ressources.end()) return nullptr;
-
-		return ressourceMetaIt->second.shader;
-	}
-
 	std::shared_ptr<Prefab> RessourceManagerCore::FindPrefab(const UUIDv4::UUID& p_ressourceUuid)
 	{
 		auto ressourceMetaIt = FindRessource(p_ressourceUuid, SupportedFileType::PREFAB);
@@ -221,8 +184,6 @@ namespace Core
 		if (p_ressourceMeta.texture) return (int)p_ressourceMeta.texture.use_count();
 
 		if (p_ressourceMeta.material) return (int)p_ressourceMeta.material.use_count();
-
-		if (p_ressourceMeta.shader) return (int)p_ressourceMeta.shader.use_count();
 
 		if (p_ressourceMeta.prefab) return (int)p_ressourceMeta.prefab.use_count();
 
@@ -270,19 +231,6 @@ namespace Core
 			return;
 		}
 
-		if (p_ressourceMeta.type == SupportedFileType::SHADER)
-		{
-			p_ressourceMeta.shader = std::make_shared<Shader>();
-
-			if (p_ressourceMeta.shader)
-			{
-				p_ressourceMeta.tryAllocate = false;
-				p_ressourceMeta.isAllocated = true;
-			}
-
-			return;
-		}
-
 		if (p_ressourceMeta.type == SupportedFileType::PREFAB)
 		{
 			p_ressourceMeta.prefab = Prefab::Load(p_ressourceUuid, p_ressourceMeta.ressourcePath.string());
@@ -304,8 +252,6 @@ namespace Core
 		if (p_ressourceMeta.texture) p_ressourceMeta.texture = nullptr;
 
 		if (p_ressourceMeta.material) p_ressourceMeta.material = nullptr;
-
-		if (p_ressourceMeta.shader) return;
 
 		if (p_ressourceMeta.prefab) return;
 

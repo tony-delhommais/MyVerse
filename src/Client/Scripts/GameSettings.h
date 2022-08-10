@@ -5,7 +5,7 @@
 #ifndef MYVERSE_GAME_SETTINGS_H
 #define MYVERSE_GAME_SETTINGS_H
 
-#include "Core/Application.h"
+#include "Core/Common/Application.h"
 
 using namespace Core;
 

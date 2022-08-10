@@ -24,11 +24,6 @@ namespace Core
 		return RessourceManagerCore::instance().FindMaterial(p_ressourceUuid);
 	}
 
-	std::shared_ptr<Shader> RessourceManager::FindShader(const UUIDv4::UUID& p_ressourceUuid)
-	{
-		return RessourceManagerCore::instance().FindShader(p_ressourceUuid);
-	}
-
 	std::shared_ptr<Prefab> RessourceManager::FindPrefab(const UUIDv4::UUID& p_ressourceUuid)
 	{
 		return RessourceManagerCore::instance().FindPrefab(p_ressourceUuid);

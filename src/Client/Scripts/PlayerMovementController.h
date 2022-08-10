@@ -5,7 +5,7 @@
 #ifndef MYVERSE_PLAYER_MOVEMENT_CONTROLLER_H
 #define MYVERSE_PLAYER_MOVEMENT_CONTROLLER_H
 
-#include "Core/Application.h"
+#include "Core/Common/Application.h"
 
 using namespace Core;
 

@@ -13,17 +13,18 @@
 #include "Core/Utils/MathUtils.h"
 #include "Core/Utils/Utils.h"
 
-#include "Core/AssetRepositoryAnalyzer.h"
+#include "Core/Common/AssetRepositoryAnalyzer.h"
 
-#include "Core/Clock.h"
-#include "Core/Input.h"
+#include "Core/Common/Clock.h"
+#include "Core/Common/Input.h"
 
 #include "Core/Ressource/Scene.h"
+#include "Core/Ressource/Shader.h"
 
 #include "Core/Factories/ScriptFactory.h"
 
 #ifdef _DEBUG
-#include "Core/Debug.h"
+#include "Core/Common/Debug.h"
 #endif
 
 namespace Core
@@ -55,18 +56,22 @@ namespace Core
 	public:
 		long long GetFrameCount();
 
+		std::shared_ptr<Shader> GetActiveShader();
+
 		std::shared_ptr<Scene> GetActiveScene();
 
 		bool IsApplicationPaused();
 		void SetApplicationPause(bool p_pauseState);
 
 	private:
-		bool ParseProjectSettings(const std::filesystem::path& p_projectSettingsFilePath);
-		bool ParseGraphicsSettings(const std::filesystem::path& p_graphicsSettingsFilePath);
+		bool ParseProjectSettings();
+		bool ParseGraphicsSettings();
 
-		int Init_Glfw();
+		bool InitGlfw();
 
-		void SetupPipeline();
+		bool SetupPipeline();
+
+		bool InitializeShader();
 
 	private:
 		std::string m_applicationName = "Default";
@@ -85,6 +90,10 @@ namespace Core
 		long long m_frameCount = 0;
 
 	private:
+		std::filesystem::path m_vertexShaderPath;
+		std::filesystem::path m_fragmentShaderPath;
+		std::shared_ptr<Shader> m_activeShader = nullptr;
+
 		ScenePreloadMap m_scenesPreload;
 		int m_sceneToLoad = -1;
 

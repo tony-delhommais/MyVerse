@@ -45,7 +45,7 @@ namespace Core
 
 	void Shader::SetShader(SupportedFileType p_shaderType, const std::filesystem::path& p_path)
 	{
-		if (m_programId) return;
+		if (IsShaderValid()) return;
 
 		if (p_shaderType == SupportedFileType::VERTEX_SHADER && !SetVertexShader(p_path)) return;
 
