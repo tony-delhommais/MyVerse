@@ -442,7 +442,12 @@ void Entity::Render()
 	{
 		if (m_meshRenderer)
 		{
-			ApplicationCore::instance().GetActiveShader()->SetUniformMat4("ModelMatrix", GetWorldTransform());
+			if (m_shaderModelMatrixUniformLocation == -1)
+			{
+				m_shaderModelMatrixUniformLocation = ApplicationCore::instance().GetActiveShader()->FindUniformLocation("ModelMatrix");
+			}
+			
+			ApplicationCore::instance().GetActiveShader()->SetUniformMat4(m_shaderModelMatrixUniformLocation, GetWorldTransform());
 
 			m_meshRenderer->Render();
 		}

@@ -146,6 +146,8 @@ namespace Core
 		void DecomposeWorldTransform();
 
 	private:
+		GLint m_shaderModelMatrixUniformLocation = -1;
+
 		EntityExecutionState m_currentEntityExecutionState = EntityExecutionState::PreAwake;
 		EntityExecutionState m_wantedEntityExecutionState = EntityExecutionState::Update;
 

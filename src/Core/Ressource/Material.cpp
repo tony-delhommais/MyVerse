@@ -44,11 +44,24 @@ namespace Core
 	{
 		if (m_useSolidColor)
 		{
-			ApplicationCore::instance().GetActiveShader()->SetUniformVec3("solidColor", m_solidColor);
+			if (m_shaderSolidColorUniformLocation == -1)
+			{
+				m_shaderSolidColorUniformLocation = ApplicationCore::instance().GetActiveShader()->FindUniformLocation("solidColor");
+			}
+
+			ApplicationCore::instance().GetActiveShader()->SetUniformVec3(m_shaderSolidColorUniformLocation, m_solidColor);
 		}
 		else
 		{
-			if (!m_invertTextures) ApplicationCore::instance().GetActiveShader()->SetUniformInt("textureInversionValue", 1);
+			if (!m_invertTextures)
+			{
+				if (m_shaderInvertTextureUniformLocation == -1)
+				{
+					m_shaderInvertTextureUniformLocation = ApplicationCore::instance().GetActiveShader()->FindUniformLocation("textureInversionValue");
+				}
+
+				ApplicationCore::instance().GetActiveShader()->SetUniformInt(m_shaderInvertTextureUniformLocation, 1);
+			}
 
 			if (m_diffuseTexture)
 			{

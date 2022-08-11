@@ -151,7 +151,12 @@ namespace Core
 
 		glm::mat4 VueProjectionMatrix = m_renderCamera->GetViewProjectionMatrix();
 
-		ApplicationCore::instance().GetActiveShader()->SetUniformMat4("VueProjectionMatrix", VueProjectionMatrix);
+		if (m_shaderVueProjectionMatrixUniformLocation == -1)
+		{
+			m_shaderVueProjectionMatrixUniformLocation = ApplicationCore::instance().GetActiveShader()->FindUniformLocation("VueProjectionMatrix");
+		}
+
+		ApplicationCore::instance().GetActiveShader()->SetUniformMat4(m_shaderVueProjectionMatrixUniformLocation, VueProjectionMatrix);
 
 		for(auto& entity : entitiesToRender)
 		{

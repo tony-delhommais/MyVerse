@@ -26,8 +26,7 @@ namespace Core
 	public:
 		void Use();
 
-	private:
-		GLint FindUniformLinkId(const std::string& p_locationName);
+		GLint FindUniformLocation(const std::string& p_locationName);
 
 	public:
 		void SetShader(SupportedFileType p_shaderType, const std::filesystem::path& p_path);
@@ -35,8 +34,13 @@ namespace Core
 		bool IsShaderValid();
 
 		void SetUniformInt(const std::string& p_locationName, int p_value);
+		void SetUniformInt(const GLint p_locationId, int p_value);
+
 		void SetUniformVec3(const std::string& p_locationName, const glm::vec3& p_value);
+		void SetUniformVec3(const GLint p_locationId, const glm::vec3& p_value);
+
 		void SetUniformMat4(const std::string& p_locationName, const glm::mat4& p_value);
+		void SetUniformMat4(const GLint p_locationId, const glm::mat4& p_value);
 
 	private:
 		bool SetVertexShader(const std::filesystem::path& p_path);

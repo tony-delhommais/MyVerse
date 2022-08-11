@@ -7,6 +7,7 @@
 
 #include "Core/Utils/JsonUtils.h"
 #include "Core/Utils/MathUtils.h"
+#include "Core/Utils/GraphicsUtils.h"
 
 #include "Core/Ressource/Texture.h"
 
@@ -32,8 +33,10 @@ namespace Core
 
 	private:
 		bool m_useSolidColor = true;
+		GLint m_shaderSolidColorUniformLocation = -1;
 		glm::vec3 m_solidColor = glm::vec3(1.0);
 
+		GLint m_shaderInvertTextureUniformLocation = -1;
 		bool m_invertTextures = true;
 
 		bool m_isDiffuseTextureSet = false;

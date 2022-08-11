@@ -20,7 +20,7 @@ namespace Core
 		if(m_programId) glUseProgram(m_programId);
 	}
 
-	GLint Shader::FindUniformLinkId(const std::string& p_locationName)
+	GLint Shader::FindUniformLocation(const std::string& p_locationName)
 	{
 		if (!IsShaderValid()) return -1;
 
@@ -88,35 +88,50 @@ namespace Core
 
 	void Shader::SetUniformInt(const std::string& p_locationName, int p_value)
 	{
+		GLint location = FindUniformLocation(p_locationName);
+
+		SetUniformInt(location, p_value);
+	}
+
+	void Shader::SetUniformInt(const GLint p_locationId, int p_value)
+	{
 		if (!IsShaderValid()) return;
 
-		GLint location = FindUniformLinkId(p_locationName);
+		if (p_locationId == -1) return;
 
-		if (location == -1) return;
-
-		glUniform1i(location, p_value);
+		glUniform1i(p_locationId, p_value);
 	}
 
 	void Shader::SetUniformVec3(const std::string& p_locationName, const glm::vec3& p_value)
 	{
+		GLint location = FindUniformLocation(p_locationName);
+
+		SetUniformVec3(location, p_value);
+	}
+
+	void Shader::SetUniformVec3(const GLint p_locationId, const glm::vec3& p_value)
+	{
 		if (!IsShaderValid()) return;
 
-		GLint location = FindUniformLinkId(p_locationName);
+		if (p_locationId == -1) return;
 
-		if (location == -1) return;
-
-		glUniform3fv(location, 1, glm::value_ptr(p_value));
+		glUniform3fv(p_locationId, 1, glm::value_ptr(p_value));
 	}
 
 	void Shader::SetUniformMat4(const std::string& p_locationName, const glm::mat4& p_value)
 	{
+		GLint location = FindUniformLocation(p_locationName);
+
+		SetUniformMat4(location, p_value);
+	}
+
+	void Shader::SetUniformMat4(const GLint p_locationId, const glm::mat4& p_value)
+	{
 		if (!IsShaderValid()) return;
 
-		GLint location = FindUniformLinkId(p_locationName);
+		if (p_locationId == -1) return;
 
-		if (location == -1) return;
-
-		glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(p_value));
+		glUniformMatrix4fv(p_locationId, 1, GL_FALSE, glm::value_ptr(p_value));
 	}
 
 	bool Shader::SetVertexShader(const std::filesystem::path& p_path)

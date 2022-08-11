@@ -29,7 +29,7 @@ namespace Core
 
 	bool OrientationFixedRectangleArea::IntersectWithEntity(std::shared_ptr<Entity> p_entity)
 	{
-		auto entityPosition = p_entity->GetLocalPosition();
+		auto& entityPosition = p_entity->GetLocalPosition();
 
 		return entityPosition.x >= m_topLeftX &&
 			entityPosition.x <= m_bottomRightX &&

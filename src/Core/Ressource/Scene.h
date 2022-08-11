@@ -6,6 +6,7 @@
 #define MYVERSE_SCENE_H
 
 #include "Core/Utils/Utils.h"
+#include "Core/Utils/GraphicsUtils.h"
 
 namespace Core
 {
@@ -43,6 +44,8 @@ namespace Core
 		bool HasLocalEntities();
 
 	private:
+		GLint m_shaderVueProjectionMatrixUniformLocation = -1;
+
 		std::shared_ptr<EntityQuadTree> m_entityQuadTree = nullptr;
 
 		std::list<std::shared_ptr<Entity>> m_localEntities;
