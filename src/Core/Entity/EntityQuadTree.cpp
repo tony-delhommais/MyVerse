@@ -186,13 +186,23 @@ namespace Core
 
 	void EntityQuadTree::AddEntityToCardinal(std::shared_ptr<Entity> p_entity)
 	{
-		bool entityIsOnNorth = p_entity->GetLocalPosition().z > m_area->GetPosition().z;
-		bool entityIsOnWest = p_entity->GetLocalPosition().x < m_area->GetPosition().x;
+		auto entityLocalPosition = p_entity->GetLocalPosition();
+		auto areaPosition = m_area->GetPosition();
 
-		if (entityIsOnWest && entityIsOnNorth) m_cardinalPoints[0]->AddEntity(p_entity);
-		if (!entityIsOnWest && entityIsOnNorth) m_cardinalPoints[1]->AddEntity(p_entity);
-		if (entityIsOnWest && !entityIsOnNorth) m_cardinalPoints[2]->AddEntity(p_entity);
-		if (!entityIsOnWest && !entityIsOnNorth) m_cardinalPoints[3]->AddEntity(p_entity);
+		bool entityIsOnNorth = entityLocalPosition.z > areaPosition.z;
+		bool entityIsOnWest = entityLocalPosition.x < areaPosition.x;
+
+		if (entityIsOnWest && entityIsOnNorth)
+			m_cardinalPoints[0]->AddEntity(p_entity);
+
+		if (!entityIsOnWest && entityIsOnNorth)
+			m_cardinalPoints[1]->AddEntity(p_entity);
+
+		if (entityIsOnWest && !entityIsOnNorth)
+			m_cardinalPoints[2]->AddEntity(p_entity);
+
+		if (!entityIsOnWest && !entityIsOnNorth)
+			m_cardinalPoints[3]->AddEntity(p_entity);
 	}
 
 } // Core

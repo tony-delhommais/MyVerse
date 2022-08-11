@@ -26,7 +26,7 @@ namespace Core
 		virtual bool IntersectWithEntity(std::shared_ptr<Entity> p_entity) = 0;
 
 	public:
-		glm::vec3 GetPosition();
+		const glm::vec3& GetPosition();
 
 	protected:
 		glm::vec3 m_position;

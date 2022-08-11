@@ -6,6 +6,8 @@
 
 #include "Core/Entity/EntityQuadTree.h"
 
+#include "Core/CoreClass/ApplicationCore.h"
+
 #include "Core/Components/Camera.h"
 
 #include "Core/Area/OrientationFixedRectangleArea.h"
@@ -147,12 +149,13 @@ namespace Core
 
 		auto entitiesToRender = m_entityQuadTree->GetEntitiesOnCircleArea(m_renderCamera->GetDynamicEntityRenderingArea());
 
-		glm::mat4 VPMatrix = m_renderCamera->GetViewProjectionMatrix();
-		glm::mat4 id = glm::mat4(1);
+		glm::mat4 VueProjectionMatrix = m_renderCamera->GetViewProjectionMatrix();
+
+		ApplicationCore::instance().GetActiveShader()->SetUniformMat4("VueProjectionMatrix", VueProjectionMatrix);
 
 		for(auto& entity : entitiesToRender)
 		{
-			entity->Render(VPMatrix);
+			entity->Render();
 		}
 	}
 

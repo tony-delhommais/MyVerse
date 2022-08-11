@@ -48,7 +48,7 @@ namespace Core
 		}
 		else
 		{
-			if (!m_invertTextures) ApplicationCore::instance().GetActiveShader()->SetUniformInt("textureInversion", 1);
+			if (!m_invertTextures) ApplicationCore::instance().GetActiveShader()->SetUniformInt("textureInversionValue", 1);
 
 			if (m_diffuseTexture)
 			{
@@ -59,11 +59,6 @@ namespace Core
 				m_diffuseTexture = RessourceManager::FindTexture(m_diffuseTextureUuid);
 			}
 		}
-	}
-
-	void Material::NotUse()
-	{
-		Texture::NotUse();
 	}
 
 } // Core

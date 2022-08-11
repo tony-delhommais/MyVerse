@@ -14,50 +14,46 @@ namespace Core
 		m_width = p_width;
 		m_height = p_height;
 
-		m_halfWidth = p_width / 2.0f;
-		m_halfHeight = p_height / 2.0f;
+		m_topLeftX = m_position.x - (p_width / 2.0f);
+		m_topLeftY = m_position.z + (p_width / 2.0f);
+
+		m_topRightX = m_position.x + (p_height / 2.0f);
+		m_topRightY = m_position.z + (p_width / 2.0f);
+
+		m_bottomLeftX = m_position.x - (p_width / 2.0f);
+		m_bottomLeftY = m_position.z - (p_height / 2.0f);
+
+		m_bottomRightX = m_position.x + (p_height / 2.0f);
+		m_bottomRightY = m_position.z - (p_height / 2.0f);
 	}
 
 	bool OrientationFixedRectangleArea::IntersectWithEntity(std::shared_ptr<Entity> p_entity)
 	{
 		auto entityPosition = p_entity->GetLocalPosition();
 
-		return entityPosition.x >= m_position.x - m_halfWidth &&
-			entityPosition.x <= m_position.x + m_halfWidth &&
-			entityPosition.z >= m_position.z - m_halfHeight &&
-			entityPosition.z <= m_position.z + m_halfHeight;
+		return entityPosition.x >= m_topLeftX &&
+			entityPosition.x <= m_bottomRightX &&
+			entityPosition.z >= m_bottomRightY &&
+			entityPosition.z <= m_topLeftY;
 	}
 
 	bool OrientationFixedRectangleArea::IntersectWithCircleArea(std::shared_ptr<CircleArea> p_circleArea)
 	{
-		float bottomLeftX = m_position.x - m_halfWidth;
-		float bottomLeftY = m_position.z - m_halfHeight;
-
-		float deltaX = p_circleArea->GetPosition().x - fmax(bottomLeftX, fmin(p_circleArea->GetPosition().x, bottomLeftX + m_width));
-		float deltaY = p_circleArea->GetPosition().z - fmax(bottomLeftY, fmin(p_circleArea->GetPosition().z, bottomLeftY + m_height));
+		float deltaX = p_circleArea->GetPosition().x - fmax(m_bottomLeftX, fmin(p_circleArea->GetPosition().x, m_topRightX));
+		float deltaY = p_circleArea->GetPosition().z - fmax(m_bottomLeftY, fmin(p_circleArea->GetPosition().z, m_topRightY));
 
 		return (deltaX * deltaX + deltaY * deltaY) < (p_circleArea->GetRadius() * p_circleArea->GetRadius());
 	}
 
 	bool OrientationFixedRectangleArea::IntersectWithOrientationFixedRectangleArea(std::shared_ptr<OrientationFixedRectangleArea> p_quadArea)
 	{
-		float thisTopLeftX = m_position.x - m_halfWidth;
-		float thisTopLeftY = m_position.z + m_halfWidth;
-		float thisBottomRightX = m_position.x + m_halfHeight;
-		float thisBottomRightY = m_position.z - m_halfHeight;
-
-		float otherTopLeftX = p_quadArea->m_position.x - p_quadArea->m_halfWidth;
-		float otherTopLeftY = p_quadArea->m_position.z + p_quadArea->m_halfHeight;
-		float otherBottomRightX = p_quadArea->m_position.x + p_quadArea->m_halfWidth;
-		float otherBottomRightY = p_quadArea->m_position.z - p_quadArea->m_halfHeight;
-
-		if(thisTopLeftX == thisTopLeftY || thisBottomRightX == thisBottomRightY || otherTopLeftX == otherTopLeftY || otherBottomRightX == otherBottomRightY)
+		if (m_topLeftX == m_topLeftY || m_bottomRightX == m_bottomRightY || p_quadArea->m_topLeftX == p_quadArea->m_topLeftY || p_quadArea->m_bottomRightX == p_quadArea->m_bottomRightY)
 			return false;
 
-		if(thisTopLeftX > otherBottomRightX || otherTopLeftX > thisBottomRightX)
+		if (m_topLeftX > p_quadArea->m_bottomRightX || p_quadArea->m_topLeftX > m_bottomRightX)
 			return false;
 
-		if(thisTopLeftY > otherBottomRightY || otherTopLeftY > thisBottomRightY)
+		if (m_topLeftY > p_quadArea->m_bottomRightY || p_quadArea->m_topLeftY > m_bottomRightY)
 			return false;
 
 		return true;

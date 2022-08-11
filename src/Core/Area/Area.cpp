@@ -12,7 +12,7 @@ namespace Core
 		m_position = p_position * glm::vec3(1.0, 0.0, 1.0);
 	}
 
-	glm::vec3 Area::GetPosition()
+	const glm::vec3& Area::GetPosition()
 	{
 		return m_position;
 	}

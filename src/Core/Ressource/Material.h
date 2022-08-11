@@ -29,7 +29,6 @@ namespace Core
 		static std::shared_ptr<Material> Load(const std::filesystem::path& p_path);
 
 		void Use();
-		void NotUse();
 
 	private:
 		bool m_useSolidColor = true;

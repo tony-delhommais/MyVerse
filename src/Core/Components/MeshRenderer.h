@@ -41,7 +41,7 @@ namespace Core
 		void FindMaterialRef(int p_meshId);
 
 	public:
-		void Render(const glm::mat4& p_MVP);
+		void Render();
 
 	private:
 		void SetMeshes(std::vector<std::shared_ptr<Mesh>> p_meshes);

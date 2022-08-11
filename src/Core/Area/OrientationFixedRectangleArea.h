@@ -32,8 +32,17 @@ namespace Core
 		float m_width = 1.0f;
 		float m_height = 1.0f;
 
-		float m_halfWidth = 0.5f;
-		float m_halfHeight = 0.5f;
+		float m_topLeftX = 0.0f;
+		float m_topLeftY = 0.0f;
+
+		float m_topRightX = 0.0f;
+		float m_topRightY = 0.0f;
+
+		float m_bottomLeftX = 0.0f;
+		float m_bottomLeftY = 0.0f;
+
+		float m_bottomRightX = 0.0f;
+		float m_bottomRightY = 0.0f;
 	};
 
 } // Core

@@ -4,8 +4,6 @@
 
 #include "Core/Components/MeshRenderer.h"
 
-#include "Core/CoreClass/ApplicationCore.h"
-
 #include "Core/Managers/RessourceManager.h"
 
 #include "Core/Ressource/Mesh.h"
@@ -70,10 +68,8 @@ namespace Core
 		SetRenderMaterial(material, p_meshId);
 	}
 
-	void MeshRenderer::Render(const glm::mat4& p_MVP)
+	void MeshRenderer::Render()
 	{
-		ApplicationCore::instance().GetActiveShader()->SetUniformMat4("MVP", p_MVP);
-
 		if (m_meshesMaterials.empty())
 		{
 			FindMeshRef();
@@ -93,9 +89,6 @@ namespace Core
 						link.material->Use();
 
 					link.mesh->RenderMesh();
-
-					if (link.material)
-						link.material->NotUse();
 				}
 
 				meshId++;

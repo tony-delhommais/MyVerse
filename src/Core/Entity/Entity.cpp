@@ -436,20 +436,20 @@ void Entity::UpdateExecution(float p_deltaTime)
 	DetermineNextEntityState();
 }
 
-void Entity::Render(const glm::mat4& p_VPMatrix)
+void Entity::Render()
 {
 	if (m_isActive)
 	{
 		if (m_meshRenderer)
 		{
-			glm::mat4 MVP = p_VPMatrix * GetWorldTransform();
+			ApplicationCore::instance().GetActiveShader()->SetUniformMat4("ModelMatrix", GetWorldTransform());
 
-			m_meshRenderer->Render(MVP);
+			m_meshRenderer->Render();
 		}
 
 		for (auto& child : m_childrens)
 		{
-			child->Render(p_VPMatrix);
+			child->Render();
 		}
 	}
 }
@@ -500,14 +500,14 @@ bool Entity::IsEntityReferencedToAPrefab()
 	return prefabRefStruct != nullptr;
 }
 
-glm::mat4 Entity::GetLocalTransform()
+const glm::mat4& Entity::GetLocalTransform()
 {
 	ComputeLocalTransform();
 
 	return m_localTransform;
 }
 
-glm::mat4 Entity::GetWorldTransform()
+const glm::mat4& Entity::GetWorldTransform()
 {
 	if (m_getWorldTransformLastCompute == ApplicationCore::instance().GetFrameCount()) return m_worldTransform;
 	m_getWorldTransformLastCompute = ApplicationCore::instance().GetFrameCount();
@@ -529,12 +529,12 @@ void Entity::SetLocalPosition(const glm::vec3& p_position)
 	ComputeLocalTransform();
 }
 
-glm::vec3 Entity::GetLocalPosition()
+const glm::vec3& Entity::GetLocalPosition()
 {
 	return m_localPosition;
 }
 
-glm::vec3 Entity::GetWorldPosition()
+const glm::vec3& Entity::GetWorldPosition()
 {
 	DecomposeWorldTransform();
 
@@ -589,12 +589,12 @@ void Entity::SetLocalScale(const glm::vec3& p_scale)
 	ComputeLocalTransform();
 }
 
-glm::vec3 Entity::GetLocalScale()
+const glm::vec3& Entity::GetLocalScale()
 {
 	return m_localScale;
 }
 
-glm::vec3 Entity::GetWorldScale()
+const glm::vec3& Entity::GetWorldScale()
 {
 	DecomposeWorldTransform();
 

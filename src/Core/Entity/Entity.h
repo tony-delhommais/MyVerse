@@ -103,7 +103,7 @@ namespace Core
 		}
 
 		void UpdateExecution(float p_deltaTime);
-		void Render(const glm::mat4& p_VPMatrix);
+		void Render();
 
 	public:
 		EntityExecutionState GetCurrentEntityExecutionState();
@@ -117,12 +117,12 @@ namespace Core
 		void SetPrefabReferenceUuid(const UUIDv4::UUID& p_prefabReferenceUuid);
 		bool IsEntityReferencedToAPrefab();
 
-		glm::mat4 GetLocalTransform();
-		glm::mat4 GetWorldTransform();
+		const glm::mat4& GetLocalTransform();
+		const glm::mat4& GetWorldTransform();
 
 		void SetLocalPosition(const glm::vec3& p_position);
-		glm::vec3 GetLocalPosition();
-		glm::vec3 GetWorldPosition();
+		const glm::vec3& GetLocalPosition();
+		const glm::vec3& GetWorldPosition();
 
 		void SetLocalRotation(const glm::quat& p_rotation);
 		glm::quat GetLocalRotation();
@@ -133,8 +133,8 @@ namespace Core
 		glm::vec3 GetWorldEulerRotation(bool p_useDegree = true);
 
 		void SetLocalScale(const glm::vec3& p_scale);
-		glm::vec3 GetLocalScale();
-		glm::vec3 GetWorldScale();
+		const glm::vec3& GetLocalScale();
+		const glm::vec3& GetWorldScale();
 
 	private:
 		bool IsChildOf(std::shared_ptr<Entity> p_testEntity);
