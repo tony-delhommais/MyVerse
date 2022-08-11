@@ -50,8 +50,6 @@ namespace Core
 				meshRenderer->m_usedMaterialsUuid.insert(std::map<int, UUIDv4::UUID>::value_type(linkId, uuid));
 			}
 		}
-		//std::string shaderUuid = "63101c80-44b9-4554-a848-5963002a864b";
-		//meshRenderer->m_shaderUuid = UUIDv4::UUID::fromStrFactory(shaderUuid);
 
 		return meshRenderer;
 	}
@@ -74,17 +72,6 @@ namespace Core
 
 	void MeshRenderer::Render(const glm::mat4& p_MVP)
 	{
-		/*if (m_shader)
-		{
-			m_shader->Use();
-			m_shader->SetUniformMat4("MVP", p_MVP);
-		}
-		else
-		{
-			//m_shader = RessourceManager::FindShader(m_shaderUuid);
-		}*/
-
-		ApplicationCore::instance().GetActiveShader()->Use();
 		ApplicationCore::instance().GetActiveShader()->SetUniformMat4("MVP", p_MVP);
 
 		if (m_meshesMaterials.empty())
@@ -103,7 +90,7 @@ namespace Core
 						FindMaterialRef(meshId);
 
 					if (link.material)
-						link.material->Use(ApplicationCore::instance().GetActiveShader());
+						link.material->Use();
 
 					link.mesh->RenderMesh();
 

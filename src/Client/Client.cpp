@@ -6,14 +6,14 @@
 
 int main(int argc, char *argv[])
 {
-    Core::ApplicationCore& app = Core::ApplicationCore::instance();
+	Core::ApplicationCore& app = Core::ApplicationCore::instance();
 
-    if (app.Initialize())
-    {
-        app.RenderLoop();
-    }
+	if (app.Initialize())
+	{
+		app.RenderLoop();
+	}
 
-    app.Clear();
+	app.Clear();
 
-    return 0;
+	return 0;
 }

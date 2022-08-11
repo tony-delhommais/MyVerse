@@ -34,14 +34,13 @@ void SpawnTest::Start()
 	}
 }
 
-bool SpawnTest::s_isRegistered = ScriptFactory::instance().Register("SpawnTest", [](JsonObject& parameters)
-	{
-		auto script = std::make_shared<SpawnTest>();
+bool SpawnTest::s_isRegistered = ScriptFactory::instance().Register("SpawnTest", [](JsonObject& parameters) {
+	auto script = std::make_shared<SpawnTest>();
 
-		script->testPrefabUuid = GetParameterFromJsonObject(parameters, "TestPrefabUuid", script->testPrefabUuid);
+	script->testPrefabUuid = GetParameterFromJsonObject(parameters, "TestPrefabUuid", script->testPrefabUuid);
 
-		script->x = GetParameterFromJsonObject(parameters, "X", script->x);
-		script->y = GetParameterFromJsonObject(parameters, "Y", script->y);
+	script->x = GetParameterFromJsonObject(parameters, "X", script->x);
+	script->y = GetParameterFromJsonObject(parameters, "Y", script->y);
 
-		return script;
-	});
+	return script;
+});

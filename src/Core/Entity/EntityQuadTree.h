@@ -25,14 +25,14 @@ namespace Core
 		static std::shared_ptr<EntityQuadTree> Make(JsonObject& psceneData);
 
 	public:
-        bool AddEntity(const std::shared_ptr<Entity>& p_newEntity);
-        void Clear();
+		bool AddEntity(const std::shared_ptr<Entity>& p_newEntity);
+		void Clear();
 
 		int GetEntitiesCount();
-        std::vector<std::shared_ptr<Entity>> GetEntitiesOnCircleArea(std::shared_ptr<CircleArea> p_circleArea);
+		std::vector<std::shared_ptr<Entity>> GetEntitiesOnCircleArea(std::shared_ptr<CircleArea> p_circleArea);
 
-        std::shared_ptr<Entity> FindEntityWithTag(const std::string& p_tag);
-        std::vector<std::shared_ptr<Entity>> FindEntitiesWithTag(const std::string& p_tag);
+		std::shared_ptr<Entity> FindEntityWithTag(const std::string& p_tag);
+		std::vector<std::shared_ptr<Entity>> FindEntitiesWithTag(const std::string& p_tag);
 
 	private:
 		void SubDivide();
@@ -40,21 +40,21 @@ namespace Core
 		void AddEntityToCardinal(std::shared_ptr<Entity> p_entity);
 
 	private:
-        std::shared_ptr<OrientationFixedRectangleArea> m_area = nullptr;
+		std::shared_ptr<OrientationFixedRectangleArea> m_area = nullptr;
 
 		int m_maxDepth = 0;
 		int m_maxEntity = 50;
 
-        std::list<std::shared_ptr<Entity>> m_entities;
+		std::list<std::shared_ptr<Entity>> m_entities;
 
 		bool m_isSubdivided = false;
 
-        std::unique_ptr<EntityQuadTree> m_cardinalPoints[4] = {
-                nullptr,
-                nullptr,
-                nullptr,
-                nullptr
-        };
+		std::unique_ptr<EntityQuadTree> m_cardinalPoints[4] = {
+				nullptr,
+				nullptr,
+				nullptr,
+				nullptr
+		};
 	};
 
 } // Core

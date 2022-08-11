@@ -18,12 +18,12 @@ namespace Core
 		Script() = default;
 		virtual ~Script() = default;
 
-        virtual void Awake();
-        virtual void OnEnable();
+		virtual void Awake();
+		virtual void OnEnable();
 		virtual void Start();
 		//virtual void FixedUpdate(float p_fixedDeltaTime);
 		virtual void Update(float p_deltaTime);
-        virtual void OnDisable();
+		virtual void OnDisable();
 		virtual void Destroy();
 	};
 

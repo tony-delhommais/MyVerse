@@ -34,7 +34,6 @@ namespace Core
 		std::shared_ptr<CircleArea> GetDynamicEntityRenderingArea();
 
 	private:
-
 		float m_fov = 60.0f;
 		float m_nearPlan = 0.01f;
 		float m_farPlan = 100.0f;

@@ -39,14 +39,14 @@ namespace Core
 		return InputCore::instance().IsMouseButtonUp(p_mouseButton);
 	}
 
-    glm::vec2 Input::GetMousePosition()
+	glm::vec2 Input::GetMousePosition()
 	{
 		return InputCore::instance().GetMousePosition();
-    }
+	}
 
-    glm::vec2 Input::GetMouseMovement()
+	glm::vec2 Input::GetMouseMovement()
 	{
 		return InputCore::instance().GetMouseMovement();
-    }
+	}
 
 } // Core

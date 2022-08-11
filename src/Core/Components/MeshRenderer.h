@@ -55,9 +55,6 @@ namespace Core
 		std::vector<LinkMeshMaterial> m_meshesMaterials;
 
 		std::map<int, UUIDv4::UUID> m_usedMaterialsUuid;
-
-		//UUIDv4::UUID m_shaderUuid;
-		//std::shared_ptr<Shader> m_shader = nullptr;
 	};
 
 } // Core

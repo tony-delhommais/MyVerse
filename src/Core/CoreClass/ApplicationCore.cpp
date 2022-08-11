@@ -109,7 +109,7 @@ namespace Core
 				glfwPollEvents();
 
 				if (glfwWindowShouldClose(m_window) || m_sceneToLoad != -1)
-					m_activeScene->StopExecution();
+				m_activeScene->StopExecution();
 
 #ifdef _DEBUG
 				Clock::instance().ResetStopWatch("RessourceManagementLoop");
@@ -181,8 +181,6 @@ namespace Core
 		std::cout << std::endl;
 		Debug::LogInfo("Application End");
 #endif
-
-		return;
 	}
 
 	void ApplicationCore::Quit()
@@ -408,6 +406,8 @@ namespace Core
 #endif
 			return false;
 		}
+
+		m_activeShader->Use();
 
 		return true;
 	}

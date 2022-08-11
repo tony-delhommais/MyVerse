@@ -7,17 +7,17 @@
 
 namespace Core {
 
-    enum EntityExecutionState
-    {
-        PreAwake,
-        Awake,
-        OnEnable,
-        Start,
-        Update,
-        OnDisable,
-        Destroy,
-        PostDestroy
-    };
+	enum EntityExecutionState
+	{
+		PreAwake,
+		Awake,
+		OnEnable,
+		Start,
+		Update,
+		OnDisable,
+		Destroy,
+		PostDestroy
+	};
 
 } // Core
 

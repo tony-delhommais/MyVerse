@@ -25,8 +25,7 @@ namespace Core
 		new_axis.positive = GetParameterFromJsonObject(p_newAxis, "PositiveKey", GLFW_KEY_UNKNOWN);
 		new_axis.negative = GetParameterFromJsonObject(p_newAxis, "NegativeKey", GLFW_KEY_UNKNOWN);
 
-		if (new_axis.positive == GLFW_KEY_UNKNOWN || new_axis.negative == GLFW_KEY_UNKNOWN)
-			return;
+		if (new_axis.positive == GLFW_KEY_UNKNOWN || new_axis.negative == GLFW_KEY_UNKNOWN) return;
 
 		m_keyAxis.push_back(new_axis);
 	}
@@ -84,7 +83,7 @@ namespace Core
 		for (int keyCode : m_keysDown)
 		{
 			if (keyCode == p_keyCode)
-				return true;
+			return true;
 		}
 
 		return false;
@@ -97,7 +96,7 @@ namespace Core
 		for (int keyCode : m_keysUp)
 		{
 			if (keyCode == p_keyCode)
-				return true;
+			return true;
 		}
 
 		return false;
@@ -108,7 +107,7 @@ namespace Core
 		for (KeyAxis& keyAxis : m_keyAxis)
 		{
 			if (keyAxis.name == p_axisName)
-				return keyAxis.value;
+			return keyAxis.value;
 		}
 #ifdef _DEBUG
 		Debug::LogInfo("[Input] Failed to get Axis " + p_axisName);
@@ -121,7 +120,7 @@ namespace Core
 		for (int mouseButton : m_mouseButtonDown)
 		{
 			if (mouseButton == p_mouseButton)
-				return true;
+			return true;
 		}
 
 		return false;
@@ -132,7 +131,7 @@ namespace Core
 		for (int mouseButton : m_mouseButtonUp)
 		{
 			if (mouseButton == p_mouseButton)
-				return true;
+			return true;
 		}
 
 		return false;

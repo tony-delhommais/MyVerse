@@ -19,160 +19,160 @@ namespace Core
 
 	Scene::Scene()
 	{
-        m_renderCamera = std::make_shared<Camera>();
-    }
+		m_renderCamera = std::make_shared<Camera>();
+	}
 
-    std::shared_ptr<Scene> Scene::Make(const std::filesystem::path& p_scenePath)
-    {
-        auto sceneJson = LoadJsonFile(p_scenePath);
-        if (sceneJson.empty())
-        {
+	std::shared_ptr<Scene> Scene::Make(const std::filesystem::path& p_scenePath)
+	{
+		auto sceneJson = LoadJsonFile(p_scenePath);
+		if (sceneJson.empty())
+		{
 #ifdef _DEBUG
-            Debug::LogWarning("[SceneFactory] Unable to locate scene config file, trying at " + p_scenePath.string());
+			Debug::LogWarning("[SceneFactory] Unable to locate scene config file, trying at " + p_scenePath.string());
 #endif
-            return nullptr;
-        }
+			return nullptr;
+		}
 
-        auto scene = std::make_shared<Scene>();
+		auto scene = std::make_shared<Scene>();
 
-        auto sceneQuadTree = EntityQuadTree::Make(sceneJson);
-        if (!sceneQuadTree)
-        {
+		auto sceneQuadTree = EntityQuadTree::Make(sceneJson);
+		if (!sceneQuadTree)
+		{
 #ifdef _DEBUG
-            Debug::LogWarning("[SceneFactory] Failed to parse EntityQuadTree settings on scene " + p_scenePath.string());
+			Debug::LogWarning("[SceneFactory] Failed to parse EntityQuadTree settings on scene " + p_scenePath.string());
 #endif
-            return nullptr;
-        }
+			return nullptr;
+		}
 
-        scene->m_entityQuadTree = sceneQuadTree;
+		scene->m_entityQuadTree = sceneQuadTree;
 
-        auto localEntitiesArray = GetParameterFromJsonObject(sceneJson, "LocalEntities", true, false);
-        if (localEntitiesArray != sceneJson)
-        {
-            for (auto& localEntityData : localEntitiesArray)
-            {
-                auto newLocalEntity = Entity::Make(localEntityData);
+		auto localEntitiesArray = GetParameterFromJsonObject(sceneJson, "LocalEntities", true, false);
+		if (localEntitiesArray != sceneJson)
+		{
+			for (auto& localEntityData : localEntitiesArray)
+			{
+				auto newLocalEntity = Entity::Make(localEntityData);
 
-                if (!newLocalEntity)
-                {
+				if (!newLocalEntity)
+				{
 #ifdef _DEBUG
-                    Debug::LogWarning("[SceneFactory] Failed to parse a local Entity");
+					Debug::LogWarning("[SceneFactory] Failed to parse a local Entity");
 #endif
-                    continue;
-                }
+					continue;
+				}
 
-                scene->AddLocalEntity(newLocalEntity);
-            }
-        }
+				scene->AddLocalEntity(newLocalEntity);
+			}
+		}
 
-        scene->BuildEntityQuadTree();
+		scene->BuildEntityQuadTree();
 
-        std::shared_ptr<Camera> camera = nullptr;
+		std::shared_ptr<Camera> camera = nullptr;
 
-        auto mainCameraEntity = scene->FindLocalEntityWithTag("MainCamera");
-        if (mainCameraEntity) camera = mainCameraEntity->GetComponent<Camera>();
+		auto mainCameraEntity = scene->FindLocalEntityWithTag("MainCamera");
+		if (mainCameraEntity) camera = mainCameraEntity->GetComponent<Camera>();
 
-        if (!camera)
-        {
+		if (!camera)
+		{
 #ifdef _DEBUG
-            Debug::LogError("[SceneFactory] Failed to find the render Camera of the Player");
+			Debug::LogError("[SceneFactory] Failed to find the render Camera of the Player");
 #endif
-            return nullptr;
-        }
+			return nullptr;
+		}
 
-        scene->m_renderCamera = camera;
+		scene->m_renderCamera = camera;
 
-        return scene;
-    }
+		return scene;
+	}
 
-    void Scene::AddLocalEntity(std::shared_ptr<Entity> p_entity)
-    {
-        m_localEntities.push_back(p_entity);
-    }
+	void Scene::AddLocalEntity(std::shared_ptr<Entity> p_entity)
+	{
+		m_localEntities.push_back(p_entity);
+	}
 
-    void Scene::RemoveLocalEntity(std::shared_ptr<Entity> p_entity)
-    {
-        m_localEntities.erase(std::remove(m_localEntities.begin(), m_localEntities.end(), p_entity), m_localEntities.end());
-    }
+	void Scene::RemoveLocalEntity(std::shared_ptr<Entity> p_entity)
+	{
+		m_localEntities.erase(std::remove(m_localEntities.begin(), m_localEntities.end(), p_entity), m_localEntities.end());
+	}
 
-    std::shared_ptr<Entity> Scene::FindLocalEntityWithTag(const std::string& p_tag)
-    {
-        return m_entityQuadTree->FindEntityWithTag(p_tag);
-    }
+	std::shared_ptr<Entity> Scene::FindLocalEntityWithTag(const std::string& p_tag)
+	{
+		return m_entityQuadTree->FindEntityWithTag(p_tag);
+	}
 
-    std::vector<std::shared_ptr<Entity>> Scene::FindLocalEntitiesWithTag(const std::string& p_tag)
-    {
-        return m_entityQuadTree->FindEntitiesWithTag(p_tag);
-    }
+	std::vector<std::shared_ptr<Entity>> Scene::FindLocalEntitiesWithTag(const std::string& p_tag)
+	{
+		return m_entityQuadTree->FindEntitiesWithTag(p_tag);
+	}
 
-    void Scene::UpdateExecution(float p_deltaTime)
-    {
-        for(auto& entity : m_localEntities)
-        {
-            entity->UpdateExecution(p_deltaTime);
-        }
-    }
+	void Scene::UpdateExecution(float p_deltaTime)
+	{
+		for(auto& entity : m_localEntities)
+		{
+			entity->UpdateExecution(p_deltaTime);
+		}
+	}
 
-    void Scene::StopExecution()
-    {
-        for(auto& entity : m_localEntities)
-        {
-            entity->DestroyEntity();
-        }
-    }
+	void Scene::StopExecution()
+	{
+		for(auto& entity : m_localEntities)
+		{
+			entity->DestroyEntity();
+		}
+	}
 
-    void Scene::RemoveDestroyedLocalEntities()
-    {
-        std::list<std::shared_ptr<Entity>> toRemove;
+	void Scene::RemoveDestroyedLocalEntities()
+	{
+		std::list<std::shared_ptr<Entity>> toRemove;
 
-        for(auto& entity : m_localEntities)
-        {
-            if(entity->GetCurrentEntityExecutionState() == EntityExecutionState::PostDestroy)
-            {
-                toRemove.push_back(entity);
-            }
-        }
+		for(auto& entity : m_localEntities)
+		{
+			if(entity->GetCurrentEntityExecutionState() == EntityExecutionState::PostDestroy)
+			{
+				toRemove.push_back(entity);
+			}
+		}
 
-        for (auto& childToRemove : toRemove)
-        {
-            m_localEntities.remove(childToRemove);
-        }
-    }
+		for (auto& childToRemove : toRemove)
+		{
+			m_localEntities.remove(childToRemove);
+		}
+	}
 
-    void Scene::Render()
-    {
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	void Scene::Render()
+	{
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        BuildEntityQuadTree();
+		BuildEntityQuadTree();
 
-        auto entitiesToRender = m_entityQuadTree->GetEntitiesOnCircleArea(m_renderCamera->GetDynamicEntityRenderingArea());
+		auto entitiesToRender = m_entityQuadTree->GetEntitiesOnCircleArea(m_renderCamera->GetDynamicEntityRenderingArea());
 
-        glm::mat4 VPMatrix = m_renderCamera->GetViewProjectionMatrix();
-        glm::mat4 id = glm::mat4(1);
+		glm::mat4 VPMatrix = m_renderCamera->GetViewProjectionMatrix();
+		glm::mat4 id = glm::mat4(1);
 
-        for(auto& entity : entitiesToRender)
-        {
-            entity->Render(VPMatrix, id);
-        }
-    }
+		for(auto& entity : entitiesToRender)
+		{
+			entity->Render(VPMatrix);
+		}
+	}
 
-    void Scene::BuildEntityQuadTree()
-    {
-        m_entityQuadTree->Clear();
+	void Scene::BuildEntityQuadTree()
+	{
+		m_entityQuadTree->Clear();
 
-        for (auto& entity : m_localEntities)
-        {
-            bool isAdded = m_entityQuadTree->AddEntity(entity);
+		for (auto& entity : m_localEntities)
+		{
+			bool isAdded = m_entityQuadTree->AddEntity(entity);
 #ifdef _DEBUG
-            if (!isAdded)
-                Debug::LogWarning("[Scene] a local Entity is out of QuadTree range");
+			if (!isAdded)
+				Debug::LogWarning("[Scene] a local Entity is out of QuadTree range");
 #endif
-        }
-    }
+		}
+	}
 
-    bool Scene::HasLocalEntities()
-    {
-        return !m_localEntities.empty();
-    }
+	bool Scene::HasLocalEntities()
+	{
+		return !m_localEntities.empty();
+	}
 
 } // Core

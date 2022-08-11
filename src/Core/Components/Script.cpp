@@ -11,39 +11,18 @@
 namespace Core
 {
 
-    void Script::Awake()
-    {
+	void Script::Awake() {}
 
-    }
+	void Script::OnEnable() {}
 
-    void Script::OnEnable()
-    {
+	void Script::Start() {}
 
-    }
+	//void Script::FixedUpdate(float p_fixedDeltaTime) {}
 
-	void Script::Start()
-	{
+	void Script::Update(float p_deltaTime) {}
 
-	}
+	void Script::OnDisable() {}
 
-	/*void Script::FixedUpdate(float p_fixedDeltaTime)
-	{
-
-	}*/
-
-	void Script::Update(float p_deltaTime)
-	{
-
-	}
-
-    void Script::OnDisable()
-    {
-
-    }
-
-	void Script::Destroy()
-	{
-
-	}
+	void Script::Destroy() {}
 
 } // Core

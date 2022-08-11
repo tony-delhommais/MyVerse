@@ -60,14 +60,13 @@ void PlayerMovementController::UpdateCameraRotation(float p_deltaTime)
 	GetEntity()->RotateEuler(glm::vec3(0.0, mouseMovement.x, 0.0) * (cameraRotationSpeed * 2) / 100.0f);
 }
 
-bool PlayerMovementController::s_isRegistered = ScriptFactory::instance().Register("PlayerMovementController", [](JsonObject& parameters)
-	{
-		auto script = std::make_shared<PlayerMovementController>();
+bool PlayerMovementController::s_isRegistered = ScriptFactory::instance().Register("PlayerMovementController", [](JsonObject& parameters) {
+	auto script = std::make_shared<PlayerMovementController>();
 
-		script->playerAcceleration = GetParameterFromJsonObject(parameters, "PlayerAcceleration", script->playerAcceleration);
-		script->playerMaxSpeed = GetParameterFromJsonObject(parameters, "PlayerMaxSpeed", script->playerMaxSpeed);
+	script->playerAcceleration = GetParameterFromJsonObject(parameters, "PlayerAcceleration", script->playerAcceleration);
+	script->playerMaxSpeed = GetParameterFromJsonObject(parameters, "PlayerMaxSpeed", script->playerMaxSpeed);
 
-		script->cameraRotationSpeed = GetParameterFromJsonObject(parameters, "CameraRotationSpeed", script->cameraRotationSpeed);
+	script->cameraRotationSpeed = GetParameterFromJsonObject(parameters, "CameraRotationSpeed", script->cameraRotationSpeed);
 
-		return script;
-	});
+	return script;
+});

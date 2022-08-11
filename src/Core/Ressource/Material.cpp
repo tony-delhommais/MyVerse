@@ -7,6 +7,8 @@
 
 #include "Core/Managers/RessourceManager.h"
 
+#include "Core/CoreClass/ApplicationCore.h"
+
 namespace Core
 {
 
@@ -38,15 +40,15 @@ namespace Core
 		return material;
 	}
 
-	void Material::Use(std::shared_ptr<Shader> p_shader)
+	void Material::Use()
 	{
 		if (m_useSolidColor)
 		{
-			if (p_shader) p_shader->SetUniformVec3("solidColor", m_solidColor);
+			ApplicationCore::instance().GetActiveShader()->SetUniformVec3("solidColor", m_solidColor);
 		}
 		else
 		{
-			if (p_shader && !m_invertTextures) p_shader->SetUniformInt("textureInversion", 1);
+			if (!m_invertTextures) ApplicationCore::instance().GetActiveShader()->SetUniformInt("textureInversion", 1);
 
 			if (m_diffuseTexture)
 			{

@@ -63,7 +63,7 @@ namespace Core
 		}
 
 #ifdef _DEBUG
-    Debug::LogWarning("[Camera] Not assigned to an Entity");
+		Debug::LogWarning("[Camera] Not assigned to an Entity");
 #endif
 
 		return glm::mat4(1.0);

@@ -12,25 +12,25 @@
 namespace Core
 {
 
-    class CircleArea;
-    class QuadArea;
+	class CircleArea;
+	class QuadArea;
 
-    class Area : public std::enable_shared_from_this<Area>
-    {
-    public:
-        Area() = default;
-        Area(const glm::vec3& p_position);
-        ~Area() = default;
+	class Area : public std::enable_shared_from_this<Area>
+	{
+	public:
+		Area() = default;
+		Area(const glm::vec3& p_position);
+		~Area() = default;
 
-    public:
-        virtual bool IntersectWithEntity(std::shared_ptr<Entity> p_entity) = 0;
+	public:
+		virtual bool IntersectWithEntity(std::shared_ptr<Entity> p_entity) = 0;
 
-    public:
-        glm::vec3 GetPosition();
+	public:
+		glm::vec3 GetPosition();
 
-    protected:
-        glm::vec3 m_position;
-    };
+	protected:
+		glm::vec3 m_position;
+	};
 
 } // Core
 

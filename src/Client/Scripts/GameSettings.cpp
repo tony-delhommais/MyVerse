@@ -26,9 +26,8 @@ void GameSettings::Update(float p_deltaTime)
 	}
 }
 
-bool GameSettings::s_isRegistered = ScriptFactory::instance().Register("GameSettings", [](JsonObject& parameters)
-	{
-		auto script = std::make_shared<GameSettings>();
+bool GameSettings::s_isRegistered = ScriptFactory::instance().Register("GameSettings", [](JsonObject& parameters) {
+	auto script = std::make_shared<GameSettings>();
 
-		return script;
-	});
+	return script;
+});

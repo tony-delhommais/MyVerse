@@ -3,6 +3,10 @@ project(MyVerse)
 
 set(CMAKE_CXX_STANDARD 20)
 
+if(NOT WIN32)
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=native")
+endif()
+
 set(FETCHCONTENT_UPDATES_DISCONNECTED ON)
 
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/add_glad.cmake)

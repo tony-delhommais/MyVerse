@@ -1,0 +1,29 @@
+{
+  "KeyBinding": [
+    {
+      "Keys": [ 87 ],
+      "Action": "Forward",
+      "Value": 1.0
+    },
+    {
+      "Keys": [ 83 ],
+      "Action": "Forward",
+      "Value": -1.0
+    },
+    {
+      "Keys": [ 68 ],
+      "Action": "Right",
+      "Value": 1.0
+    },
+    {
+      "Keys": [ 65 ],
+      "Action": "Right",
+      "Value": -1.0
+    },
+    {
+      "Keys": [ 256 ],
+      "Action": "Pause",
+      "Value": 0.0
+    }
+  ]
+}

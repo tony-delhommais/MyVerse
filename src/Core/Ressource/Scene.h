@@ -10,9 +10,9 @@
 namespace Core
 {
 
-    class EntityQuadTree;
-    class Entity;
-    class Camera;
+	class EntityQuadTree;
+	class Entity;
+	class Camera;
 
 	class Scene
 	{
@@ -20,36 +20,36 @@ namespace Core
 		Scene();
 		virtual ~Scene() = default;
 
-        static std::shared_ptr<Scene> Make(const std::filesystem::path& p_scenePath);
+		static std::shared_ptr<Scene> Make(const std::filesystem::path& p_scenePath);
 
-    public:
-        void AddLocalEntity(std::shared_ptr<Entity> p_entity);
-        void RemoveLocalEntity(std::shared_ptr<Entity> p_entity);
+	public:
+		void AddLocalEntity(std::shared_ptr<Entity> p_entity);
+		void RemoveLocalEntity(std::shared_ptr<Entity> p_entity);
 
-        std::shared_ptr<Entity> FindLocalEntityWithTag(const std::string& p_tag);
-        std::vector<std::shared_ptr<Entity>> FindLocalEntitiesWithTag(const std::string& p_tag);
+		std::shared_ptr<Entity> FindLocalEntityWithTag(const std::string& p_tag);
+		std::vector<std::shared_ptr<Entity>> FindLocalEntitiesWithTag(const std::string& p_tag);
 
-        void UpdateExecution(float p_deltaTime);
-        void StopExecution();
+		void UpdateExecution(float p_deltaTime);
+		void StopExecution();
 
-        void RemoveDestroyedLocalEntities();
+		void RemoveDestroyedLocalEntities();
 
-        void Render();
+		void Render();
 
-    private:
-        void BuildEntityQuadTree();
+	private:
+		void BuildEntityQuadTree();
 
-    public:
-        bool HasLocalEntities();
+	public:
+		bool HasLocalEntities();
 
 	private:
 		std::shared_ptr<EntityQuadTree> m_entityQuadTree = nullptr;
 
-        std::list<std::shared_ptr<Entity>> m_localEntities;
+		std::list<std::shared_ptr<Entity>> m_localEntities;
 
-        std::shared_ptr<Entity> m_player = nullptr;
+		std::shared_ptr<Entity> m_player = nullptr;
 
-        std::shared_ptr<Camera> m_renderCamera = nullptr;
+		std::shared_ptr<Camera> m_renderCamera = nullptr;
 	};
 
 } // Core

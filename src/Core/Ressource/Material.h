@@ -28,7 +28,7 @@ namespace Core
 	public:
 		static std::shared_ptr<Material> Load(const std::filesystem::path& p_path);
 
-		void Use(std::shared_ptr<Shader> p_shader = nullptr);
+		void Use();
 		void NotUse();
 
 	private:
