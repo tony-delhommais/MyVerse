@@ -82,8 +82,8 @@
 					"Name": "SpawnTest",
 					"Parameters": {
 						"TestPrefabUuid": "53d6c4f2-a49b-47c5-aad3-ead69df327d6",
-						"X": 51,
-						"Y": 51
+						"X": 21,
+						"Y": 21
 					}
 				}
 			]

@@ -415,22 +415,22 @@ void Entity::UpdateExecution(float p_deltaTime)
 		break;
 	}
 
-	std::list<std::shared_ptr<Entity>> toRemove;
-
-	for (auto& child : m_childrens)
+	bool destroyPrevious = false;
+	for (auto it = m_childrens.begin(); it != m_childrens.end(); it++)
 	{
-		child->UpdateExecution(p_deltaTime);
-
-		if(child->GetCurrentEntityExecutionState() == EntityExecutionState::PostDestroy)
+		if (destroyPrevious)
 		{
-			toRemove.push_back(child);
-			continue;
-		}
-	}
+			m_childrens.erase(--it);
 
-	for (auto& childToRemove : toRemove)
-	{
-		m_childrens.remove(childToRemove);
+			destroyPrevious = false;
+		}
+
+		it->get()->UpdateExecution(p_deltaTime);
+
+		if (it->get()->GetCurrentEntityExecutionState() == EntityExecutionState::PostDestroy)
+		{
+			destroyPrevious = true;
+		}
 	}
 
 	DetermineNextEntityState();
