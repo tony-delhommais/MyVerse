@@ -148,16 +148,14 @@ namespace Core
 				{
 					Clock::instance().ResetStopWatch("MainLoopDebugUpdate");
 
-					float d = frameCount;
-
 					if (frameCount != 0)
 					{
-						float l_deltaMainLoop = (int)(deltaMainLoop / d) / 1000.0f;
-						float l_deltaRessourceManagementLoop = (int)(deltaRessourceManagementLoop / d) / 1000.0f;
-						float l_deltaUpdateExecution = (int)(deltaUpdateExecution / d) / 1000.0f;
-						float l_deltaRender = (int)(deltaRender / d) / 1000.0f;
+						float l_deltaMainLoop = (int)(deltaMainLoop / (float)(frameCount)) / 1000.0f;
+						float l_deltaRessourceManagementLoop = (int)(deltaRessourceManagementLoop / (float)(frameCount)) / 1000.0f;
+						float l_deltaUpdateExecution = (int)(deltaUpdateExecution / (float)(frameCount)) / 1000.0f;
+						float l_deltaRender = (int)(deltaRender / (float)(frameCount)) / 1000.0f;
 
-						float l_total = (int)((deltaRessourceManagementLoop + deltaUpdateExecution + deltaRender) / d) / 1000.0f;
+						float l_total = (int)((deltaRessourceManagementLoop + deltaUpdateExecution + deltaRender) / (float)(frameCount)) / 1000.0f;
 
 						std::cout << "\rFU: " << l_deltaMainLoop << "  ML: " << l_deltaRessourceManagementLoop << "  U: " << l_deltaUpdateExecution << "  R: " << l_deltaRender << "  TT: " << l_total << "                  ";
 					}

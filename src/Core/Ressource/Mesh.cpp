@@ -115,7 +115,7 @@ namespace Core
 			return nullptr;
 		}
 
-		mesh->m_nbFaces = nbFaces;
+		mesh->m_nbFaces = (unsigned int)(nbFaces);
 
 		return mesh;
 	}

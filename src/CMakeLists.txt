@@ -1,3 +1,5 @@
+cmake_minimum_required(VERSION 3.8)
+
 set(ENGINE_SOURCES
 	Core/Area/Area.cpp
 	Core/Area/CircleArea.cpp
@@ -48,18 +50,20 @@ set(CLIENT_SOURCES
 
 add_executable(MyVerse "Client/Client.cpp" ${ENGINE_SOURCES} ${CLIENT_SOURCES})
 
+set_property(TARGET MyVerse PROPERTY CXX_STANDARD 20)
+
 if(WIN32)
 	target_link_libraries(MyVerse
+		grpc++
 		glad
 		glfw
-		#grpc++
 		opengl32
 	)
 else()
 	target_link_libraries(MyVerse
+		grpc++
 		glad
 		glfw
-		#grpc++
 		OpenGL
 	)
 endif()
