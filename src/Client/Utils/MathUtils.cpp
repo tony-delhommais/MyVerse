@@ -4,7 +4,7 @@
 
 #include "Client/Utils/MathUtils.h"
 
-namespace Core
+namespace Client
 {
 
 	namespace Math
@@ -45,4 +45,4 @@ namespace Core
 
 	} // Math
 
-} // Core
+} // Client

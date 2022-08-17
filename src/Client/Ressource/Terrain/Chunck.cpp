@@ -4,7 +4,7 @@
 
 #include "Client/Ressource/Terrain/Chunck.h"
 
-namespace Core
+namespace Client
 {
 
 	std::shared_ptr<Chunck> Chunck::Load(const std::filesystem::path& p_chunckPath)
@@ -15,4 +15,4 @@ namespace Core
 		return nullptr;
 	}
 
-} // Core
+} // Client

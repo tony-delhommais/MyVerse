@@ -19,7 +19,7 @@
 
 #include "Client/Common/Debug.h"
 
-namespace Core
+namespace Client
 {
 
 	class Application
@@ -43,6 +43,6 @@ namespace Core
 		static void SetApplicationPause(bool p_pauseState);
 	};
 
-} // Core
+} // Client
 
 #endif // MYVERSE_APPLICATION_H

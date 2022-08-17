@@ -14,7 +14,7 @@
 #include "Client/Common/Debug.h"
 #endif
 
-namespace Core
+namespace Client
 {
 
 	struct KeyAxis
@@ -77,6 +77,6 @@ namespace Core
 		glm::vec2 m_mouseMovement = { 0, 0 };
 	};
 
-} // Core
+} // Client
 
 #endif // MYVERSE_INPUT_CORE_H

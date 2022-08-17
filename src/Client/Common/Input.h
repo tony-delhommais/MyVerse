@@ -8,7 +8,7 @@
 #include "Client/Utils/MathUtils.h"
 #include "Client/Utils/Utils.h"
 
-namespace Core
+namespace Client
 {
 
 	class Input
@@ -27,6 +27,6 @@ namespace Core
 		static glm::vec2 GetMouseMovement();
 	};
 
-} // Core
+} // Client
 
 #endif // MYVERSE_INPUT_H

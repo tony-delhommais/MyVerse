@@ -6,7 +6,7 @@
 
 #include "Client/Common/Clock.h"
 
-namespace Core
+namespace Client
 {
 
 	InputCore& InputCore::instance()
@@ -213,4 +213,4 @@ namespace Core
 		else if (p_action == GLFW_RELEASE) m_mouseButtonUp.push_back(p_mouseButton);
 	}
 
-} // Core
+} // Client

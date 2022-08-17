@@ -8,7 +8,7 @@
 #include "Client/Utils/Utils.h"
 #include "Client/Utils/JsonUtils.h"
 
-namespace Core
+namespace Client
 {
 
 	class Chunck
@@ -20,6 +20,6 @@ namespace Core
 		static std::shared_ptr<Chunck> Load(const std::filesystem::path& p_chunckPath);
 	};
 
-} // Core
+} // Client
 
 #endif // MYVERSE_CHUNCK_H

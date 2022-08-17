@@ -7,7 +7,7 @@
 #include "Client/Core/InputCore.h"
 #include "Client/Core/RessourceManagerCore.h"
 
-namespace Core
+namespace Client
 {
 
 	ApplicationCore& ApplicationCore::instance()
@@ -410,4 +410,4 @@ namespace Core
 		return true;
 	}
 
-} // Core
+} // Client

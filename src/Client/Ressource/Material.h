@@ -15,7 +15,7 @@
 #include "Client/Common/Debug.h"
 #endif
 
-namespace Core
+namespace Client
 {
 
 	class Shader;
@@ -44,6 +44,6 @@ namespace Core
 		std::shared_ptr<Texture> m_diffuseTexture = nullptr;
 	};
 
-} // Core
+} // Client
 
 #endif // MYVERSE_MATERIAL_H

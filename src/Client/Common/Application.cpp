@@ -6,7 +6,7 @@
 
 #include "Client/Core/ApplicationCore.h"
 
-namespace Core
+namespace Client
 {
 
 	void Application::Quit()
@@ -44,4 +44,4 @@ namespace Core
 		ApplicationCore::instance().SetApplicationPause(p_pauseState);
 	}
 
-} // Core
+} // Client

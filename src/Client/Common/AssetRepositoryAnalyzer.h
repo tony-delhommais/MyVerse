@@ -13,7 +13,7 @@
 #include "Client/Common/Debug.h"
 #endif
 
-namespace Core
+namespace Client
 {
 
 	class AssetRepositoryAnalyzer
@@ -28,6 +28,6 @@ namespace Core
 		static void PreloadAssetsFiles(const std::filesystem::path& p_assetsFolder);
 	};
 
-} // Core
+} // Client
 
 #endif // MYVERSE_ASSET_REPOSITORY_ANALYZER_H

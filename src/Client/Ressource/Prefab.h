@@ -12,7 +12,7 @@
 #include "Client/Common/Debug.h"
 #endif
 
-namespace Core
+namespace Client
 {
 
 	class Entity;
@@ -34,6 +34,6 @@ namespace Core
 		JsonObject m_prefabStruct;
 	};
 
-} // Core
+} // Client
 
 #endif // MYVERSE_PREFAB_H

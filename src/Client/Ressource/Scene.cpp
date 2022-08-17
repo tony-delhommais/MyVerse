@@ -16,7 +16,7 @@
 #include "Client/Common/Debug.h"
 #endif
 
-namespace Core
+namespace Client
 {
 
 	Scene::Scene()
@@ -97,6 +97,22 @@ namespace Core
 		m_localEntities.erase(std::remove(m_localEntities.begin(), m_localEntities.end(), p_entity), m_localEntities.end());
 	}
 
+	void Scene::RemoveDestroyedLocalEntities()
+	{
+		std::list<std::shared_ptr<Entity>>::iterator it = m_localEntities.begin();
+		while (it != m_localEntities.end())
+		{
+			std::list<std::shared_ptr<Entity>>::iterator entityToTest = it;
+
+			it++;
+
+			if (entityToTest->get()->GetCurrentEntityExecutionState() == EntityExecutionState::PostDestroy)
+			{
+				m_localEntities.erase(entityToTest);
+			}
+		}
+	}
+
 	std::shared_ptr<Entity> Scene::FindLocalEntityWithTag(const std::string& p_tag)
 	{
 		return m_entityQuadTree->FindEntityWithTag(p_tag);
@@ -120,24 +136,6 @@ namespace Core
 		for(auto& entity : m_localEntities)
 		{
 			entity->DestroyEntity();
-		}
-	}
-
-	void Scene::RemoveDestroyedLocalEntities()
-	{
-		std::list<std::shared_ptr<Entity>> toRemove;
-
-		for(auto& entity : m_localEntities)
-		{
-			if(entity->GetCurrentEntityExecutionState() == EntityExecutionState::PostDestroy)
-			{
-				toRemove.push_back(entity);
-			}
-		}
-
-		for (auto& childToRemove : toRemove)
-		{
-			m_localEntities.remove(childToRemove);
 		}
 	}
 
@@ -183,4 +181,4 @@ namespace Core
 		return !m_localEntities.empty();
 	}
 
-} // Core
+} // Client

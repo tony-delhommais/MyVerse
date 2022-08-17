@@ -9,7 +9,7 @@
 
 #include "Client/Core/ApplicationCore.h"
 
-namespace Core
+namespace Client
 {
 
 	std::shared_ptr<Material> Material::Load(const std::filesystem::path& p_path)
@@ -74,4 +74,4 @@ namespace Core
 		}
 	}
 
-} // Core
+} // Client

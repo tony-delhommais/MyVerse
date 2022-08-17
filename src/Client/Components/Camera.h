@@ -10,7 +10,7 @@
 
 #include "Client/Components/Component.h"
 
-namespace Core
+namespace Client
 {
 
 	class CircleArea;
@@ -43,6 +43,6 @@ namespace Core
 		float m_dynamicEntityRenderingAreaRadius = 5.0f;
 	};
 
-} // Core
+} // Client
 
 #endif // MYVERSE_CAMERA_H

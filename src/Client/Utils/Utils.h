@@ -17,11 +17,11 @@
 #include <sstream>
 #include <memory>
 
-namespace Core
+namespace Client
 {
 
 	std::vector<std::string> SplitString(const std::string& p_text, const std::string& p_delims);
 
-} // Core
+} // Client
 
 #endif // MYVERSE_UTILS_H

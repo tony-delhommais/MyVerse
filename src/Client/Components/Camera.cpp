@@ -12,7 +12,7 @@
 #include "Client/Common/Debug.h"
 #endif
 
-namespace Core
+namespace Client
 {
 
 	Camera::Camera() : Component()
@@ -94,4 +94,4 @@ namespace Core
 		return std::make_shared<CircleArea>(GetEntity()->GetWorldPosition(), m_dynamicEntityRenderingAreaRadius);
 	}
 
-} // Core
+} // Client

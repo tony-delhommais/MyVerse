@@ -8,7 +8,7 @@
 #include "Client/Utils/Utils.h"
 #include "Client/Utils/GraphicsUtils.h"
 
-namespace Core
+namespace Client
 {
 
 	class Clock
@@ -31,6 +31,6 @@ namespace Core
 		std::map<std::string, long long> m_stopWatches;
 	};
 
-} // Core
+} // Client
 
 #endif // MYVERSE_CLOCK_H

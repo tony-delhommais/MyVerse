@@ -5,7 +5,7 @@
 #ifndef MYVERSE_ENTITYEXECUTIONSTATE_H
 #define MYVERSE_ENTITYEXECUTIONSTATE_H
 
-namespace Core {
+namespace Client {
 
 	enum EntityExecutionState
 	{
@@ -19,6 +19,6 @@ namespace Core {
 		PostDestroy
 	};
 
-} // Core
+} // Client
 
 #endif // MYVERSE_ENTITYEXECUTIONSTATE_H

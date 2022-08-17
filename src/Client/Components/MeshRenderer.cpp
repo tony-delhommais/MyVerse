@@ -9,7 +9,7 @@
 #include "Client/Ressource/Mesh.h"
 #include "Client/Ressource/Material.h"
 
-namespace Core
+namespace Client
 {
 
 	std::shared_ptr<MeshRenderer> MeshRenderer::Make(JsonObject& p_componentProprety)
@@ -125,4 +125,4 @@ namespace Core
 		return int(m_meshesMaterials.size());
 	}
 
-} // Core
+} // Client

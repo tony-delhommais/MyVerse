@@ -4,7 +4,7 @@
 
 #include "Client/Components/Component.h"
 
-namespace Core
+namespace Client
 {
 
 	void Component::SetEntity(std::shared_ptr<Entity> p_entity)
@@ -17,4 +17,4 @@ namespace Core
 		return m_entity;
 	}
 
-} // Core
+} // Client

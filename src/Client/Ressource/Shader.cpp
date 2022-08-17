@@ -4,7 +4,7 @@
 
 #include "Client/Ressource/Shader.h"
 
-namespace Core
+namespace Client
 {
 
 	Shader::~Shader()
@@ -234,4 +234,4 @@ namespace Core
 		return true;
 	}
 
-} // Core
+} // Client

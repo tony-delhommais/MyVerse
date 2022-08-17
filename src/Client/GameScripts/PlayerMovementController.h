@@ -7,7 +7,7 @@
 
 #include "Client/Common/Application.h"
 
-using namespace Core;
+using namespace Client;
 
 class PlayerMovementController : public Script
 {

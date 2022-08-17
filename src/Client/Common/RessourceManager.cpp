@@ -6,7 +6,7 @@
 
 #include "Client/Core/RessourceManagerCore.h"
 
-namespace Core
+namespace Client
 {
 
 	std::vector<std::shared_ptr<Mesh>> RessourceManager::FindMeshes(const UUIDv4::UUID& p_ressourceUuid)
@@ -29,4 +29,4 @@ namespace Core
 		return RessourceManagerCore::instance().FindPrefab(p_ressourceUuid);
 	}
 
-} // Core
+} // Client

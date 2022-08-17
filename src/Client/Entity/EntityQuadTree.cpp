@@ -4,7 +4,7 @@
 
 #include "Client/Entity/EntityQuadTree.h"
 
-namespace Core
+namespace Client
 {
 
 	EntityQuadTree::EntityQuadTree(std::shared_ptr<OrientationFixedRectangleArea> p_area, int p_maxDepth, int p_maxEntity)
@@ -208,4 +208,4 @@ namespace Core
 			m_cardinalPoints[3]->AddEntity(p_entity);
 	}
 
-} // Core
+} // Client

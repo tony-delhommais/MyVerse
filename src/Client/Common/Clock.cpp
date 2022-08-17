@@ -4,7 +4,7 @@
 
 #include "Client/Common/Clock.h"
 
-namespace Core
+namespace Client
 {
 
 	Clock& Clock::instance()
@@ -51,4 +51,4 @@ namespace Core
 		return (long long)(glfwGetTime() * 1000000) - stopWatch->second;
 	}
 
-} // Core
+} // Client

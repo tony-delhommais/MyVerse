@@ -14,7 +14,7 @@
 #include "Client/Common/Debug.h"
 #endif
 
-namespace Core
+namespace Client
 {
 
 #pragma pack(push, 1)
@@ -53,6 +53,6 @@ namespace Core
 		GLuint m_EBO_id = 0;
 	};
 
-} // Core
+} // Client
 
 #endif // MYVERSE_MESH_H

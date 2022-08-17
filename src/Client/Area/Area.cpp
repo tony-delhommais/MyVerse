@@ -4,7 +4,7 @@
 
 #include "Client/Area/Area.h"
 
-namespace Core
+namespace Client
 {
 
 	Area::Area(const glm::vec3& p_position)
@@ -17,4 +17,4 @@ namespace Core
 		return m_position;
 	}
 
-} // Core
+} // Client

@@ -6,7 +6,7 @@
 
 #include "Client/Entity/Entity.h"
 
-namespace Core
+namespace Client
 {
 
 	std::shared_ptr<Prefab> Prefab::Load(const UUIDv4::UUID& p_uuid, const std::filesystem::path& p_path)
@@ -35,4 +35,4 @@ namespace Core
 		return newEntity;
 	}
 
-} // Core
+} // Client

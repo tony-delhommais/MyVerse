@@ -8,7 +8,7 @@
 #include <memory>
 #include <vector>
 
-namespace Core
+namespace Client
 {
 
 	class Entity;
@@ -27,6 +27,6 @@ namespace Core
 		std::shared_ptr<Entity> m_entity = nullptr;
 	};
 
-} // Core
+} // Client
 
 #endif // MYVERSE_COMPONENT_H

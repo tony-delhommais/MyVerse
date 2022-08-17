@@ -6,7 +6,7 @@
 
 #include "Client/Area/OrientationFixedRectangleArea.h"
 
-namespace Core
+namespace Client
 {
 
 	CircleArea::CircleArea(const glm::vec3& p_position, float p_radius) : Area(p_position)
@@ -34,4 +34,4 @@ namespace Core
 		return m_radius;
 	}
 
-} // Core
+} // Client

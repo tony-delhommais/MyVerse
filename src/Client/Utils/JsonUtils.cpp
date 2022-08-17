@@ -4,7 +4,7 @@
 
 #include "Client/Utils/JsonUtils.h"
 
-namespace Core
+namespace Client
 {
 
 	JsonObject LoadJsonFile(const std::filesystem::path& p_jsonFilePath)
@@ -109,4 +109,4 @@ namespace Core
 		return p_jsonObject[p_parameter];
 	}
 
-} // Core
+} // Client

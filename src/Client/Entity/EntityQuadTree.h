@@ -13,7 +13,7 @@
 #include "Client/Area/CircleArea.h"
 #include "Client/Area/OrientationFixedRectangleArea.h"
 
-namespace Core
+namespace Client
 {
 
 	class EntityQuadTree
@@ -57,6 +57,6 @@ namespace Core
 		};
 	};
 
-} // Core
+} // Client
 
 #endif // MYVERSE_ENTITY_QUAD_TREE_H

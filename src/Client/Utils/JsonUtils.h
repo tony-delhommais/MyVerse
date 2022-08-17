@@ -11,7 +11,7 @@
 
 #include "nlohmann/json.hpp"
 
-namespace Core
+namespace Client
 {
 
 	typedef nlohmann::json JsonObject;
@@ -33,6 +33,6 @@ namespace Core
 	JsonObject& GetParameterFromJsonObject(JsonObject& p_jsonObject, const char* p_parameter, bool p_isArray, bool p_isObject);
 	JsonObject& GetParameterFromJsonObject(JsonObject& p_jsonObject, const std::string& p_parameter, bool p_isArray, bool p_isObject);
 
-} // Core
+} // Client
 
 #endif // MYVERSE_JSON_UTILS_H

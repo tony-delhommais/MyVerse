@@ -7,7 +7,7 @@
 
 #include "Client/Area/Area.h"
 
-namespace Core
+namespace Client
 {
 
 	class OrientationFixedRectangleArea;
@@ -31,6 +31,6 @@ namespace Core
 		float m_radius = 1.0f;
 	};
 
-} // Core
+} // Client
 
 #endif // MYVERSE_CIRCLEAREA_H

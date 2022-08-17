@@ -6,7 +6,7 @@
 
 int main(int argc, char *argv[])
 {
-	Core::ApplicationCore& app = Core::ApplicationCore::instance();
+	Client::ApplicationCore& app = Client::ApplicationCore::instance();
 
 	if (app.Initialize())
 	{

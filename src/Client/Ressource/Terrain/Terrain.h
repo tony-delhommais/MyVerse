@@ -10,7 +10,7 @@
 
 #include "Client/Area/CircleArea.h"
 
-namespace Core
+namespace Client
 {
 
 	class Terrain
@@ -28,6 +28,6 @@ namespace Core
 		float m_chunkHeight = 100.0f;
 	};
 
-} // Core
+} // Client
 
 #endif // MYVERSE_CHUNCK_H

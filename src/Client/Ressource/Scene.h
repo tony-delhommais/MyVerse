@@ -8,7 +8,7 @@
 #include "Client/Utils/Utils.h"
 #include "Client/Utils/GraphicsUtils.h"
 
-namespace Core
+namespace Client
 {
 
 	class EntityQuadTree;
@@ -26,14 +26,13 @@ namespace Core
 	public:
 		void AddLocalEntity(std::shared_ptr<Entity> p_entity);
 		void RemoveLocalEntity(std::shared_ptr<Entity> p_entity);
+		void RemoveDestroyedLocalEntities();
 
 		std::shared_ptr<Entity> FindLocalEntityWithTag(const std::string& p_tag);
 		std::vector<std::shared_ptr<Entity>> FindLocalEntitiesWithTag(const std::string& p_tag);
 
 		void UpdateExecution(float p_deltaTime);
 		void StopExecution();
-
-		void RemoveDestroyedLocalEntities();
 
 		void Render();
 
@@ -55,6 +54,6 @@ namespace Core
 		std::shared_ptr<Camera> m_renderCamera = nullptr;
 	};
 
-} // Core
+} // Client
 
 #endif // MYVERSE_SCENE_H

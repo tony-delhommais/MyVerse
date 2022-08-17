@@ -12,7 +12,7 @@
 
 #include "Client/Common/Clock.h"
 
-namespace Core
+namespace Client
 {
 
 	class Material;
@@ -70,6 +70,6 @@ namespace Core
 		RessourceMetaMap m_ressources;
 	};
 
-} // Core
+} // Client
 
 #endif // MYVERSE_RESSOURCE_MANAGER_CORE_H

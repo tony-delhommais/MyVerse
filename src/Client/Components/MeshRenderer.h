@@ -14,7 +14,7 @@
 
 #include "Client/Ressource/Shader.h"
 
-namespace Core
+namespace Client
 {
 
 	class Mesh;
@@ -57,6 +57,6 @@ namespace Core
 		std::map<int, UUIDv4::UUID> m_usedMaterialsUuid;
 	};
 
-} // Core
+} // Client
 
 #endif // MYVERSE_MESH_RENDERER_H

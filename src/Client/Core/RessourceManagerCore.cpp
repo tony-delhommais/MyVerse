@@ -15,7 +15,7 @@
 #include "Client/Common/Debug.h"
 #endif
 
-namespace Core
+namespace Client
 {
 
 	RessourceManagerCore& RessourceManagerCore::instance()
@@ -258,4 +258,4 @@ namespace Core
 		p_ressourceMeta.isAllocated = false;
 	}
 
-} // Core
+} // Client

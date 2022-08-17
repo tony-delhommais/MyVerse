@@ -4,7 +4,7 @@
 
 #include "Client/Common/Debug.h"
 
-namespace Core
+namespace Client
 {
 
 	void Debug::LogInfo(const std::string& p_log)
@@ -22,4 +22,4 @@ namespace Core
 		std::cout << "[Error] " << p_log << std::endl;
 	}
 
-} // Core
+} // Client

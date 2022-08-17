@@ -9,7 +9,7 @@
 
 #include "Client/Entity/Entity.h"
 
-namespace Core
+namespace Client
 {
 
 	class CircleArea;
@@ -32,6 +32,6 @@ namespace Core
 		glm::vec3 m_position;
 	};
 
-} // Core
+} // Client
 
 #endif // MYVERSE_AREA_H

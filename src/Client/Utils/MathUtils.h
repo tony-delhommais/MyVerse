@@ -11,7 +11,7 @@
 #include "ext.hpp"
 #include "gtx/matrix_decompose.hpp"
 
-namespace Core
+namespace Client
 {
 
 	namespace Math
@@ -26,6 +26,6 @@ namespace Core
 
 	} // Math
 
-} // Core
+} // Client
 
 #endif // MYVERSE_MATH_UTILS_H

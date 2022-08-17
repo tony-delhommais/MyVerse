@@ -7,7 +7,7 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
-namespace Core
+namespace Client
 {
 
 	Texture::~Texture()
@@ -61,4 +61,4 @@ namespace Core
 		return texture;
 	}
 
-} // Core
+} // Client

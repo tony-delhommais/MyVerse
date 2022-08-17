@@ -8,7 +8,7 @@
 #include "Client/Utils/Utils.h"
 #include "Client/Utils/GraphicsUtils.h"
 
-namespace Core
+namespace Client
 {
 
 	class Texture
@@ -27,6 +27,6 @@ namespace Core
 		GLuint m_openGL_id = 0;
 	};
 
-} // Core
+} // Client
 
 #endif // MYVERSE_TEXTURE_H

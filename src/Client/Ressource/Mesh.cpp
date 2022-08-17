@@ -6,7 +6,7 @@
 
 #include "OBJ_Loader.h"
 
-namespace Core
+namespace Client
 {
 
 	Mesh::~Mesh()
@@ -166,4 +166,4 @@ namespace Core
 		return true;
 	}
 
-} // Core
+} // Client

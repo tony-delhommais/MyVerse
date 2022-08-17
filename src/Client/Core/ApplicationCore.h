@@ -27,7 +27,7 @@
 #include "Client/Common/Debug.h"
 #endif
 
-namespace Core
+namespace Client
 {
 
 	typedef std::map<std::string, std::filesystem::path> ScenePreloadMap;
@@ -102,6 +102,6 @@ namespace Core
 		bool m_applicationIsPaused = false;
 	};
 
-} // Core
+} // Client
 
 #endif // MYVERSE_APPLICATION_CORE_H

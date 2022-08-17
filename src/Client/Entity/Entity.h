@@ -21,7 +21,7 @@
 
 #include "Client/Entity/EntityExecutionState.h"
 
-namespace Core
+namespace Client
 {
 
 	class Entity : public std::enable_shared_from_this<Entity>
@@ -179,6 +179,6 @@ namespace Core
 		std::list<std::shared_ptr<Script>> m_scripts;
 	};
 
-} // Core
+} // Client
 
 #endif // MYVERSE_ENTITY_H

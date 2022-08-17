@@ -8,7 +8,7 @@
 #include "Client/Common/Debug.h"
 #endif
 
-namespace Core
+namespace Client
 {
 
 	void Script::Awake() {}
@@ -25,4 +25,4 @@ namespace Core
 
 	void Script::Destroy() {}
 
-} // Core
+} // Client

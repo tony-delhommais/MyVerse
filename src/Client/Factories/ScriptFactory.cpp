@@ -4,7 +4,7 @@
 
 #include "Client/Factories/ScriptFactory.h"
 
-namespace Core
+namespace Client
 {
 
 	ScriptFactory& ScriptFactory::instance()
@@ -54,4 +54,4 @@ namespace Core
 		return script;
 	}
 
-} // Core
+} // Client

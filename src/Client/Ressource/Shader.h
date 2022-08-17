@@ -14,7 +14,7 @@
 #include "Client/Common/Debug.h"
 #endif
 
-namespace Core
+namespace Client
 {
 
 	class Shader
@@ -55,6 +55,6 @@ namespace Core
 		std::map<std::string, GLint> m_uniformLink;
 	};
 
-} // Core
+} // Client
 
 #endif // MYVERSE_SHADER_H

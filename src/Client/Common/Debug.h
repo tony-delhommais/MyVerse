@@ -7,7 +7,7 @@
 
 #include "Client/Utils/Utils.h"
 
-namespace Core
+namespace Client
 {
 
 	class Debug
@@ -20,6 +20,6 @@ namespace Core
 		static void LogError(const std::string& p_log);
 	};
 
-} // Core
+} // Client
 
 #endif // MYVERSE_DEBUG_H

@@ -13,7 +13,7 @@
 #include "Client/Common/Debug.h"
 #endif
 
-namespace Core
+namespace Client
 {
 
 	class ScriptFactory
@@ -33,6 +33,6 @@ namespace Core
 		std::map<std::string, std::function<std::shared_ptr<Script>(JsonObject& p_scriptParameters)>> m_scriptsBuilders;
 	};
 
-} // Core
+} // Client
 
 #endif // MYVERSE_SCRIPT_FACTORY_H

@@ -4,7 +4,7 @@
 
 #include "Client/Utils/Utils.h"
 
-namespace Core
+namespace Client
 {
 
 	std::vector<std::string> SplitString(const std::string& p_text, const std::string& p_delims)
@@ -24,4 +24,4 @@ namespace Core
 		return tokens;
 	}
 
-} // Core
+} // Client

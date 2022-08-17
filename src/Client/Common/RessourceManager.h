@@ -8,7 +8,7 @@
 #include "Client/Utils/Utils.h"
 #include "Client/Utils/JsonUtils.h"
 
-namespace Core
+namespace Client
 {
 
 	class Material;
@@ -28,6 +28,6 @@ namespace Core
 		static std::shared_ptr<Prefab> FindPrefab(const UUIDv4::UUID& p_ressourceUuid);
 	};
 
-} // Core
+} // Client
 
 #endif // MYVERSE_RESSOURCE_MANAGER_H

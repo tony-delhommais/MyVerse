@@ -4,7 +4,7 @@
 
 #include "Client/Ressource/Terrain/Terrain.h"
 
-namespace Core
+namespace Client
 {
 
 	std::shared_ptr<Terrain> Terrain::Load(const std::filesystem::path& p_terrainPath)
@@ -33,4 +33,4 @@ namespace Core
 
 	}
 
-} // Core
+} // Client

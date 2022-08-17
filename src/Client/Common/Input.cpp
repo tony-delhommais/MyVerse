@@ -6,7 +6,7 @@
 
 #include "Client/Core/InputCore.h"
 
-namespace Core
+namespace Client
 {
 
 	void Input::SetCursorMode(int p_cursorMode)
@@ -49,4 +49,4 @@ namespace Core
 		return InputCore::instance().GetMouseMovement();
 	}
 
-} // Core
+} // Client

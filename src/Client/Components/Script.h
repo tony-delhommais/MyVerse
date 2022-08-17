@@ -9,7 +9,7 @@
 
 #include "Client/Utils/JsonUtils.h"
 
-namespace Core
+namespace Client
 {
 	
 	class Script : public Component
@@ -27,6 +27,6 @@ namespace Core
 		virtual void Destroy();
 	};
 
-} // Core
+} // Client
 
 #endif // MYVERSE_SCRIPT_H

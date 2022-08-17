@@ -6,7 +6,7 @@
 
 #include "Client/Core/RessourceManagerCore.h"
 
-namespace Core
+namespace Client
 {
 
 	void AssetRepositoryAnalyzer::GenerateMetaFilesOnAssetsFolder(const std::filesystem::path& p_assetsFolder)
@@ -110,4 +110,4 @@ namespace Core
 		}
 	}
 
-} // Core
+} // Client

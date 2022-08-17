@@ -5,7 +5,7 @@
 #ifndef MYVERSE_SUPPORTED_FILE_TYPE_H
 #define MYVERSE_SUPPORTED_FILE_TYPE_H
 
-namespace Core
+namespace Client
 {
 
 	enum SupportedFileType
@@ -25,6 +25,6 @@ namespace Core
 		MAX_VALUE
 	};
 
-} // Core
+} // Client
 
 #endif // MYVERSE_SUPPORTED_FILE_TYPE_H
