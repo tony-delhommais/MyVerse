@@ -12,7 +12,7 @@ namespace Client
 	{
 		UNKNOWN,
 		DIRECTORY,
-		SCENE,
+		SCENE, //todo remove
 		MESH,
 		TEXTURE,
 		MATERIAL,

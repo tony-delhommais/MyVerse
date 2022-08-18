@@ -1,13 +1,4 @@
 {
-	"QuadTreeSettings": {
-		"MaxDepth": 5,
-		"MaxEntity": 50,
-		"Area": {
-			"Location": [ 0.0, 0.0, 0.0 ],
-			"Width": 50.0,
-			"Height": 50.0
-		}
-	},
 	"LocalEntities": [
 		{
 			"Type": "Entity",
@@ -44,30 +35,12 @@
 				},
 				{
 					"Type": "Script",
-					"Name": "PlayerMovementController",
+					"Name": "PlayerController",
 					"Parameters": {
 						"PlayerAcceleration": 1.0,
 						"PlayerMaxSpeed": 5.0,
 						"CameraRotationSpeed": 5.0
 					}
-				}
-			],
-			"Childs": [
-				{
-					"Type": "Entity",
-					"Tag": "MainCamera",
-					"Position": [ 0.0, 1.5, -2.5 ],
-					"Rotation": [ 20.0, 0.0, 0.0 ],
-					"Scale": [ 1.0, 1.0, 1.0 ],
-					"Components": [
-						{
-							"Type": "Camera",
-							"Fov": 60.0,
-							"Near": 0.01,
-							"Far": 100.0,
-							"DynamicEntityRenderingAreaRadius": 10.0
-						}
-					]
 				}
 			]
 		},

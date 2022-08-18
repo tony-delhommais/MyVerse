@@ -13,21 +13,23 @@ set(CLIENT_SOURCES
 	Client/Common/RessourceManager.cpp
 
 	Client/Components/Component.cpp
-	Client/Components/Camera.cpp
 	Client/Components/MeshRenderer.cpp
 	Client/Components/Script.cpp
 
 	Client/Core/ApplicationCore.cpp
 	Client/Core/InputCore.cpp
 	Client/Core/RessourceManagerCore.cpp
-
+	
+	Client/Entity/Camera.cpp
 	Client/Entity/Entity.cpp
 	Client/Entity/EntityQuadTree.cpp
+	Client/Entity/Player.cpp
 
 	Client/Factories/ScriptFactory.cpp
 
+	Client/GameScripts/Controllers/CameraController.cpp
+	Client/GameScripts/Controllers/PlayerController.cpp
 	Client/GameScripts/GameSettings.cpp
-	Client/GameScripts/PlayerMovementController.cpp
 	Client/GameScripts/Rotation.cpp
 	Client/GameScripts/SpawnTest.cpp
 

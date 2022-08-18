@@ -1,3 +1,12 @@
 {
+  "Fov": 60.0,
+  "Near": 0.01,
+  "Far": 100.0,
+  "CameraControllerScript": {
+    "Type": "Script",
+    "Name": "CameraController",
+    "Parameters": {
 
+    }
+  }
 }

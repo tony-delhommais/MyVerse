@@ -31,13 +31,8 @@ namespace Client
 	public:
 		static void Quit();
 
-		static bool LoadScene(const std::string& p_sceneAlias);
-		static bool LoadScene(int p_sceneId);
-
 	public:
 		long long GetFrameCount();
-
-		static std::shared_ptr<Scene> GetActiveScene();
 
 		static bool IsApplicationPaused();
 		static void SetApplicationPause(bool p_pauseState);

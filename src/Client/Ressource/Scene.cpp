@@ -5,10 +5,8 @@
 #include "Client/Ressource/Scene.h"
 
 #include "Client/Entity/EntityQuadTree.h"
-
-#include "Client/Core/ApplicationCore.h"
-
-#include "Client/Components/Camera.h"
+#include "Client/Entity/Camera.h"
+#include "Client/Entity/Player.h"
 
 #include "Client/Area/OrientationFixedRectangleArea.h"
 
@@ -19,34 +17,25 @@
 namespace Client
 {
 
-	Scene::Scene()
+	Scene& Scene::instance()
 	{
-		m_renderCamera = std::make_shared<Camera>();
+		static Scene instance;
+		return instance;
 	}
 
-	std::shared_ptr<Scene> Scene::Make(const std::filesystem::path& p_scenePath)
+	void Scene::Initialize(const std::filesystem::path& p_scenePath, std::shared_ptr<Camera> p_camera, std::shared_ptr<Player> p_player)
 	{
+		m_camera = p_camera;
+		m_player = p_player;
+
 		auto sceneJson = LoadJsonFile(p_scenePath);
 		if (sceneJson.empty())
 		{
 #ifdef _DEBUG
 			Debug::LogWarning("[SceneFactory] Unable to locate scene config file, trying at " + p_scenePath.string());
 #endif
-			return nullptr;
+			return;
 		}
-
-		auto scene = std::make_shared<Scene>();
-
-		auto sceneQuadTree = EntityQuadTree::Make(sceneJson);
-		if (!sceneQuadTree)
-		{
-#ifdef _DEBUG
-			Debug::LogWarning("[SceneFactory] Failed to parse EntityQuadTree settings on scene " + p_scenePath.string());
-#endif
-			return nullptr;
-		}
-
-		scene->m_entityQuadTree = sceneQuadTree;
 
 		auto localEntitiesArray = GetParameterFromJsonObject(sceneJson, "LocalEntities", true, false);
 		if (localEntitiesArray != sceneJson)
@@ -63,28 +52,9 @@ namespace Client
 					continue;
 				}
 
-				scene->AddLocalEntity(newLocalEntity);
+				AddLocalEntity(newLocalEntity);
 			}
 		}
-
-		scene->BuildEntityQuadTree();
-
-		std::shared_ptr<Camera> camera = nullptr;
-
-		auto mainCameraEntity = scene->FindLocalEntityWithTag("MainCamera");
-		if (mainCameraEntity) camera = mainCameraEntity->GetComponent<Camera>();
-
-		if (!camera)
-		{
-#ifdef _DEBUG
-			Debug::LogError("[SceneFactory] Failed to find the render Camera of the Player");
-#endif
-			return nullptr;
-		}
-
-		scene->m_renderCamera = camera;
-
-		return scene;
 	}
 
 	void Scene::AddLocalEntity(std::shared_ptr<Entity> p_entity)
@@ -115,16 +85,36 @@ namespace Client
 
 	std::shared_ptr<Entity> Scene::FindLocalEntityWithTag(const std::string& p_tag)
 	{
-		return m_entityQuadTree->FindEntityWithTag(p_tag);
+		for (auto& entity : m_localEntities)
+		{
+			auto foundEntity = entity->FindChildWithTag(p_tag);
+			if (foundEntity)
+				return foundEntity;
+		}
+
+		return nullptr;
 	}
 
-	std::vector<std::shared_ptr<Entity>> Scene::FindLocalEntitiesWithTag(const std::string& p_tag)
+	std::list<std::shared_ptr<Entity>> Scene::FindLocalEntitiesWithTag(const std::string& p_tag)
 	{
-		return m_entityQuadTree->FindEntitiesWithTag(p_tag);
+		std::list<std::shared_ptr<Entity>> returnList;
+
+		for (auto& entity : m_localEntities)
+		{
+			auto entities = entity->FindChildsWithTag(p_tag);
+
+			returnList.insert(returnList.end(), entities.begin(), entities.end());
+		}
+
+		return returnList;
 	}
 
 	void Scene::UpdateExecution(float p_deltaTime)
 	{
+		m_camera->UpdateExecution(p_deltaTime);
+
+		m_player->UpdateExecution(p_deltaTime);
+
 		for(auto& entity : m_localEntities)
 		{
 			entity->UpdateExecution(p_deltaTime);
@@ -133,6 +123,10 @@ namespace Client
 
 	void Scene::StopExecution()
 	{
+		m_camera->DestroyEntity();
+
+		m_player->DestroyEntity();
+
 		for(auto& entity : m_localEntities)
 		{
 			entity->DestroyEntity();
@@ -143,37 +137,28 @@ namespace Client
 	{
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		BuildEntityQuadTree();
+		m_camera->UseCameraForRendering();
 
-		auto entitiesToRender = m_entityQuadTree->GetEntitiesOnCircleArea(m_renderCamera->GetDynamicEntityRenderingArea());
+		m_player->Render();
 
-		glm::mat4 VueProjectionMatrix = m_renderCamera->GetViewProjectionMatrix();
-
-		if (m_shaderVueProjectionMatrixUniformLocation == -1)
-		{
-			m_shaderVueProjectionMatrixUniformLocation = ApplicationCore::instance().GetActiveShader()->FindUniformLocation("VueProjectionMatrix");
-		}
-
-		ApplicationCore::instance().GetActiveShader()->SetUniformMat4(m_shaderVueProjectionMatrixUniformLocation, VueProjectionMatrix);
-
-		for(auto& entity : entitiesToRender)
+		for(auto& entity : m_localEntities)
 		{
 			entity->Render();
 		}
 	}
 
-	void Scene::BuildEntityQuadTree()
+	bool Scene::IsStopped()
 	{
-		m_entityQuadTree->Clear();
+		if (m_camera->GetCurrentEntityExecutionState() != EntityExecutionState::PostDestroy) return false;
+
+		if (m_player->GetCurrentEntityExecutionState() != EntityExecutionState::PostDestroy) return false;
 
 		for (auto& entity : m_localEntities)
 		{
-			bool isAdded = m_entityQuadTree->AddEntity(entity);
-#ifdef _DEBUG
-			if (!isAdded)
-				Debug::LogWarning("[Scene] a local Entity is out of QuadTree range");
-#endif
+			if (entity->GetCurrentEntityExecutionState() != EntityExecutionState::PostDestroy) return false;
 		}
+
+		return true;
 	}
 
 	bool Scene::HasLocalEntities()

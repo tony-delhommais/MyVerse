@@ -45,12 +45,6 @@ namespace Client
 			type == SupportedFileType::MAX_VALUE
 			) return;
 
-		if (type == SupportedFileType::SCENE)
-		{
-			ApplicationCore::instance().PreLoadScene(p_ressourceMetaPath.stem().string(), ressourcePath.string());
-			return;
-		}
-
 		std::string fileUuid = GetParameterFromJsonObject(jsonStruct, "Uuid", "None");
 		if (fileUuid == "None") return;
 		UUIDv4::UUID uuid = UUIDv4::UUID::fromStrFactory(fileUuid);

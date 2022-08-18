@@ -9,11 +9,11 @@
 
 using namespace Client;
 
-class PlayerMovementController : public Script
+class PlayerController : public Script
 {
 public:
-	PlayerMovementController() = default;
-	~PlayerMovementController() override = default;
+	PlayerController() = default;
+	~PlayerController() override = default;
 
 	void Update(float p_deltaTime) override;
 

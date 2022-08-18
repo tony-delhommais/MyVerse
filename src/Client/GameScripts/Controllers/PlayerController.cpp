@@ -2,15 +2,15 @@
 // Created by Tony on 29/06/2022.
 //
 
-#include "Client/GameScripts/PlayerMovementController.h"
+#include "Client/GameScripts/Controllers/PlayerController.h"
 
-void PlayerMovementController::Update(float p_deltaTime)
+void PlayerController::Update(float p_deltaTime)
 {
 	UpdatePlayerPosition(p_deltaTime);
 	UpdateCameraRotation(p_deltaTime);
 }
 
-void PlayerMovementController::UpdatePlayerPosition(float p_deltaTime)
+void PlayerController::UpdatePlayerPosition(float p_deltaTime)
 {
 	// Z: (W) 87
 	// S: (S) 83
@@ -48,7 +48,7 @@ void PlayerMovementController::UpdatePlayerPosition(float p_deltaTime)
 	GetEntity()->Translate(playerVelocity * p_deltaTime);
 }
 
-void PlayerMovementController::UpdateCameraRotation(float p_deltaTime)
+void PlayerController::UpdateCameraRotation(float p_deltaTime)
 {
 	glm::vec2 mouseMovement = glm::vec2(0.0);
 
@@ -60,8 +60,8 @@ void PlayerMovementController::UpdateCameraRotation(float p_deltaTime)
 	GetEntity()->RotateEuler(glm::vec3(0.0, mouseMovement.x, 0.0) * (cameraRotationSpeed * 2) / 100.0f);
 }
 
-bool PlayerMovementController::s_isRegistered = ScriptFactory::instance().Register("PlayerMovementController", [](JsonObject& parameters) {
-	auto script = std::make_shared<PlayerMovementController>();
+bool PlayerController::s_isRegistered = ScriptFactory::instance().Register("PlayerController", [](JsonObject& parameters) {
+	auto script = std::make_shared<PlayerController>();
 
 	script->playerAcceleration = GetParameterFromJsonObject(parameters, "PlayerAcceleration", script->playerAcceleration);
 	script->playerMaxSpeed = GetParameterFromJsonObject(parameters, "PlayerMaxSpeed", script->playerMaxSpeed);

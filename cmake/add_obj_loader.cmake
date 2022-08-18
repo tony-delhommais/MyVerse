@@ -8,12 +8,3 @@ FetchContent_Declare(obj_loader
 set(FETCHCONTENT_QUIET OFF)
 FetchContent_MakeAvailable(obj_loader)
 include_directories(${obj_loader_SOURCE_DIR}/Source)
-
-#FetchContent_GetProperties(obj_loader)
-#if(NOT obj_loader_POPULATED)
-#	message(STATUS "Populate OBJ-Loader")
-#	FetchContent_Populate(obj_loader)
-#	include_directories(${obj_loader_SOURCE_DIR}/Source)
-#else()
-#	message(STATUS "OBJ-Loader is already populated")
-#endif()

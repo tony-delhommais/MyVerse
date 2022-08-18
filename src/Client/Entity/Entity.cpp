@@ -84,18 +84,6 @@ namespace Client
 
 				if (componentType == "Null") continue;
 
-				if (componentType == "Camera")
-				{
-					auto camera = Camera::Make(componentProprety);
-					if (!camera) continue;
-
-					camera->SetEntity(newEntity);
-
-					newEntity->m_camera = camera;
-
-					continue;
-				}
-
 				if (componentType == "MeshRenderer")
 				{
 					auto meshRenderer = MeshRenderer::Make(componentProprety);
@@ -170,12 +158,12 @@ namespace Client
 		if(m_parent) // If this has a parent
 			m_parent->RemoveChild(shared_from_this());
 		else // Otherwise parent is the scene
-			ApplicationCore::instance().GetActiveScene()->RemoveLocalEntity(shared_from_this());
+			Scene::instance().RemoveLocalEntity(shared_from_this());
 
 		if(p_newParent) // If new parent is not Null
 			p_newParent->AddChild(shared_from_this());
 		else // Otherwise new parent is scene
-			ApplicationCore::instance().GetActiveScene()->AddLocalEntity(shared_from_this());
+			Scene::instance().AddLocalEntity(shared_from_this());
 
 		// Set the new parent
 		m_parent = p_newParent;
@@ -359,19 +347,8 @@ namespace Client
 			if (m_meshRenderer)
 				return false;
 
+			meshRenderer->SetEntity(shared_from_this());
 			m_meshRenderer = meshRenderer;
-
-			return true;
-		}
-
-		// Test the type of the Component
-		auto camera = std::dynamic_pointer_cast<Camera>(p_component);
-		if (camera)
-		{
-			if (m_camera)
-				return false;
-
-			m_camera = camera;
 
 			return true;
 		}
@@ -380,6 +357,7 @@ namespace Client
 		auto script = std::dynamic_pointer_cast<Script>(p_component);
 		if (script)
 		{
+			script->SetEntity(shared_from_this());
 			m_scripts.push_back(script);
 
 			return true;

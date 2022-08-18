@@ -15,7 +15,6 @@
 #include "Client/Ressource/Scene.h"
 
 #include "Client/Components/MeshRenderer.h"
-#include "Client/Components/Camera.h"
 
 #include "Client/Factories/ScriptFactory.h"
 
@@ -66,7 +65,6 @@ namespace Client
 			std::list<std::shared_ptr<Component>> components;
 
 			components.push_back(m_meshRenderer);
-			components.push_back(m_camera);
 			components.insert(components.end(), m_scripts.begin(), m_scripts.end());
 
 			for (auto& component : components)
@@ -87,7 +85,6 @@ namespace Client
 			std::list<std::shared_ptr<Component>> components;
 
 			components.push_back(m_meshRenderer);
-			components.push_back(m_camera);
 			components.insert(components.end(), m_scripts.begin(), m_scripts.end());
 
 			std::list<std::shared_ptr<T>> Tcomponents;
@@ -175,7 +172,6 @@ namespace Client
 		glm::vec3 m_worldScale;
 
 		std::shared_ptr<MeshRenderer> m_meshRenderer;
-		std::shared_ptr<Camera> m_camera;
 		std::list<std::shared_ptr<Script>> m_scripts;
 	};
 

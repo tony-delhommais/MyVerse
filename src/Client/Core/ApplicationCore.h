@@ -48,17 +48,10 @@ namespace Client
 
 		void Quit();
 
-		bool PreLoadScene(const std::string& p_sceneAlias, const std::filesystem::path& p_scenePath);
-
-		bool LoadScene(const std::string& p_sceneAlias);
-		bool LoadScene(int p_sceneId);
-
 	public:
 		long long GetFrameCount();
 
 		std::shared_ptr<Shader> GetActiveShader();
-
-		std::shared_ptr<Scene> GetActiveScene();
 
 		bool IsApplicationPaused();
 		void SetApplicationPause(bool p_pauseState);
@@ -93,11 +86,6 @@ namespace Client
 		std::filesystem::path m_vertexShaderPath;
 		std::filesystem::path m_fragmentShaderPath;
 		std::shared_ptr<Shader> m_activeShader = nullptr;
-
-		ScenePreloadMap m_scenesPreload;
-		int m_sceneToLoad = -1;
-
-		std::shared_ptr<Scene> m_activeScene;
 
 		bool m_applicationIsPaused = false;
 	};

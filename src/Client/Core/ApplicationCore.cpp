@@ -7,6 +7,9 @@
 #include "Client/Core/InputCore.h"
 #include "Client/Core/RessourceManagerCore.h"
 
+#include "Client/Entity/Camera.h"
+#include "Client/Entity/Player.h"
+
 namespace Client
 {
 
@@ -49,6 +52,20 @@ namespace Client
 
 		AssetRepositoryAnalyzer::PreloadAssetsFiles(ASSETS_PATH);
 
+		auto camera = Camera::Make(std::filesystem::path(PROJECT_SETTINGS_PATH + std::string("./CameraSettings.json")));
+		if (!camera)
+		{
+			return 0;
+		}
+
+		auto player = Player::Make(std::filesystem::path(PROJECT_SETTINGS_PATH + std::string("./PlayerSettings.json")));
+		if (!player)
+		{
+			return 0;
+		}
+
+		Scene::instance().Initialize(std::filesystem::path(PROJECT_SETTINGS_PATH + std::string("./SceneSettings.json")), camera, player);
+
 		return 1;
 	}
 
@@ -65,115 +82,87 @@ namespace Client
 
 	void ApplicationCore::RenderLoop()
 	{
-		if (m_sceneToLoad == -1)
-		{
 #ifdef _DEBUG
-			Debug::LogError("[Application] No one scene was preloaded");
+		long long frameCount = 0;
+
+		long long deltaMainLoop = 0;
+		long long deltaRessourceManagementLoop = 0;
+		long long deltaUpdateExecution = 0;
+		long long deltaRender = 0;
 #endif
-			return;
-		}
 
 		do
 		{
-			ScenePreloadMap::iterator sceneToLoad = m_scenesPreload.begin();
-			for (int i = 0; i < m_sceneToLoad; i++) sceneToLoad++;
+			m_frameCount ++;
+			long long deltaTime = Clock::instance().GetMicrosecondStopWatchTime("MainLoop");
+			float secondDeltaTime = (float)(deltaTime / 1000000.0);
+			Clock::instance().ResetStopWatch("MainLoop");
 
-			m_sceneToLoad = -1;
-			m_activeScene = Scene::Make(sceneToLoad->second.string());
+			InputCore::instance().ResetFrameState();
+			glfwPollEvents();
 
-			if (!m_activeScene)
+			if (glfwWindowShouldClose(m_window))
+				Scene::instance().StopExecution();
+
+#ifdef _DEBUG
+			Clock::instance().ResetStopWatch("RessourceManagementLoop");
+#endif
+			RessourceManagerCore::instance().ManagementLoop();
+#ifdef _DEBUG
+			deltaRessourceManagementLoop += Clock::instance().GetMicrosecondStopWatchTime("RessourceManagementLoop");
+#endif
+
+#ifdef _DEBUG
+			Clock::instance().ResetStopWatch("UpdateExecution");
+#endif
+			Scene::instance().UpdateExecution(secondDeltaTime);
+#ifdef _DEBUG
+			deltaUpdateExecution += Clock::instance().GetMicrosecondStopWatchTime("UpdateExecution");
+#endif
+
+			Scene::instance().RemoveDestroyedLocalEntities();
+
+#ifdef _DEBUG
+			Clock::instance().ResetStopWatch("Render");
+#endif
+			Scene::instance().Render();
+#ifdef _DEBUG
+			deltaRender += Clock::instance().GetMicrosecondStopWatchTime("Render");
+#endif
+
+			glfwSwapBuffers(m_window);
+
+#ifdef _DEBUG
+			frameCount++;
+
+			deltaMainLoop += deltaTime;
+
+			if (Clock::instance().GetMillisecondStopWatchTime("MainLoopDebugUpdate") > 1000)
 			{
-#ifdef _DEBUG
-				Debug::LogError("[Application] Unable to load scene");
-#endif
-				return;
-			}
+				Clock::instance().ResetStopWatch("MainLoopDebugUpdate");
 
-#ifdef _DEBUG
-			long long frameCount = 0;
-
-			long long deltaMainLoop = 0;
-			long long deltaRessourceManagementLoop = 0;
-			long long deltaUpdateExecution = 0;
-			long long deltaRender = 0;
-#endif
-
-			do
-			{
-				m_frameCount ++;
-				long long deltaTime = Clock::instance().GetMicrosecondStopWatchTime("MainLoop");
-				float secondDeltaTime = (float)(deltaTime / 1000000.0);
-				Clock::instance().ResetStopWatch("MainLoop");
-
-				InputCore::instance().ResetFrameState();
-				glfwPollEvents();
-
-				if (glfwWindowShouldClose(m_window) || m_sceneToLoad != -1)
-				m_activeScene->StopExecution();
-
-#ifdef _DEBUG
-				Clock::instance().ResetStopWatch("RessourceManagementLoop");
-#endif
-				RessourceManagerCore::instance().ManagementLoop();
-#ifdef _DEBUG
-				deltaRessourceManagementLoop += Clock::instance().GetMicrosecondStopWatchTime("RessourceManagementLoop");
-#endif
-
-#ifdef _DEBUG
-				Clock::instance().ResetStopWatch("UpdateExecution");
-#endif
-				m_activeScene->UpdateExecution(secondDeltaTime);
-#ifdef _DEBUG
-				deltaUpdateExecution += Clock::instance().GetMicrosecondStopWatchTime("UpdateExecution");
-#endif
-
-				m_activeScene->RemoveDestroyedLocalEntities();
-
-#ifdef _DEBUG
-				Clock::instance().ResetStopWatch("Render");
-#endif
-				m_activeScene->Render();
-#ifdef _DEBUG
-				deltaRender += Clock::instance().GetMicrosecondStopWatchTime("Render");
-#endif
-
-				glfwSwapBuffers(m_window);
-
-#ifdef _DEBUG
-				frameCount++;
-
-				deltaMainLoop += deltaTime;
-
-				if (Clock::instance().GetMillisecondStopWatchTime("MainLoopDebugUpdate") > 1000)
+				if (frameCount != 0)
 				{
-					Clock::instance().ResetStopWatch("MainLoopDebugUpdate");
+					float l_deltaMainLoop = (int)(deltaMainLoop / (float)(frameCount)) / 1000.0f;
+					float l_deltaRessourceManagementLoop = (int)(deltaRessourceManagementLoop / (float)(frameCount)) / 1000.0f;
+					float l_deltaUpdateExecution = (int)(deltaUpdateExecution / (float)(frameCount)) / 1000.0f;
+					float l_deltaRender = (int)(deltaRender / (float)(frameCount)) / 1000.0f;
 
-					if (frameCount != 0)
-					{
-						float l_deltaMainLoop = (int)(deltaMainLoop / (float)(frameCount)) / 1000.0f;
-						float l_deltaRessourceManagementLoop = (int)(deltaRessourceManagementLoop / (float)(frameCount)) / 1000.0f;
-						float l_deltaUpdateExecution = (int)(deltaUpdateExecution / (float)(frameCount)) / 1000.0f;
-						float l_deltaRender = (int)(deltaRender / (float)(frameCount)) / 1000.0f;
+					float l_total = (int)((deltaRessourceManagementLoop + deltaUpdateExecution + deltaRender) / (float)(frameCount)) / 1000.0f;
 
-						float l_total = (int)((deltaRessourceManagementLoop + deltaUpdateExecution + deltaRender) / (float)(frameCount)) / 1000.0f;
-
-						std::cout << "\rFU: " << l_deltaMainLoop << "  ML: " << l_deltaRessourceManagementLoop << "  U: " << l_deltaUpdateExecution << "  R: " << l_deltaRender << "  TT: " << l_total << "                  ";
-					}
-
-					frameCount = 0;
-
-					deltaMainLoop = 0;
-					deltaRessourceManagementLoop = 0;
-					deltaUpdateExecution = 0;
-					deltaRender = 0;
+					std::cout << "\rFU: " << l_deltaMainLoop << "  ML: " << l_deltaRessourceManagementLoop << "  U: " << l_deltaUpdateExecution << "  R: " << l_deltaRender << "  TT: " << l_total << "                  ";
 				}
+
+				frameCount = 0;
+
+				deltaMainLoop = 0;
+				deltaRessourceManagementLoop = 0;
+				deltaUpdateExecution = 0;
+				deltaRender = 0;
+			}
 #endif
 
-			} while ((!glfwWindowShouldClose(m_window) && m_sceneToLoad == -1) || m_activeScene->HasLocalEntities());
-
-			m_activeScene = nullptr;
-
-		} while (!glfwWindowShouldClose(m_window));
+		} while (!glfwWindowShouldClose(m_window) || !Scene::instance().IsStopped());
 
 #ifdef _DEBUG
 		std::cout << std::endl;
@@ -186,54 +175,6 @@ namespace Client
 		glfwSetWindowShouldClose(m_window, GLFW_TRUE);
 	}
 
-	bool ApplicationCore::PreLoadScene(const std::string& p_sceneAlias, const std::filesystem::path& p_scenePath)
-	{
-		if (!std::filesystem::exists(p_scenePath))
-		{
-#ifdef _DEBUG
-			Debug::LogWarning("[Application] Unable to preload scene, config file not found");
-#endif
-			return false;
-		}
-
-		auto ret = m_scenesPreload.insert(ScenePreloadMap::value_type(p_sceneAlias, p_scenePath));
-		if (ret.second == false)
-		{
-#ifdef _DEBUG
-			Debug::LogWarning("[Application] Tried to preload a scene with a multiple used alias");
-#endif
-			return false;
-		}
-
-		m_sceneToLoad = 0;
-
-		return true;
-	}
-
-	bool ApplicationCore::LoadScene(const std::string& p_sceneAlias)
-	{
-		ScenePreloadMap::iterator it = m_scenesPreload.find(p_sceneAlias);
-
-		if (it == m_scenesPreload.end())
-		{
-			return false;
-		}
-
-		m_sceneToLoad = int(std::distance(m_scenesPreload.begin(), it));
-
-		return true;
-	}
-
-	bool ApplicationCore::LoadScene(int p_sceneId)
-	{
-		if (p_sceneId < 0 || p_sceneId >= m_scenesPreload.size())
-			return false;
-
-		m_sceneToLoad = p_sceneId;
-
-		return true;
-	}
-
 	long long ApplicationCore::GetFrameCount()
 	{
 		return m_frameCount;
@@ -242,11 +183,6 @@ namespace Client
 	std::shared_ptr<Shader> ApplicationCore::GetActiveShader()
 	{
 		return m_activeShader;
-	}
-
-	std::shared_ptr<Scene> ApplicationCore::GetActiveScene()
-	{
-		return m_activeScene;
 	}
 
 	bool ApplicationCore::IsApplicationPaused()
