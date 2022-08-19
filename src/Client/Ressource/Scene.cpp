@@ -67,22 +67,6 @@ namespace Client
 		m_localEntities.erase(std::remove(m_localEntities.begin(), m_localEntities.end(), p_entity), m_localEntities.end());
 	}
 
-	void Scene::RemoveDestroyedLocalEntities()
-	{
-		std::list<std::shared_ptr<Entity>>::iterator it = m_localEntities.begin();
-		while (it != m_localEntities.end())
-		{
-			std::list<std::shared_ptr<Entity>>::iterator entityToTest = it;
-
-			it++;
-
-			if (entityToTest->get()->GetCurrentEntityExecutionState() == EntityExecutionState::PostDestroy)
-			{
-				m_localEntities.erase(entityToTest);
-			}
-		}
-	}
-
 	std::shared_ptr<Entity> Scene::FindLocalEntityWithTag(const std::string& p_tag)
 	{
 		for (auto& entity : m_localEntities)
@@ -115,9 +99,19 @@ namespace Client
 
 		m_player->UpdateExecution(p_deltaTime);
 
-		for(auto& entity : m_localEntities)
+		std::list<std::shared_ptr<Entity>>::iterator it = m_localEntities.begin();
+		while (it != m_localEntities.end())
 		{
-			entity->UpdateExecution(p_deltaTime);
+			std::list<std::shared_ptr<Entity>>::iterator entity = it;
+
+			entity->get()->UpdateExecution(p_deltaTime);
+
+			it++;
+
+			if (entity->get()->GetCurrentEntityExecutionState() == EntityExecutionState::PostDestroy)
+			{
+				m_localEntities.erase(entity);
+			}
 		}
 	}
 
@@ -159,6 +153,16 @@ namespace Client
 		}
 
 		return true;
+	}
+
+	std::shared_ptr<Camera> Scene::GetCamera()
+	{
+		return m_camera;
+	}
+
+	std::shared_ptr<Player> Scene::GetPlayer()
+	{
+		return m_player;
 	}
 
 	bool Scene::HasLocalEntities()

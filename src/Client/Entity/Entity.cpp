@@ -315,7 +315,7 @@ namespace Client
 		return glm::vec3(2 * (x * y - w * z), 1 - 2 * (x * x + z * z), 2 * (y * z + w * x));
 	}
 
-	void Entity::InstantiatePrefab(const UUIDv4::UUID& p_prefabUuid)
+	std::shared_ptr<Entity> Entity::InstantiatePrefab(const UUIDv4::UUID& p_prefabUuid)
 	{
 		auto prefab = RessourceManager::FindPrefab(p_prefabUuid);
 
@@ -323,6 +323,8 @@ namespace Client
 		newChild->SetPrefabReferenceUuid(p_prefabUuid);
 
 		AddChild(newChild);
+
+		return newChild;
 	}
 
 	void Entity::DestroyEntity()
@@ -480,6 +482,13 @@ namespace Client
 		return prefabRefStruct != nullptr;
 	}
 
+	void Entity::SetLocalTransform(const glm::mat4& p_localTransform)
+	{
+		m_localTransform = p_localTransform;
+
+		DecomposeLocalTransform();
+	}
+
 	const glm::mat4& Entity::GetLocalTransform()
 	{
 		ComputeLocalTransform();
@@ -635,6 +644,16 @@ namespace Client
 		glm::mat4 scale = glm::scale(glm::mat4(1.0), m_localScale);
 
 		m_localTransform = translate * rotate * scale;
+	}
+
+	void Entity::DecomposeLocalTransform()
+	{
+		glm::vec3 skew;
+		glm::vec4 perspective;
+		glm::quat rotation;
+
+		glm::decompose(m_localTransform, m_localScale, rotation, m_localPosition, skew, perspective);
+		m_localRotation = glm::eulerAngles(rotation);
 	}
 
 	void Entity::DecomposeWorldTransform()

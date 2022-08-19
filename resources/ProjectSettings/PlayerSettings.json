@@ -14,7 +14,8 @@
     "Type": "Script",
     "Name": "PlayerController",
     "Parameters": {
-
+      "PlayerAcceleration": 1.0,
+      "PlayerMaxSpeed": 5.0
     }
   }
 }

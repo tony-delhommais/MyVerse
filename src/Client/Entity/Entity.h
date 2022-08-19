@@ -52,7 +52,7 @@ namespace Client
 		glm::vec3 Right();
 		glm::vec3 Up();
 
-		void InstantiatePrefab(const UUIDv4::UUID& p_prefabUuid);
+		std::shared_ptr<Entity> InstantiatePrefab(const UUIDv4::UUID& p_prefabUuid);
 		void DestroyEntity();
 
 		bool AddComponent(std::shared_ptr<Component> p_component);
@@ -114,6 +114,7 @@ namespace Client
 		void SetPrefabReferenceUuid(const UUIDv4::UUID& p_prefabReferenceUuid);
 		bool IsEntityReferencedToAPrefab();
 
+		void SetLocalTransform(const glm::mat4& p_localTransform);
 		const glm::mat4& GetLocalTransform();
 		const glm::mat4& GetWorldTransform();
 
@@ -140,6 +141,7 @@ namespace Client
 		void DetermineNextEntityState();
 
 		void ComputeLocalTransform();
+		void DecomposeLocalTransform();
 		void DecomposeWorldTransform();
 
 	private:

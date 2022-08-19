@@ -4,13 +4,36 @@
 
 #include "Client/GameScripts/Controllers/CameraController.h"
 
+void CameraController::Start()
+{
+	glm::mat4 position = glm::translate(glm::mat4(1.0f), cameraOffsetPosition);
+	glm::mat4 rotation = glm::mat4_cast(glm::quat(glm::radians(cameraOffsetRotation)));
+
+	cameraOffsetTransform = position * rotation;
+}
+
 void CameraController::Update(float p_deltaTime)
 {
-	
+	glm::vec2 mouseMovement = glm::vec2(0.0);
+
+	if (!Application::IsApplicationPaused())
+	{
+		mouseMovement = Input::GetMouseMovement();
+	}
+
+	cameraRotationAngle += mouseMovement.x * (cameraRotationSpeed * 2) / 100.0f;
+
+	glm::mat4 position = glm::translate(glm::mat4(1.0f), Scene::instance().GetPlayer()->GetWorldPosition());
+
+	glm::mat4 newTransform = glm::rotate(position, glm::radians(cameraRotationAngle), glm::vec3(0.0f, 1.0f, 0.0f));
+
+	GetEntity()->SetLocalTransform(newTransform * cameraOffsetTransform);
 }
 
 bool CameraController::s_isRegistered = ScriptFactory::instance().Register("CameraController", [](JsonObject& parameters) {
 	auto script = std::make_shared<CameraController>();
 
+	script->cameraRotationSpeed = GetParameterFromJsonObject(parameters, "CameraRotationSpeed", script->cameraRotationSpeed);
+
 	return script;
-	});
+});

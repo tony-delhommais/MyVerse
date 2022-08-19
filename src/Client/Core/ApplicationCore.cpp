@@ -83,7 +83,7 @@ namespace Client
 	void ApplicationCore::RenderLoop()
 	{
 #ifdef _DEBUG
-		long long frameCount = 0;
+		long long debugUpdaterameCount = 0;
 
 		long long deltaMainLoop = 0;
 		long long deltaRessourceManagementLoop = 0;
@@ -120,8 +120,6 @@ namespace Client
 			deltaUpdateExecution += Clock::instance().GetMicrosecondStopWatchTime("UpdateExecution");
 #endif
 
-			Scene::instance().RemoveDestroyedLocalEntities();
-
 #ifdef _DEBUG
 			Clock::instance().ResetStopWatch("Render");
 #endif
@@ -133,7 +131,7 @@ namespace Client
 			glfwSwapBuffers(m_window);
 
 #ifdef _DEBUG
-			frameCount++;
+			debugUpdaterameCount++;
 
 			deltaMainLoop += deltaTime;
 
@@ -141,19 +139,19 @@ namespace Client
 			{
 				Clock::instance().ResetStopWatch("MainLoopDebugUpdate");
 
-				if (frameCount != 0)
+				if (debugUpdaterameCount != 0)
 				{
-					float l_deltaMainLoop = (int)(deltaMainLoop / (float)(frameCount)) / 1000.0f;
-					float l_deltaRessourceManagementLoop = (int)(deltaRessourceManagementLoop / (float)(frameCount)) / 1000.0f;
-					float l_deltaUpdateExecution = (int)(deltaUpdateExecution / (float)(frameCount)) / 1000.0f;
-					float l_deltaRender = (int)(deltaRender / (float)(frameCount)) / 1000.0f;
+					float l_deltaMainLoop = (int)(deltaMainLoop / (float)(debugUpdaterameCount)) / 1000.0f;
+					float l_deltaRessourceManagementLoop = (int)(deltaRessourceManagementLoop / (float)(debugUpdaterameCount)) / 1000.0f;
+					float l_deltaUpdateExecution = (int)(deltaUpdateExecution / (float)(debugUpdaterameCount)) / 1000.0f;
+					float l_deltaRender = (int)(deltaRender / (float)(debugUpdaterameCount)) / 1000.0f;
 
-					float l_total = (int)((deltaRessourceManagementLoop + deltaUpdateExecution + deltaRender) / (float)(frameCount)) / 1000.0f;
+					float l_total = (int)((deltaRessourceManagementLoop + deltaUpdateExecution + deltaRender) / (float)(debugUpdaterameCount)) / 1000.0f;
 
 					std::cout << "\rFU: " << l_deltaMainLoop << "  ML: " << l_deltaRessourceManagementLoop << "  U: " << l_deltaUpdateExecution << "  R: " << l_deltaRender << "  TT: " << l_total << "                  ";
 				}
 
-				frameCount = 0;
+				debugUpdaterameCount = 0;
 
 				deltaMainLoop = 0;
 				deltaRessourceManagementLoop = 0;

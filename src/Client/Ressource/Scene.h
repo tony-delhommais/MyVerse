@@ -30,7 +30,6 @@ namespace Client
 	public:
 		void AddLocalEntity(std::shared_ptr<Entity> p_entity);
 		void RemoveLocalEntity(std::shared_ptr<Entity> p_entity);
-		void RemoveDestroyedLocalEntities();
 
 		std::shared_ptr<Entity> FindLocalEntityWithTag(const std::string& p_tag);
 		std::list<std::shared_ptr<Entity>> FindLocalEntitiesWithTag(const std::string& p_tag);
@@ -42,6 +41,10 @@ namespace Client
 
 	public:
 		bool IsStopped();
+
+		std::shared_ptr<Camera> GetCamera();
+
+		std::shared_ptr<Player> GetPlayer();
 
 		bool HasLocalEntities();
 
