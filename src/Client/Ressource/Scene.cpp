@@ -95,8 +95,6 @@ namespace Client
 
 	void Scene::UpdateExecution(float p_deltaTime)
 	{
-		m_camera->UpdateExecution(p_deltaTime);
-
 		m_player->UpdateExecution(p_deltaTime);
 
 		std::list<std::shared_ptr<Entity>>::iterator it = m_localEntities.begin();
@@ -113,18 +111,20 @@ namespace Client
 				m_localEntities.erase(entity);
 			}
 		}
+
+		m_camera->UpdateExecution(p_deltaTime);
 	}
 
 	void Scene::StopExecution()
 	{
-		m_camera->DestroyEntity();
-
 		m_player->DestroyEntity();
 
 		for(auto& entity : m_localEntities)
 		{
 			entity->DestroyEntity();
 		}
+
+		m_camera->DestroyEntity();
 	}
 
 	void Scene::Render()

@@ -39,12 +39,12 @@ namespace Client
 		return InputCore::instance().IsMouseButtonUp(p_mouseButton);
 	}
 
-	glm::vec2 Input::GetMousePosition()
+	const glm::vec2& Input::GetMousePosition()
 	{
 		return InputCore::instance().GetMousePosition();
 	}
 
-	glm::vec2 Input::GetMouseMovement()
+	const glm::vec2& Input::GetMouseMovement()
 	{
 		return InputCore::instance().GetMouseMovement();
 	}

@@ -54,8 +54,8 @@ namespace Client
 		bool IsMouseButtonDown(int p_mouseButton);
 		bool IsMouseButtonUp(int p_mouseButton);
 
-		glm::vec2 GetMousePosition();
-		glm::vec2 GetMouseMovement();
+		const glm::vec2& GetMousePosition();
+		const glm::vec2& GetMouseMovement();
 
 		void UpdateKeyAxis(int p_keyCode, int p_action);
 		void UpdateMousePosition(double p_mouseX, double p_mouseY);

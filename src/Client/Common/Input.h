@@ -23,8 +23,8 @@ namespace Client
 		static bool IsMouseButtonDown(int p_mouseButton);
 		static bool IsMouseButtonUp(int p_mouseButton);
 
-		static glm::vec2 GetMousePosition();
-		static glm::vec2 GetMouseMovement();
+		static const glm::vec2& GetMousePosition();
+		static const glm::vec2& GetMouseMovement();
 	};
 
 } // Client

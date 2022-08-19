@@ -137,12 +137,12 @@ namespace Client
 		return false;
 	}
 
-	glm::vec2 InputCore::GetMousePosition()
+	const glm::vec2& InputCore::GetMousePosition()
 	{
 		return m_mousePosition;
 	}
 
-	glm::vec2 InputCore::GetMouseMovement()
+	const glm::vec2& InputCore::GetMouseMovement()
 	{
 		return m_mouseMovement;
 	}
