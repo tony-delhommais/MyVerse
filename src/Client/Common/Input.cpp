@@ -24,9 +24,9 @@ namespace Client
 		return InputCore::instance().IsKeyUp(p_keyCode);
 	}
 
-	float Input::GetAxis(const std::string& p_axisName)
+	float Input::GetAction(int p_actionId)
 	{
-		return InputCore::instance().GetAxis(p_axisName);
+		return InputCore::instance().GetAction(p_actionId);
 	}
 
 	bool Input::IsMouseButtonDown(int p_mouseButton)

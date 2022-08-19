@@ -1,42 +1,35 @@
 {
-	"KeyBinding": [
-		{
-			"Keys": [ 87 ],
-			"Action": "Forward",
-			"Value": 1.0
-		},
-		{
-			"Keys": [ 83 ],
-			"Action": "Forward",
-			"Value": -1.0
-		},
-		{
-			"Keys": [ 68 ],
-			"Action": "Right",
-			"Value": 1.0
-		},
-		{
-			"Keys": [ 65 ],
-			"Action": "Right",
-			"Value": -1.0
-		},
-		{
-			"Keys": [ 256 ],
-			"Action": "Pause",
-			"Value": 0.0
-		}
-	],
 	"ApplicationName": "MyVerse - OpenGL - Alpha Version",
-	"Axis": [
+	"Actions": [
 		{
+			"Id": 0,
 			"Alias": "Forward",
-			"PositiveKey": 87,
-			"NegativeKey": 83
+			"TransitionTime": 0.0,
+			"KeysBinding": [
+				{
+					"Keys": [ 87 ],
+					"Value": 1.0
+				},
+				{
+					"Keys": [ 83 ],
+					"Value": -1.0
+				}
+			]
 		},
 		{
+			"Id": 1,
 			"Alias": "Right",
-			"PositiveKey": 68,
-			"NegativeKey": 65
+			"TransitionTime": 0.0,
+			"KeysBinding": [
+				{
+					"Keys": [ 68 ],
+					"Value": 1.0
+				},
+				{
+					"Keys": [ 65 ],
+					"Value": -1.0
+				}
+			]
 		}
 	]
 }

@@ -18,7 +18,7 @@ namespace Client
 
 		static bool IsKeyDown(int p_keyCode);
 		static bool IsKeyUp(int p_keyCode);
-		static float GetAxis(const std::string& p_axisName);
+		static float GetAction(int p_actionId);
 
 		static bool IsMouseButtonDown(int p_mouseButton);
 		static bool IsMouseButtonUp(int p_mouseButton);

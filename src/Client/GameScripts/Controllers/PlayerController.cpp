@@ -11,46 +11,49 @@ void PlayerController::Update(float p_deltaTime)
 	// D: (D) 68
 	// Q: (A) 65
 
+	float current_x_axis = 0.0f;
+	float current_y_axis = 0.0f;
+
 	if (!Application::IsApplicationPaused())
 	{
-		float current_x_axis = Input::GetAxis("Right");
-		float current_y_axis = Input::GetAxis("Forward");
-
-		////////// Translation //////////
-		float targetDirectionalSpeed = current_y_axis * playerMaxSpeed;
-
-		if (previousTargetDirectionalSpeed != targetDirectionalSpeed)
-		{
-			previousTargetDirectionalSpeed = targetDirectionalSpeed;
-			lerpUpdateTime = 0.0f;
-		}
-
-		lerpUpdateTime += p_deltaTime * playerAcceleration;
-
-		playerVelocity = Math::Lerp(playerVelocity, previousTargetDirectionalSpeed, lerpUpdateTime);
-
-		GetEntity()->Translate(GetEntity()->Forward() * playerVelocity * p_deltaTime);
-		////////// Translation //////////
-
-		////////// Rotation //////////
-		float targetRotationSpeed = current_x_axis * playerMaxRotationSpeedStatic;
-		if(current_y_axis != 0) targetRotationSpeed = current_x_axis * playerMaxRotationSpeedInMovement;
-
-		targetRotationSpeed *= -1.0f;
-
-		if (previousTargetRotationSpeed != targetRotationSpeed)
-		{
-			previousTargetRotationSpeed = targetRotationSpeed;
-			lerpUpdateRotationTime = 0.0f;
-		}
-
-		lerpUpdateRotationTime += p_deltaTime * playerRotationAcceleration;
-
-		playerRotationVelocity = Math::Lerp(playerRotationVelocity, previousTargetRotationSpeed, lerpUpdateRotationTime);
-
-		GetEntity()->RotateEuler(glm::vec3(0.0f, playerRotationVelocity, 0.0f) * p_deltaTime);
-		////////// Rotation //////////
+		current_x_axis = Input::GetAction(1);
+		current_y_axis = Input::GetAction(0);
 	}
+
+	////////// Translation //////////
+	float targetDirectionalSpeed = current_y_axis * playerMaxSpeed;
+
+	if (previousTargetDirectionalSpeed != targetDirectionalSpeed)
+	{
+		previousTargetDirectionalSpeed = targetDirectionalSpeed;
+		lerpUpdateTime = 0.0f;
+	}
+
+	lerpUpdateTime += p_deltaTime * playerAcceleration;
+
+	playerVelocity = Math::Lerp(playerVelocity, previousTargetDirectionalSpeed, lerpUpdateTime);
+
+	GetEntity()->Translate(GetEntity()->Forward() * playerVelocity * p_deltaTime);
+	////////// Translation //////////
+
+	////////// Rotation //////////
+	float targetRotationSpeed = current_x_axis * playerMaxRotationSpeedStatic;
+	if(current_y_axis != 0) targetRotationSpeed = current_x_axis * playerMaxRotationSpeedInMovement;
+
+	targetRotationSpeed *= -1.0f;
+
+	if (previousTargetRotationSpeed != targetRotationSpeed)
+	{
+		previousTargetRotationSpeed = targetRotationSpeed;
+		lerpUpdateRotationTime = 0.0f;
+	}
+
+	lerpUpdateRotationTime += p_deltaTime * playerRotationAcceleration;
+
+	playerRotationVelocity = Math::Lerp(playerRotationVelocity, previousTargetRotationSpeed, lerpUpdateRotationTime);
+
+	GetEntity()->RotateEuler(glm::vec3(0.0f, playerRotationVelocity, 0.0f) * p_deltaTime);
+	////////// Rotation //////////
 }
 
 bool PlayerController::s_isRegistered = ScriptFactory::instance().Register("PlayerController", [](JsonObject& parameters) {

@@ -206,13 +206,10 @@ namespace Client
 
 		m_applicationName = GetParameterFromJsonObject(projectSettings, "ApplicationName", m_applicationName);
 
-		JsonObject& axisList = GetParameterFromJsonObject(projectSettings, "Axis", true, false);
-		if (axisList != projectSettings)
+		JsonObject& actionList = GetParameterFromJsonObject(projectSettings, "Actions", true, false);
+		if (actionList != projectSettings)
 		{
-			for (auto& axis : axisList)
-			{
-				InputCore::instance().ParseAxisKey(axis);
-			}
+			InputCore::instance().ParseActions(actionList);
 		}
 
 		return true;

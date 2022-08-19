@@ -17,16 +17,23 @@
 namespace Client
 {
 
-	struct KeyAxis
+	struct KeyBindingData
 	{
-		std::string	name = "";
+		int keyPressed = GLFW_RELEASE;
 
-		int	positive = GLFW_KEY_UNKNOWN;
-		int positivePressed = GLFW_RELEASE;
+		float value = 0.0f;
+	};
 
-		int negative = GLFW_KEY_UNKNOWN;
-		int negativePressed = GLFW_RELEASE;
+	struct Action
+	{
+		int id = -1;
+		std::string alias = "";
 
+		float transitionTime = 0.0f;
+
+		std::map<int, KeyBindingData> keyBindingList;
+
+		float targetValue = 0.0f;
 		float value = 0.0f;
 	};
 
@@ -39,7 +46,7 @@ namespace Client
 	public:
 		static InputCore& instance();
 
-		void ParseAxisKey(JsonObject& p_newAxis);
+		void ParseActions(JsonObject& p_actionList);
 
 		void Initialize(GLFWwindow* p_window);
 
@@ -49,7 +56,9 @@ namespace Client
 
 		bool IsKeyDown(int p_keyCode);
 		bool IsKeyUp(int p_keyCode);
-		float GetAxis(const std::string& p_axisName);
+		float GetAction(int p_actionId);
+
+		int GetActionId(const std::string& p_actionAlias);
 
 		bool IsMouseButtonDown(int p_mouseButton);
 		bool IsMouseButtonUp(int p_mouseButton);
@@ -66,7 +75,7 @@ namespace Client
 
 		std::vector<int> m_keysDown;
 		std::vector<int> m_keysUp;
-		std::vector<KeyAxis> m_keyAxis;
+		std::list<Action> m_actions;
 
 		std::vector<int> m_mouseButtonDown;
 		std::vector<int> m_mouseButtonUp;

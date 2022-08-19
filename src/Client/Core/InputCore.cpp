@@ -15,19 +15,42 @@ namespace Client
 		return instance;
 	}
 
-	void InputCore::ParseAxisKey(JsonObject& p_newAxis)
+	void InputCore::ParseActions(JsonObject& p_actionList)
 	{
-		static int default_alias = 0;
+		if (p_actionList.is_array())
+		{
+			for (JsonObject& actionData : p_actionList)
+			{
+				Action action;
 
-		KeyAxis new_axis;
+				action.id = GetParameterFromJsonObject(actionData, "Id", action.id);
+				if (action.id == -1) continue;
 
-		new_axis.name = GetParameterFromJsonObject(p_newAxis, "Alias", "Default_" + std::to_string(default_alias++));
-		new_axis.positive = GetParameterFromJsonObject(p_newAxis, "PositiveKey", GLFW_KEY_UNKNOWN);
-		new_axis.negative = GetParameterFromJsonObject(p_newAxis, "NegativeKey", GLFW_KEY_UNKNOWN);
+				action.alias = GetParameterFromJsonObject(actionData, "Alias", "Null");
+				if (action.alias == "Null") continue;
 
-		if (new_axis.positive == GLFW_KEY_UNKNOWN || new_axis.negative == GLFW_KEY_UNKNOWN) return;
+				action.transitionTime = GetParameterFromJsonObject(actionData, "TransitionTime", action.transitionTime);
 
-		m_keyAxis.push_back(new_axis);
+				JsonObject& keyBindingList = GetParameterFromJsonObject(actionData, "KeysBinding", true, false);
+				if (keyBindingList != actionData)
+				{
+					for (JsonObject& keyBindingJsonData : keyBindingList)
+					{
+						JsonObject& keys = GetParameterFromJsonObject(keyBindingJsonData, "Keys", true, false);
+						//todo manage multiple keys
+						int key = keys[0];
+
+						KeyBindingData keyBindingData;
+
+						keyBindingData.value = GetParameterFromJsonObject(keyBindingJsonData, "Value", 1.0f);
+
+						action.keyBindingList.insert(std::map<int, KeyBindingData>::value_type(key, keyBindingData));
+					}
+				}
+
+				m_actions.push_back(action);
+			}
+		}
 	}
 
 	void InputCore::Initialize(GLFWwindow* p_window)
@@ -69,6 +92,8 @@ namespace Client
 
 		m_mouseMovement = m_mousePreviousPosition - m_mousePosition;
 		m_mousePreviousPosition = m_mousePosition;
+
+		//todo use transition speed
 	}
 
 	void InputCore::SetCursorMode(int p_cursorMode)
@@ -82,8 +107,7 @@ namespace Client
 
 		for (int keyCode : m_keysDown)
 		{
-			if (keyCode == p_keyCode)
-			return true;
+			if (keyCode == p_keyCode) return true;
 		}
 
 		return false;
@@ -95,32 +119,41 @@ namespace Client
 
 		for (int keyCode : m_keysUp)
 		{
-			if (keyCode == p_keyCode)
-			return true;
+			if (keyCode == p_keyCode) return true;
 		}
 
 		return false;
 	}
 
-	float InputCore::GetAxis(const std::string& p_axisName)
+	float InputCore::GetAction(int p_actionId)
 	{
-		for (KeyAxis& keyAxis : m_keyAxis)
+		for (Action& action : m_actions)
 		{
-			if (keyAxis.name == p_axisName)
-			return keyAxis.value;
+			if (action.id == p_actionId) return action.value;
 		}
 #ifdef _DEBUG
-		Debug::LogInfo("[Input] Failed to get Axis " + p_axisName);
+		Debug::LogInfo("[Input] Failed to get Axis " + p_actionId);
 #endif
 		return 0.0f;
+	}
+
+	int InputCore::GetActionId(const std::string& p_actionAlias)
+	{
+		for (Action& action : m_actions)
+		{
+			if (action.alias == p_actionAlias) return action.id;
+		}
+#ifdef _DEBUG
+		Debug::LogWarning("[Input] Axis " + p_actionAlias + " don't exist");
+#endif
+		return -1;
 	}
 
 	bool InputCore::IsMouseButtonDown(int p_mouseButton)
 	{
 		for (int mouseButton : m_mouseButtonDown)
 		{
-			if (mouseButton == p_mouseButton)
-			return true;
+			if (mouseButton == p_mouseButton) return true;
 		}
 
 		return false;
@@ -130,8 +163,7 @@ namespace Client
 	{
 		for (int mouseButton : m_mouseButtonUp)
 		{
-			if (mouseButton == p_mouseButton)
-			return true;
+			if (mouseButton == p_mouseButton) return true;
 		}
 
 		return false;
@@ -152,52 +184,38 @@ namespace Client
 		if (p_action == GLFW_PRESS) m_keysDown.push_back(p_keyCode);
 		else if (p_action == GLFW_RELEASE) m_keysUp.push_back(p_keyCode);
 
-		for (KeyAxis& axis : m_keyAxis)
+		for (Action& action : m_actions)
 		{
-			bool positiveChanged = false;
-			bool negativeChanged = false;
+			bool actionChanged = false;
 
-			if (axis.positive == p_keyCode)
+			bool noKeyForActionIsPressed = true;
+
+			for (auto& keyBindingData : action.keyBindingList)
 			{
-				positiveChanged = p_action != axis.positivePressed;
-				axis.positivePressed = p_action;
+				bool keyBindingDataChanged = false;
+
+				if (keyBindingData.first == p_keyCode)
+				{
+					keyBindingDataChanged = p_action != keyBindingData.second.keyPressed;
+					keyBindingData.second.keyPressed = p_action;
+				}
+
+				if (!actionChanged && keyBindingDataChanged)
+				{
+					if (keyBindingData.second.keyPressed)
+					{
+						action.value = keyBindingData.second.value; //todo chnge to target value
+
+						actionChanged = true;
+					}
+				}
+
+				noKeyForActionIsPressed = noKeyForActionIsPressed && keyBindingData.second.keyPressed == GLFW_RELEASE;
 			}
 
-			if (axis.negative == p_keyCode)
+			if (noKeyForActionIsPressed)
 			{
-				negativeChanged = p_action != axis.negativePressed;
-				axis.negativePressed = p_action;
-			}
-
-			if (positiveChanged)
-			{
-				if (axis.positivePressed)
-				{
-					axis.value = 1.0f;
-				}
-				else if (axis.negativePressed)
-				{
-					axis.value = -1.0f;
-				}
-				else
-				{
-					axis.value = 0.0f;
-				}
-			}
-			else if (negativeChanged)
-			{
-				if (axis.negativePressed)
-				{
-					axis.value = -1.0f;
-				}
-				else if (axis.positivePressed)
-				{
-					axis.value = 1.0f;
-				}
-				else
-				{
-					axis.value = 0.0f;
-				}
+				action.value = 0.0f; //todo chnge to target value
 			}
 		}
 	}
