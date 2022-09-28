@@ -11,8 +11,13 @@ namespace Client
 	{
 		if (m_programId) glDeleteProgram(m_programId);
 
+		m_programId = 0;
+
 		if(m_vertexId) glDeleteShader(m_vertexId);
 		if(m_fragmentId) glDeleteShader(m_fragmentId);
+
+		m_vertexId = 0;
+		m_fragmentId = 0;
 	}
 
 	void Shader::Use()
@@ -47,191 +52,184 @@ namespace Client
 	{
 		if (IsShaderValid()) return;
 
-		if (p_shaderType == SupportedFileType::VERTEX_SHADER && !SetVertexShader(p_path)) return;
+		if (p_shaderType == SupportedFileType::VERTEX_SHADER)
+		{
+			m_vertexId = CompileShader(GL_VERTEX_SHADER, p_path);
 
-		if (p_shaderType == SupportedFileType::FRAGMENT_SHADER && !SetFragmentShader(p_path)) return;
+			if (m_vertexId == 0)
+				return;
+		}
+
+		if (p_shaderType == SupportedFileType::FRAGMENT_SHADER)
+		{
+			m_fragmentId = CompileShader(GL_FRAGMENT_SHADER, p_path);
+
+			if (m_fragmentId == 0)
+				return;
+		}
+
+		if (!m_vertexId || !m_fragmentId)
+			return;
 
 		int success;
 		char infoLog[512];
 
-		if (m_vertexId && m_fragmentId)
+		m_programId = glCreateProgram();
+		glAttachShader(m_programId, m_vertexId);
+		glAttachShader(m_programId, m_fragmentId);
+
+		for (int i = 0; i < EnumAttrib::NB_ATTRIBUTES; i++)
 		{
-			m_programId = glCreateProgram();
-			glAttachShader(m_programId, m_vertexId);
-			glAttachShader(m_programId, m_fragmentId);
-			glLinkProgram(m_programId);
+			glBindAttribLocation(m_programId, i, attribNames[i].c_str());
+		}
+
+		glLinkProgram(m_programId);
 			
-			glGetProgramiv(m_programId, GL_LINK_STATUS, &success);
-			if (!success)
-			{
-				glGetProgramInfoLog(m_programId, 512, NULL, infoLog);
+		glGetProgramiv(m_programId, GL_LINK_STATUS, &success);
+		if (!success)
+		{
+			glGetProgramInfoLog(m_programId, 512, NULL, infoLog);
 #ifdef _DEBUG
-				Debug::LogError("Linking of shaders to program failed :\n" + std::string(infoLog));
+			Debug::LogError("Linking of shaders to program failed :\n" + std::string(infoLog));
 #endif
-				glDeleteProgram(m_programId);
-				m_programId = 0;
-				return;
-			}
+			glDeleteProgram(m_programId);
+			m_programId = 0;
+			return;
+		}
 
-			glDeleteShader(m_vertexId);
-			glDeleteShader(m_fragmentId);
+		for (int i = 0; i < EnumUser::NB_UNIFORM_USER; i++)
+		{
+			m_userUniforms[i] = glGetUniformLocation(m_programId, uniformUserNames[i].c_str());
+		}
 
-			m_vertexId = 0;
-			m_fragmentId = 0;
+		for (int i = 0; i < EnumMatrix::NB_UNIFORM_MATRIX; i++)
+		{
+			m_matrixUniforms[i] = glGetUniformLocation(m_programId, uniformMatrixNames[i].c_str());
+		}
+
+		for (int i = 0; i < EnumTexture::NB_UNIFORM_TEXTURE; i++)
+		{
+			m_textureUniforms[i] = glGetUniformLocation(m_programId, uniformTextureNames[i].c_str());
+
+			if (m_textureUniforms[i] != -1)
+				glUniform1i(m_textureUniforms[i], i);
 		}
 	}
 
 	bool Shader::IsShaderValid()
 	{
-		return m_programId;
+		return m_programId != 0;
 	}
 
-	void Shader::SetUniformInt(const std::string& p_locationName, int p_value)
+	bool Shader::HasUserUniform(EnumUser p_uniformID)
 	{
-		GLint location = FindUniformLocation(p_locationName);
-
-		SetUniformInt(location, p_value);
-	}
-
-	void Shader::SetUniformInt(const GLint p_locationId, int p_value)
-	{
-		if (!IsShaderValid()) return;
-
-		if (p_locationId == -1) return;
-
-		glUniform1i(p_locationId, p_value);
-	}
-
-	void Shader::SetUniformVec3(const std::string& p_locationName, const glm::vec3& p_value)
-	{
-		GLint location = FindUniformLocation(p_locationName);
-
-		SetUniformVec3(location, p_value);
-	}
-
-	void Shader::SetUniformVec3(const GLint p_locationId, const glm::vec3& p_value)
-	{
-		if (!IsShaderValid()) return;
-
-		if (p_locationId == -1) return;
-
-		glUniform3fv(p_locationId, 1, glm::value_ptr(p_value));
-	}
-
-	void Shader::SetUniformMat4(const std::string& p_locationName, const glm::mat4& p_value)
-	{
-		GLint location = FindUniformLocation(p_locationName);
-
-		SetUniformMat4(location, p_value);
-	}
-
-	void Shader::SetUniformMat4(const GLint p_locationId, const glm::mat4& p_value)
-	{
-		if (!IsShaderValid()) return;
-
-		if (p_locationId == -1) return;
-
-		glUniformMatrix4fv(p_locationId, 1, GL_FALSE, glm::value_ptr(p_value));
-	}
-
-	bool Shader::SetVertexShader(const std::filesystem::path& p_path)
-	{
-		int success;
-		char infoLog[512];
-
-		std::string vertexCode;
-		std::ifstream vShaderFile;
-
-		vShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
-
-		try
-		{
-			vShaderFile.open(p_path.string());
-			std::stringstream vShaderStream;
-
-			vShaderStream << vShaderFile.rdbuf();
-
-			vShaderFile.close();
-
-			vertexCode = vShaderStream.str();
-		}
-		catch (std::ifstream::failure e)
-		{
-#ifdef _DEBUG
-			Debug::LogError("Failed to read a vertex shader :\n" + std::string(infoLog));
-#endif
+		if (!IsShaderValid() || p_uniformID < 0 || p_uniformID >= EnumUser::NB_UNIFORM_USER)
 			return false;
-		}
 
-		const char* vShaderCode = vertexCode.c_str();
-
-		m_vertexId = glCreateShader(GL_VERTEX_SHADER);
-		glShaderSource(m_vertexId, 1, &vShaderCode, NULL);
-		glCompileShader(m_vertexId);
-
-		glGetShaderiv(m_vertexId, GL_COMPILE_STATUS, &success);
-		if (!success)
-		{
-			glGetShaderInfoLog(m_vertexId, 512, NULL, infoLog);
-#ifdef _DEBUG
-			Debug::LogError("Failed to compile a vertex shader :\n" + std::string(infoLog));
-#endif
-			glDeleteShader(m_vertexId);
-			m_vertexId = 0;
+		if (m_userUniforms[p_uniformID] == -1)
 			return false;
-		}
 
 		return true;
 	}
 
-	bool Shader::SetFragmentShader(const std::filesystem::path& p_path)
+	void Shader::SetUserUniform(EnumUser p_uniformId, bool p_value)
+	{
+		if (!HasUserUniform(p_uniformId))
+			return;
+
+		glUniform1i(m_userUniforms[p_uniformId], p_value);
+	}
+
+	void Shader::SetUserUniform(EnumUser p_uniformId, int p_value)
+	{
+		if (!HasUserUniform(p_uniformId))
+			return;
+
+		glUniform1i(m_userUniforms[p_uniformId], p_value);
+	}
+
+	void Shader::SetUserUniform(EnumUser p_uniformId, glm::vec3 p_value)
+	{
+		if (!HasUserUniform(p_uniformId))
+			return;
+
+		glUniform3fv(m_userUniforms[p_uniformId], 1, glm::value_ptr(p_value));
+	}
+
+	bool Shader::HasMatrixUniform(EnumMatrix p_uniformID)
+	{
+		if (!IsShaderValid() || p_uniformID < 0 || p_uniformID >= EnumMatrix::NB_UNIFORM_MATRIX)
+			return false;
+
+		if (m_matrixUniforms[p_uniformID] == -1)
+			return false;
+
+		return true;
+	}
+
+	void Shader::SetMatrixUniform(EnumMatrix p_uniformID, glm::mat4 p_matrix)
+	{
+		if (!HasMatrixUniform(p_uniformID))
+			return;
+
+		glUniformMatrix4fv(m_matrixUniforms[p_uniformID], 1, GL_FALSE, &p_matrix[0][0]);
+	}
+
+	void Shader::SetMatrixUniform(EnumMatrix p_uniformID, glm::mat3 p_matrix)
+	{
+		if (!HasMatrixUniform(p_uniformID))
+			return;
+
+		glUniformMatrix3fv(m_matrixUniforms[p_uniformID], 1, GL_FALSE, &p_matrix[0][0]);
+	}
+
+	GLuint Shader::CompileShader(GLenum p_shaderType, const std::filesystem::path& p_path)
 	{
 		int success;
 		char infoLog[512];
 
-		std::string fragmentCode;
-		std::ifstream fShaderFile;
+		std::string code;
+		std::ifstream shaderFile;
 
-		fShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
+		shaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
 
 		try
 		{
-			fShaderFile.open(p_path.string());
-			std::stringstream fShaderStream;
+			shaderFile.open(p_path.string());
+			std::stringstream shaderStream;
 
-			fShaderStream << fShaderFile.rdbuf();
+			shaderStream << shaderFile.rdbuf();
 
-			fShaderFile.close();
+			shaderFile.close();
 
-			fragmentCode = fShaderStream.str();
+			code = shaderStream.str();
 		}
 		catch (std::ifstream::failure e)
 		{
 #ifdef _DEBUG
-			Debug::LogError("Failed to read a fragment shader :\n" + std::string(infoLog));
+			Debug::LogError("Failed to read a shader :\n" + std::string(infoLog));
 #endif
-			return false;
+			return 0;
 		}
 
-		const char* fShaderCode = fragmentCode.c_str();
+		const char* shaderCode = code.c_str();
+		GLuint shaderId;
+		shaderId = glCreateShader(p_shaderType);
+		glShaderSource(shaderId, 1, &shaderCode, NULL);
+		glCompileShader(shaderId);
 
-		m_fragmentId = glCreateShader(GL_FRAGMENT_SHADER);
-		glShaderSource(m_fragmentId, 1, &fShaderCode, NULL);
-		glCompileShader(m_fragmentId);
-
-		glGetShaderiv(m_fragmentId, GL_COMPILE_STATUS, &success);
+		glGetShaderiv(shaderId, GL_COMPILE_STATUS, &success);
 		if (!success)
 		{
-			glGetShaderInfoLog(m_fragmentId, 512, NULL, infoLog);
+			glGetShaderInfoLog(shaderId, 512, NULL, infoLog);
 #ifdef _DEBUG
-			Debug::LogError("Failed to compile a fragment shader :\n" + std::string(infoLog));
+			Debug::LogError("Failed to compile a shader :\n" + std::string(infoLog));
 #endif
-			glDeleteShader(m_fragmentId);
-			m_fragmentId = 0;
-			return false;
+			glDeleteShader(shaderId);
+			return 0;
 		}
 
-		return true;
+		return shaderId;
 	}
 
 } // Client

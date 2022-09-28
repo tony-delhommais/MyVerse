@@ -4,6 +4,8 @@
 
 #include "Client/Core/ApplicationCore.h"
 
+#include "Client/Factories/EntityFactory.h"
+
 #include "Client/Core/InputCore.h"
 #include "Client/Core/RessourceManagerCore.h"
 
@@ -52,13 +54,17 @@ namespace Client
 
 		AssetRepositoryAnalyzer::PreloadAssetsFiles(ASSETS_PATH);
 
-		auto camera = Camera::Make(std::filesystem::path(PROJECT_SETTINGS_PATH + std::string("./CameraSettings.json")));
+		auto cameraSettings = LoadJsonFile(std::filesystem::path(PROJECT_SETTINGS_PATH + std::string("./CameraSettings.json")));
+
+		auto camera = EntityFactory::instance().Make<Camera>(cameraSettings);
 		if (!camera)
 		{
 			return 0;
 		}
 
-		auto player = Player::Make(std::filesystem::path(PROJECT_SETTINGS_PATH + std::string("./PlayerSettings.json")));
+		auto playerSettings = LoadJsonFile(std::filesystem::path(PROJECT_SETTINGS_PATH + std::string("./PlayerSettings.json")));
+
+		auto player = EntityFactory::instance().Make<Player>(playerSettings);
 		if (!player)
 		{
 			return 0;

@@ -29,7 +29,8 @@ namespace Client
 		Entity();
 		virtual ~Entity();
 
-		static std::shared_ptr<Entity> Make(JsonObject& p_entityParameters);
+		std::shared_ptr<Entity> InstantiatePrefab(const UUIDv4::UUID& p_prefabUuid);
+		void DestroyEntity();
 
 	public:
 		std::shared_ptr<Entity> SetParent(std::shared_ptr<Entity> p_newParent, bool p_keepWorldTransform = false);
@@ -52,55 +53,8 @@ namespace Client
 		glm::vec3 Right();
 		glm::vec3 Up();
 
-		std::shared_ptr<Entity> InstantiatePrefab(const UUIDv4::UUID& p_prefabUuid);
-		void DestroyEntity();
-
-		bool AddComponent(std::shared_ptr<Component> p_component);
-
-		template<typename T>
-		std::shared_ptr<T> GetComponent()
-		{
-			static_assert(std::is_base_of<Component, T>::value, "GetComponent parameter must inherit from type Component");
-
-			std::list<std::shared_ptr<Component>> components;
-
-			components.push_back(m_meshRenderer);
-			components.insert(components.end(), m_scripts.begin(), m_scripts.end());
-
-			for (auto& component : components)
-			{
-				std::shared_ptr<T> castedComponent = std::dynamic_pointer_cast<T>(component);
-				if (castedComponent)
-					return castedComponent;
-			}
-
-			return nullptr;
-		}
-
-		template<typename T>
-		std::list<std::shared_ptr<T>> GetComponents()
-		{
-			static_assert(std::is_base_of<Component, T>::value, "GetComponents parameter must inherit from type Component");
-
-			std::list<std::shared_ptr<Component>> components;
-
-			components.push_back(m_meshRenderer);
-			components.insert(components.end(), m_scripts.begin(), m_scripts.end());
-
-			std::list<std::shared_ptr<T>> Tcomponents;
-
-			for (auto& component : components)
-			{
-				std::shared_ptr<T> castedComponent = std::dynamic_pointer_cast<T>(component);
-				if (castedComponent)
-					Tcomponents.push_back(castedComponent);
-			}
-
-			return Tcomponents;
-		}
-
 		void UpdateExecution(float p_deltaTime);
-		void Render();
+		void Render(glm::mat4& p_MVPParent);
 
 	public:
 		EntityExecutionState GetCurrentEntityExecutionState();
@@ -115,24 +69,42 @@ namespace Client
 		bool IsEntityReferencedToAPrefab();
 
 		void SetLocalTransform(const glm::mat4& p_localTransform);
-		const glm::mat4& GetLocalTransform();
-		const glm::mat4& GetWorldTransform();
+		glm::mat4 GetLocalTransform();
 
-		void SetLocalPosition(const glm::vec3& p_position);
-		const glm::vec3& GetLocalPosition();
-		const glm::vec3& GetWorldPosition();
+		glm::mat4 GetModelMatrix();
+		glm::vec3 GetModelPosition();
+		glm::quat GetModelRotation();
+		glm::vec3 GetModelEulerRotation(bool p_useDegree = true);
+		glm::vec3 GetModelScale();
 
-		void SetLocalRotation(const glm::quat& p_rotation);
-		glm::quat GetLocalRotation();
-		glm::quat GetWorldRotation();
+		void SetPosition(const glm::vec3& p_position);
+		glm::vec3 GetPosition();
 
-		void SetLocalEulerRotation(const glm::vec3& p_eulerRotation, bool p_useDegree = true);
-		glm::vec3 GetLocalEulerRotation(bool p_useDegree = true);
-		glm::vec3 GetWorldEulerRotation(bool p_useDegree = true);
+		void SetRotation(const glm::quat& p_rotation);
+		glm::quat GetRotation();
 
-		void SetLocalScale(const glm::vec3& p_scale);
-		const glm::vec3& GetLocalScale();
-		const glm::vec3& GetWorldScale();
+		void SetEulerRotation(const glm::vec3& p_eulerRotation, bool p_useDegree = true);
+		glm::vec3 GetEulerRotation(bool p_useDegree = true);
+
+		void SetScale(const glm::vec3& p_scale);
+		glm::vec3 GetScale();
+
+		void SetMeshRenderer(std::shared_ptr<MeshRenderer> p_meshRenderer);
+
+		void SetScript(std::shared_ptr<Script> p_script);
+
+		template<typename T>
+		std::shared_ptr<T> GetScript()
+		{
+			static_assert(std::is_base_of<Script, T>::value, "GetScript parameter must inherit from type Script");
+
+			std::list<std::shared_ptr<Component>> components;
+
+			if (m_script)
+				return std::dynamic_pointer_cast<T>(m_script);
+
+			return nullptr;
+		}
 
 	private:
 		bool IsChildOf(std::shared_ptr<Entity> p_testEntity);
@@ -140,18 +112,14 @@ namespace Client
 
 		void DetermineNextEntityState();
 
-		void ComputeLocalTransform();
-		void DecomposeLocalTransform();
-		void DecomposeWorldTransform();
+		void DecomposeLocalMatrix(glm::vec3& p_position, glm::quat& p_rotation, glm::vec3& p_scale);
+		void ComposeLocalMatrix(glm::vec3& p_position, glm::quat& p_rotation, glm::vec3& p_scale);
 
 	private:
-		GLint m_shaderModelMatrixUniformLocation = -1;
+		static bool s_isEntityMakerRegistered;
 
 		EntityExecutionState m_currentEntityExecutionState = EntityExecutionState::PreAwake;
 		EntityExecutionState m_wantedEntityExecutionState = EntityExecutionState::Update;
-
-		long long m_decomposeWorldTransformLastCompute = 0;
-		long long m_getWorldTransformLastCompute = 0;
 
 		bool m_isActive = true;
 		std::string m_tag = "None";
@@ -163,18 +131,8 @@ namespace Client
 
 		glm::mat4 m_localTransform;
 
-		glm::vec3 m_localPosition;
-		glm::vec3 m_localRotation;
-		glm::vec3 m_localScale;
-
-		glm::mat4 m_worldTransform;
-
-		glm::vec3 m_worldPosition;
-		glm::vec3 m_worldRotation;
-		glm::vec3 m_worldScale;
-
 		std::shared_ptr<MeshRenderer> m_meshRenderer;
-		std::list<std::shared_ptr<Script>> m_scripts;
+		std::shared_ptr<Script> m_script;
 	};
 
 } // Client

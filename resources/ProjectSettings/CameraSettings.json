@@ -1,4 +1,5 @@
 {
+  "Type": "Camera",
   "Fov": 60.0,
   "Near": 0.01,
   "Far": 100.0,

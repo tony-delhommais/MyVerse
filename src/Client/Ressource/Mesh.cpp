@@ -11,8 +11,12 @@ namespace Client
 
 	Mesh::~Mesh()
 	{
-		if (m_VBO_id) glDeleteBuffers(1, &m_VBO_id);
-		if (m_EBO_id) glDeleteBuffers(1, &m_EBO_id);
+		if (m_VAO_id)
+			glDeleteVertexArrays(1, &m_VAO_id);
+		if (m_VBO_id)
+			glDeleteBuffers(1, &m_VBO_id);
+		if (m_EBO_id)
+			glDeleteBuffers(1, &m_EBO_id);
 
 		m_vertices.clear();
 
@@ -47,8 +51,8 @@ namespace Client
 				vd.normal.y = vertice.Normal.Y;
 				vd.normal.z = vertice.Normal.Z;
 
-				vd.texcoords.x = vertice.TextureCoordinate.X;
-				vd.texcoords.y = vertice.TextureCoordinate.Y;
+				vd.texcoords0.x = vertice.TextureCoordinate.X;
+				vd.texcoords0.y = vertice.TextureCoordinate.Y;
 
 				mesh->m_vertices.push_back(vd);
 
@@ -71,6 +75,13 @@ namespace Client
 				return std::vector<std::shared_ptr<Mesh>>();
 			}
 
+			bool VAOGenerated = mesh->GenerateVAO();
+
+#ifdef _DEBUG
+			if (!VAOGenerated)
+				Debug::LogWarning("Failed to generate VAO on a Mesh");
+#endif
+
 			meshes.push_back(mesh);
 		}
 
@@ -80,7 +91,8 @@ namespace Client
 	std::shared_ptr<Mesh> Mesh::LoadFromChunckData(JsonObject& p_chunckData)
 	{
 		JsonObject meshData = GetParameterFromJsonObject(p_chunckData, "Land", true, false);
-		if(meshData == p_chunckData) return nullptr;
+		if(meshData == p_chunckData)
+			return nullptr;
 
 		auto mesh = std::make_shared<Mesh>();
 
@@ -122,21 +134,18 @@ namespace Client
 
 	void Mesh::RenderMesh()
 	{
-		if (m_VBO_id && m_EBO_id)
+		if (m_VAO_id)
+		{
+			glBindVertexArray(m_VAO_id);
+
+			glDrawElements(GL_TRIANGLES, m_nbFaces * 3, GL_UNSIGNED_INT, 0);
+		}
+		else if (m_VBO_id && m_EBO_id)
 		{
 			glBindBuffer(GL_ARRAY_BUFFER, m_VBO_id);
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO_id);
 
-			int stride = sizeof(VertexDescriptor);
-
-			glEnableVertexAttribArray(0);
-			glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, stride, 0);
-
-			glEnableVertexAttribArray(1);
-			glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, stride, (void*)(sizeof(VertexDescriptor::position)));
-
-			glEnableVertexAttribArray(2);
-			glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, stride, (void*)(sizeof(VertexDescriptor::position) + sizeof(VertexDescriptor::normal)));
+			OpenGLAttributesStride();
 
 			glDrawElements(GL_TRIANGLES, m_nbFaces * 3, GL_UNSIGNED_INT, 0);
 
@@ -158,12 +167,59 @@ namespace Client
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
-		if (!m_VBO_id || !m_EBO_id) return false;
+		if (!m_VBO_id || !m_EBO_id)
+			return false;
 
 		m_vertices.clear();
 		m_faces.clear();
 
 		return true;
+	}
+
+	bool Mesh::GenerateVAO()
+	{
+		bool VBOGenerated = true;
+
+		if (!m_VBO_id && !m_EBO_id)
+			VBOGenerated = GenerateVBO();
+
+		if (!VBOGenerated)
+			return false;
+
+		glGenVertexArrays(1, &m_VAO_id);
+		if (!m_VAO_id)
+			return false;
+
+		glBindVertexArray(m_VAO_id);
+		glBindBuffer(GL_ARRAY_BUFFER, m_VBO_id);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO_id);
+		
+		OpenGLAttributesStride();
+
+		glBindVertexArray(0);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+		glDeleteBuffers(1, &m_VBO_id);
+		m_VBO_id = 0;
+		glDeleteBuffers(1, &m_EBO_id);
+		m_EBO_id = 0;
+
+		return true;
+	}
+
+	void Mesh::OpenGLAttributesStride()
+	{
+		int stride = sizeof(VertexDescriptor);
+
+		glEnableVertexAttribArray(EnumAttrib::POSITION);
+		glVertexAttribPointer(EnumAttrib::POSITION, 3, GL_FLOAT, GL_FALSE, stride, 0);
+
+		glEnableVertexAttribArray(EnumAttrib::NORMAL);
+		glVertexAttribPointer(EnumAttrib::NORMAL, 3, GL_FLOAT, GL_FALSE, stride, (void*)(sizeof(VertexDescriptor::position)));
+
+		glEnableVertexAttribArray(EnumAttrib::TEXCOORD0);
+		glVertexAttribPointer(EnumAttrib::TEXCOORD0, 2, GL_FLOAT, GL_FALSE, stride, (void*)(sizeof(VertexDescriptor::position) + sizeof(VertexDescriptor::normal)));
 	}
 
 } // Client

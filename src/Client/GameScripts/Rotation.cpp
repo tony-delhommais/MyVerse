@@ -6,7 +6,8 @@
 
 void Rotation::Update(float p_deltaTime)
 {
-	GetEntity()->RotateEuler(glm::vec3(0.0, m_indice * p_deltaTime * glm::half_pi<float>(), 0.0), false);
+	float angle = m_indice * p_deltaTime * glm::half_pi<float>();
+	GetEntity()->RotateEuler(glm::vec3(0.0, angle, 0.0), false);
 }
 
 void Rotation::SetIndice(float p_indice)

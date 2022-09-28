@@ -20,19 +20,16 @@ namespace Client
 		Camera();
 		~Camera() = default;
 
-		static std::shared_ptr<Camera> Make(const std::filesystem::path& p_cameraSettingsPath);
-
 	public:
-		void UseCameraForRendering();
-
-	private:
 		glm::mat4 GetViewMatrix();
+		glm::mat4 GetProjectionMatrix();
 		glm::mat4 GetViewProjectionMatrix();
 
+	private:
 		void UpdateProjectionMatrix();
 
 	private:
-		GLint m_shaderVueProjectionMatrixUniformLocation = -1;
+		static bool s_isCameraMakerRegistered;
 
 		float m_fov = 60.0f;
 		float m_nearPlan = 0.01f;

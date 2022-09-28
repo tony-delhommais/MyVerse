@@ -25,8 +25,8 @@ private:
 
 	glm::mat4 cameraOffsetTransform = glm::mat4(1.0f);
 
-	glm::vec3 cameraOffsetPosition = glm::vec3(0.0f, 1.5f, -2.5f);
-	glm::vec3 cameraOffsetRotation = glm::vec3(20.0f, 0.0f, 0.0f);
+	glm::vec3 cameraOffsetPosition = glm::vec3(0.0f, 1.5f, 2.5f);
+	glm::vec3 cameraOffsetRotation = glm::vec3(-20.0f, 0.0f, 0.0f);
 
 	float cameraRotationAngle = 0.0f;
 	float cameraRotationSpeed = 1.0f;

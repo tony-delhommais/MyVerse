@@ -30,13 +30,12 @@ namespace Client
 		static std::shared_ptr<Material> Load(const std::filesystem::path& p_path);
 
 		void Use();
+		void Unuse();
 
 	private:
 		bool m_useSolidColor = true;
-		GLint m_shaderSolidColorUniformLocation = -1;
 		glm::vec3 m_solidColor = glm::vec3(1.0);
 
-		GLint m_shaderInvertTextureUniformLocation = -1;
 		bool m_invertTextures = true;
 
 		bool m_isDiffuseTextureSet = false;

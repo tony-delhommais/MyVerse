@@ -16,7 +16,8 @@ namespace Client
 
 	bool CircleArea::IntersectWithEntity(std::shared_ptr<Entity> p_entity)
 	{
-		return glm::distance(m_position, (p_entity->GetLocalPosition() * glm::vec3(1.0, 0.0, 1.0))) <= m_radius;
+		return glm::distance(m_position, (p_entity->GetModelPosition() * glm::vec3(1.0, 0.0, 1.0))) <= m_radius;
+		return false;
 	}
 
 	bool CircleArea::IntersectWithCircleArea(std::shared_ptr<CircleArea> p_circleArea)

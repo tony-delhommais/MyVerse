@@ -25,6 +25,7 @@ set(CLIENT_SOURCES
 	Client/Entity/EntityQuadTree.cpp
 	Client/Entity/Player.cpp
 
+	Client/Factories/EntityFactory.cpp
 	Client/Factories/ScriptFactory.cpp
 
 	Client/GameScripts/Controllers/CameraController.cpp

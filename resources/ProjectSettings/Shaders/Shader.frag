@@ -1,16 +1,27 @@
 #version 330 core
-out vec4 FragColor;
-  
-in vec3 Normal;
-in vec2 TexCoord;
 
-uniform int textureInversionValue = -1;
-uniform sampler2D diffuseTexture;
+out vec4 out_color;
 
-uniform vec3 solidColor = vec3(0, 0, 0);
+in block {
+       vec2 texcoord0;
+} In;
+
+uniform sampler2D texture0;
+
+uniform int textureInversionValue;
+
+uniform bool useSolidColor;
+uniform vec3 solidColor;
 
 void main()
 {
-    FragColor = texture(diffuseTexture, vec2(TexCoord.x, TexCoord.y * textureInversionValue)) + vec4(solidColor, 1.0);
+    if(useSolidColor)
+    {
+        out_color = vec4(solidColor, 1.0);
+    }
+    else
+    {
+        out_color = texture(texture0, vec2(In.texcoord0.x, In.texcoord0.y * textureInversionValue));
+    }
 }
 

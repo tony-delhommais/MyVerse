@@ -4,7 +4,7 @@
 
 #include "Client/Ressource/Prefab.h"
 
-#include "Client/Entity/Entity.h"
+#include "Client/Factories/EntityFactory.h"
 
 namespace Client
 {
@@ -27,7 +27,7 @@ namespace Client
 	{
 		if (m_prefabStruct.empty()) return nullptr;
 
-		auto newEntity = Entity::Make(m_prefabStruct);
+		auto newEntity = EntityFactory::instance().Make<Entity>(m_prefabStruct);
 
 		newEntity->SetParent(nullptr);
 		newEntity->SetPrefabReferenceUuid(m_prefabUuid);

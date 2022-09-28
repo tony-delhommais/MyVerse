@@ -4,6 +4,10 @@
 
 #include "Client/Ressource/Scene.h"
 
+#include "Client/Core/ApplicationCore.h"
+
+#include "Client/Factories/EntityFactory.h"
+
 #include "Client/Entity/EntityQuadTree.h"
 #include "Client/Entity/Camera.h"
 #include "Client/Entity/Player.h"
@@ -42,7 +46,7 @@ namespace Client
 		{
 			for (auto& localEntityData : localEntitiesArray)
 			{
-				auto newLocalEntity = Entity::Make(localEntityData);
+				auto newLocalEntity = EntityFactory::instance().Make<Entity>(localEntityData);
 
 				if (!newLocalEntity)
 				{
@@ -131,13 +135,19 @@ namespace Client
 	{
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		m_camera->UseCameraForRendering();
+		glm::mat4 projection = m_camera->GetProjectionMatrix();
+		glm::mat4 view = m_camera->GetViewMatrix();
+		glm::mat4 viewProjection = projection * view;
 
-		m_player->Render();
+		ApplicationCore::instance().GetActiveShader()->SetMatrixUniform(EnumMatrix::VIEW_MATRIX, view);
+		ApplicationCore::instance().GetActiveShader()->SetMatrixUniform(EnumMatrix::PROJECTION_MATRIX, projection);
+		ApplicationCore::instance().GetActiveShader()->SetMatrixUniform(EnumMatrix::VIEWPROJECTION_MATRIX, viewProjection);
+
+		m_player->Render(viewProjection);
 
 		for(auto& entity : m_localEntities)
 		{
-			entity->Render();
+			entity->Render(viewProjection);
 		}
 	}
 

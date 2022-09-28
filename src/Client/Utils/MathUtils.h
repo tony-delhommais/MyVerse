@@ -10,6 +10,7 @@
 #include "glm.hpp"
 #include "ext.hpp"
 #include "gtx/matrix_decompose.hpp"
+#include "gtx/quaternion.hpp"
 
 namespace Client
 {
@@ -23,6 +24,9 @@ namespace Client
 		float Lerp(const float a, const float b, const float f);
 		double Lerp(const double a, const double b, const double f);
 		glm::vec3 Lerp(const glm::vec3& a, const glm::vec3& b, const float f);
+
+		void DecomposeMatrix(glm::mat4& p_matrix, glm::vec3& p_position, glm::quat& p_rotation, glm::vec3& p_scale);
+		void ComposeMatrix(glm::mat4& p_matrix, glm::vec3& p_position, glm::quat& p_rotation, glm::vec3& p_scale);
 
 	} // Math
 

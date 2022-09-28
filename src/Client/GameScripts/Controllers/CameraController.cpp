@@ -7,7 +7,7 @@
 void CameraController::Start()
 {
 	glm::mat4 position = glm::translate(glm::mat4(1.0f), cameraOffsetPosition);
-	glm::mat4 rotation = glm::mat4_cast(glm::quat(glm::radians(cameraOffsetRotation)));
+	glm::mat4 rotation = glm::toMat4(glm::quat(glm::radians(cameraOffsetRotation)));
 
 	cameraOffsetTransform = position * rotation;
 }
@@ -19,7 +19,7 @@ void CameraController::Update(float p_deltaTime)
 		cameraRotationAngle += Input::GetMouseMovement().x * (cameraRotationSpeed * 2) / 100.0f;
 	}
 
-	glm::mat4 position = glm::translate(glm::mat4(1.0f), Scene::instance().GetPlayer()->GetWorldPosition());
+	glm::mat4 position = glm::translate(glm::mat4(1.0f), Scene::instance().GetPlayer()->GetPosition());
 
 	glm::mat4 newTransform = glm::rotate(position, glm::radians(cameraRotationAngle), glm::vec3(0.0f, 1.0f, 0.0f));
 

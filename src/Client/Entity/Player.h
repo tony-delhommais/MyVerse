@@ -18,7 +18,8 @@ namespace Client
 		Player() = default;
 		~Player() = default;
 
-		static std::shared_ptr<Player> Make(const std::filesystem::path& p_playerSettingsPath);
+	private:
+		static bool s_isPlayerMakerRegistered;
 	};
 
 } // Client

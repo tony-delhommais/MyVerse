@@ -88,7 +88,14 @@ namespace Client
 					if (link.material)
 						link.material->Use();
 
+					//todo use default material
+
 					link.mesh->RenderMesh();
+
+					if (link.material)
+						link.material->Unuse();
+
+					//todo unuse default material
 				}
 
 				meshId++;

@@ -1,18 +1,18 @@
 #version 330 core
-layout (location = 0) in vec3 aPosition;
-layout (location = 1) in vec3 aNormal;
-layout (location = 2) in vec2 aTexCoord;
 
-uniform mat4 ModelMatrix;
-uniform mat4 VueProjectionMatrix;
+in vec3 in_position;
+in vec3 in_normal;
+in vec2 in_texcoord0;
 
-out vec3 Normal;
-out vec2 TexCoord;
+uniform mat4 modelViewProjectionMatrix;
+
+out block {
+       vec2 texcoord0;
+} Out;
 
 void main()
 {
-    gl_Position = VueProjectionMatrix * ModelMatrix * vec4(aPosition, 1.0);
+    gl_Position = modelViewProjectionMatrix * vec4(in_position, 1.0);
 	
-	Normal = aNormal;
-	TexCoord = aTexCoord;
+	Out.texcoord0 = in_texcoord0;
 }

@@ -4,6 +4,11 @@
 
 #include "Client/GameScripts/Controllers/PlayerController.h"
 
+void PlayerController::Start()
+{
+	//GetEntity()->RotateEuler(glm::vec3(0.0f, 20.0f, 0.0f));
+}
+
 void PlayerController::Update(float p_deltaTime)
 {
 	// Z: (W) 87
@@ -20,6 +25,27 @@ void PlayerController::Update(float p_deltaTime)
 		current_y_axis = Input::GetAction(0);
 	}
 
+	////////// Rotation //////////
+	float targetRotationSpeed = current_x_axis * playerMaxRotationSpeedStatic;
+	if (current_y_axis != 0) targetRotationSpeed = current_x_axis * playerMaxRotationSpeedInMovement;
+
+	targetRotationSpeed *= -1.0f;
+
+	if (previousTargetRotationSpeed != targetRotationSpeed)
+	{
+		previousTargetRotationSpeed = targetRotationSpeed;
+		lerpUpdateRotationTime = 0.0f;
+	}
+
+	lerpUpdateRotationTime += p_deltaTime * playerRotationAcceleration;
+
+	playerRotationVelocity = Math::Lerp(playerRotationVelocity, previousTargetRotationSpeed, lerpUpdateRotationTime);
+
+	//Debug::LogInfo(std::to_string(playerRotationVelocity));
+
+	GetEntity()->RotateEuler(glm::vec3(0.0f, playerRotationVelocity, 0.0f) * p_deltaTime);
+	////////// Rotation //////////
+
 	////////// Translation //////////
 	float targetDirectionalSpeed = current_y_axis * playerMaxSpeed;
 
@@ -35,25 +61,6 @@ void PlayerController::Update(float p_deltaTime)
 
 	GetEntity()->Translate(GetEntity()->Forward() * playerVelocity * p_deltaTime);
 	////////// Translation //////////
-
-	////////// Rotation //////////
-	float targetRotationSpeed = current_x_axis * playerMaxRotationSpeedStatic;
-	if(current_y_axis != 0) targetRotationSpeed = current_x_axis * playerMaxRotationSpeedInMovement;
-
-	targetRotationSpeed *= -1.0f;
-
-	if (previousTargetRotationSpeed != targetRotationSpeed)
-	{
-		previousTargetRotationSpeed = targetRotationSpeed;
-		lerpUpdateRotationTime = 0.0f;
-	}
-
-	lerpUpdateRotationTime += p_deltaTime * playerRotationAcceleration;
-
-	playerRotationVelocity = Math::Lerp(playerRotationVelocity, previousTargetRotationSpeed, lerpUpdateRotationTime);
-
-	GetEntity()->RotateEuler(glm::vec3(0.0f, playerRotationVelocity, 0.0f) * p_deltaTime);
-	////////// Rotation //////////
 }
 
 bool PlayerController::s_isRegistered = ScriptFactory::instance().Register("PlayerController", [](JsonObject& parameters) {

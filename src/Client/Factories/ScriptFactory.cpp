@@ -40,9 +40,9 @@ namespace Client
 			return nullptr;
 		}
 
-		JsonObject& parameters = GetParameterFromJsonObject(p_componentProprety, "Parameters", false, true);
+		JsonObject parameters = GetParameterFromJsonObject(p_componentProprety, "Parameters", false, true);
 		if (parameters == p_componentProprety)
-			parameters = JsonObject({});
+			parameters = {};
 
 		auto script = m_scriptsBuilders[name](parameters);
 

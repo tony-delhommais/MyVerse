@@ -42,26 +42,15 @@ namespace Client
 
 	void Material::Use()
 	{
+		ApplicationCore::instance().GetActiveShader()->SetUserUniform(EnumUser::USE_SOLID_COLOR, m_useSolidColor);
+
 		if (m_useSolidColor)
 		{
-			if (m_shaderSolidColorUniformLocation == -1)
-			{
-				m_shaderSolidColorUniformLocation = ApplicationCore::instance().GetActiveShader()->FindUniformLocation("solidColor");
-			}
-
-			ApplicationCore::instance().GetActiveShader()->SetUniformVec3(m_shaderSolidColorUniformLocation, m_solidColor);
+			ApplicationCore::instance().GetActiveShader()->SetUserUniform(EnumUser::SOLID_COLOR, m_solidColor);
 		}
 		else
 		{
-			if (!m_invertTextures)
-			{
-				if (m_shaderInvertTextureUniformLocation == -1)
-				{
-					m_shaderInvertTextureUniformLocation = ApplicationCore::instance().GetActiveShader()->FindUniformLocation("textureInversionValue");
-				}
-
-				ApplicationCore::instance().GetActiveShader()->SetUniformInt(m_shaderInvertTextureUniformLocation, 1);
-			}
+			ApplicationCore::instance().GetActiveShader()->SetUserUniform(EnumUser::TEXTURE_INVERSION_VALUE, (!m_invertTextures ? 1 : -1));
 
 			if (m_diffuseTexture)
 			{
@@ -72,6 +61,13 @@ namespace Client
 				m_diffuseTexture = RessourceManager::FindTexture(m_diffuseTextureUuid);
 			}
 		}
+	}
+
+	void Material::Unuse()
+	{
+		ApplicationCore::instance().GetActiveShader()->SetUserUniform(EnumUser::USE_SOLID_COLOR, true);
+
+		ApplicationCore::instance().GetActiveShader()->SetUserUniform(EnumUser::SOLID_COLOR, glm::vec3(0.95f));
 	}
 
 } // Client

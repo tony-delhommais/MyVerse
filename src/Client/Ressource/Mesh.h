@@ -10,6 +10,8 @@
 #include "Client/Utils/MathUtils.h"
 #include "Client/Utils/GraphicsUtils.h"
 
+#include "Client//Ressource/Shader.h"
+
 #ifdef _DEBUG
 #include "Client/Common/Debug.h"
 #endif
@@ -23,7 +25,7 @@ namespace Client
 	{
 		glm::vec3 position;
 		glm::vec3 normal;
-		glm::vec2 texcoords;
+		glm::vec2 texcoords0;
 	};
 
 	typedef glm::ivec3 FaceDescriptor;
@@ -44,6 +46,9 @@ namespace Client
 
 	private:
 		bool GenerateVBO();
+		bool GenerateVAO();
+
+		void OpenGLAttributesStride();
 
 		std::vector<VertexDescriptor> m_vertices;
 		std::vector<FaceDescriptor>	m_faces;
@@ -51,6 +56,8 @@ namespace Client
 
 		GLuint m_VBO_id = 0;
 		GLuint m_EBO_id = 0;
+
+		GLuint m_VAO_id = 0;
 	};
 
 } // Client

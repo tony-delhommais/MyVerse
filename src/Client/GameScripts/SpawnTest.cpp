@@ -20,9 +20,9 @@ void SpawnTest::Start()
 			{
 				auto newTest = prefab->InstantiateNew();
 
-				newTest->SetLocalPosition(glm::vec3(-((x - 1) / 2) + i * 1, 0.0, -((y - 1) / 2) + j * 1));
+				newTest->SetPosition(glm::vec3(-((x - 1) / 2) + i * 1, 0.0, -((y - 1) / 2) + j * 1));
 
-				auto rotation = newTest->GetComponent<Rotation>();
+				auto rotation = newTest->GetScript<Rotation>();
 
 				if (rotation)
 				{

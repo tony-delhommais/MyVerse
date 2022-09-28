@@ -15,6 +15,7 @@ public:
 	PlayerController() = default;
 	~PlayerController() override = default;
 
+	void Start() override;
 	void Update(float p_deltaTime) override;
 
 private:

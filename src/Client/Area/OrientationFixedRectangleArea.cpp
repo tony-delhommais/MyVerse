@@ -29,12 +29,13 @@ namespace Client
 
 	bool OrientationFixedRectangleArea::IntersectWithEntity(std::shared_ptr<Entity> p_entity)
 	{
-		auto& entityPosition = p_entity->GetLocalPosition();
+		auto entityPosition = p_entity->GetModelPosition();
 
 		return entityPosition.x >= m_topLeftX &&
 			entityPosition.x <= m_bottomRightX &&
 			entityPosition.z >= m_bottomRightY &&
 			entityPosition.z <= m_topLeftY;
+		return false;
 	}
 
 	bool OrientationFixedRectangleArea::IntersectWithCircleArea(std::shared_ptr<CircleArea> p_circleArea)
