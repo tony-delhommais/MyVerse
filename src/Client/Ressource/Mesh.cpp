@@ -70,7 +70,7 @@ namespace Client
 			if (!mesh->GenerateVBO())
 			{
 #ifdef _DEBUG
-				Debug::LogWarning("Failed to generate VBO on a Mesh");
+				Debug::LogError("Failed to generate VBO on a Mesh");
 #endif
 				return std::vector<std::shared_ptr<Mesh>>();
 			}
@@ -96,7 +96,6 @@ namespace Client
 
 		auto mesh = std::make_shared<Mesh>();
 
-		size_t nbFaces = 0;
 		size_t faceVerticeId = 0;
 
 		for (size_t i = 0; i < meshData.size(); i++)
@@ -115,19 +114,24 @@ namespace Client
 				mesh->m_faces.push_back(glm::ivec3(i - 2, i - 1, i - 0));
 
 				faceVerticeId = 0;
-				nbFaces++;
+				mesh->m_nbFaces++;
 			}
 		}
 
 		if (!mesh->GenerateVBO())
 		{
 #ifdef _DEBUG
-			Debug::LogWarning("Failed to generate VBO on a Chunck Mesh");
+			Debug::LogError("Failed to generate VBO on a Mesh");
 #endif
 			return nullptr;
 		}
 
-		mesh->m_nbFaces = (unsigned int)(nbFaces);
+		bool VAOGenerated = mesh->GenerateVAO();
+
+#ifdef _DEBUG
+		if (!VAOGenerated)
+			Debug::LogWarning("Failed to generate VAO on a Mesh");
+#endif
 
 		return mesh;
 	}
@@ -139,6 +143,8 @@ namespace Client
 			glBindVertexArray(m_VAO_id);
 
 			glDrawElements(GL_TRIANGLES, m_nbFaces * 3, GL_UNSIGNED_INT, 0);
+
+			glBindVertexArray(0);
 		}
 		else if (m_VBO_id && m_EBO_id)
 		{
@@ -210,16 +216,17 @@ namespace Client
 
 	void Mesh::OpenGLAttributesStride()
 	{
-		int stride = sizeof(VertexDescriptor);
+		EnumAttrib attrib = EnumAttrib::POSITION;
+		glEnableVertexAttribArray(attrib);
+		glVertexAttribPointer(attrib, attribSize[attrib], GL_FLOAT, GL_FALSE, attribOffset[EnumAttrib::NB_ATTRIBUTES], (void*)(attribOffset[attrib]));
 
-		glEnableVertexAttribArray(EnumAttrib::POSITION);
-		glVertexAttribPointer(EnumAttrib::POSITION, 3, GL_FLOAT, GL_FALSE, stride, 0);
+		attrib = EnumAttrib::NORMAL;
+		glEnableVertexAttribArray(attrib);
+		glVertexAttribPointer(attrib, attribSize[attrib], GL_FLOAT, GL_FALSE, attribOffset[EnumAttrib::NB_ATTRIBUTES], (void*)(attribOffset[attrib]));
 
-		glEnableVertexAttribArray(EnumAttrib::NORMAL);
-		glVertexAttribPointer(EnumAttrib::NORMAL, 3, GL_FLOAT, GL_FALSE, stride, (void*)(sizeof(VertexDescriptor::position)));
-
-		glEnableVertexAttribArray(EnumAttrib::TEXCOORD0);
-		glVertexAttribPointer(EnumAttrib::TEXCOORD0, 2, GL_FLOAT, GL_FALSE, stride, (void*)(sizeof(VertexDescriptor::position) + sizeof(VertexDescriptor::normal)));
+		attrib = EnumAttrib::TEXCOORD0;
+		glEnableVertexAttribArray(attrib);
+		glVertexAttribPointer(attrib, attribSize[attrib], GL_FLOAT, GL_FALSE, attribOffset[EnumAttrib::NB_ATTRIBUTES], (void*)(attribOffset[attrib]));
 	}
 
 } // Client

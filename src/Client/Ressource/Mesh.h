@@ -33,6 +33,33 @@ namespace Client
 #pragma pack(pop)
 
 
+	const GLsizei attribOffset[EnumAttrib::NB_ATTRIBUTES + 1] = {
+		0,							// POSITION
+		sizeof(glm::vec3),			// NORMAL
+		0,							// TANGENT
+		0,							// BITANGENT
+		0,							// COLOR
+		sizeof(glm::vec3) * 2,		// TEXCOORD0
+		0,							// TEXCOORD1
+		0,							// TEXCOORD2
+		0,							// TEXCOORD3
+		sizeof(VertexDescriptor)	// STRIDE
+	};
+
+	const GLint attribSize[EnumAttrib::NB_ATTRIBUTES + 1] = {
+		3,							// POSITION
+		3,							// NORMAL
+		3,							// TANGENT
+		3,							// BITANGENT
+		3,							// COLOR
+		2,							// TEXCOORD0
+		2,							// TEXCOORD1
+		2,							// TEXCOORD2
+		2,							// TEXCOORD3
+		23							// STRIDE
+	};
+
+
 	class Mesh
 	{
 	public:
