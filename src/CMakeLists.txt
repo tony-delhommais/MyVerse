@@ -5,27 +5,33 @@ set(CLIENT_SOURCES
 	Client/Area/CircleArea.cpp
 	Client/Area/OrientationFixedRectangleArea.cpp
 
+	Client/Builders/CameraBuilder.cpp
+	Client/Builders/EntityBuilder.cpp
+	Client/Builders/MaterialBuilder.cpp
+	Client/Builders/MeshRendererBuilder.cpp
+	Client/Builders/SceneBuilder.cpp
+	Client/Builders/TransformBuilder.cpp
+
 	Client/Common/Application.cpp
 	Client/Common/AssetRepositoryAnalyzer.cpp
 	Client/Common/Clock.cpp
 	Client/Common/Debug.cpp
 	Client/Common/Input.cpp
 	Client/Common/RessourceManager.cpp
-
+	
+	Client/Components/Camera.cpp
 	Client/Components/Component.cpp
 	Client/Components/MeshRenderer.cpp
 	Client/Components/Script.cpp
+	Client/Components/Transform.cpp
 
 	Client/Core/ApplicationCore.cpp
 	Client/Core/InputCore.cpp
 	Client/Core/RessourceManagerCore.cpp
 	
-	Client/Entity/Camera.cpp
 	Client/Entity/Entity.cpp
 	Client/Entity/EntityQuadTree.cpp
-	Client/Entity/Player.cpp
 
-	Client/Factories/EntityFactory.cpp
 	Client/Factories/ScriptFactory.cpp
 
 	Client/GameScripts/Controllers/CameraController.cpp
@@ -33,6 +39,13 @@ set(CLIENT_SOURCES
 	Client/GameScripts/GameSettings.cpp
 	Client/GameScripts/Rotation.cpp
 	Client/GameScripts/SpawnTest.cpp
+
+	Client/Parser/CameraParser.cpp
+	Client/Parser/EntityParser.cpp
+	Client/Parser/MaterialParser.cpp
+	Client/Parser/MeshRendererParser.cpp
+	Client/Parser/SceneParser.cpp
+	Client/Parser/TransformParser.cpp
 
 	Client/Ressource/Terrain/Chunck.cpp
 	Client/Ressource/Terrain/Terrain.cpp

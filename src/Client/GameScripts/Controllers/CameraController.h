@@ -7,8 +7,6 @@
 
 #include "Client/Common/Application.h"
 
-#include "Client/Entity/Player.h"
-
 using namespace Client;
 
 class CameraController : public Script

@@ -6,7 +6,7 @@
 
 #include "Client/Core/ApplicationCore.h"
 
-#include "Client/Ressource/Material.h"
+#include "Client/Parser/MaterialParser.h"
 #include "Client/Ressource/Mesh.h"
 #include "Client/Ressource/Prefab.h"
 #include "Client/Ressource/Texture.h"
@@ -17,6 +17,18 @@
 
 namespace Client
 {
+
+	RessourceManagerCore::RessourceManagerCore()
+	{
+		UUIDv4::UUIDGenerator<std::mt19937_64> uuidGenerator;
+
+		RessourceMeta defaultMaterial;
+		defaultMaterial.type = SupportedFileType::MATERIAL;
+		defaultMaterial.isAllocated = true;
+		defaultMaterial.material = MaterialBuilder().SetUseSolidColor(true).SetSolidColor(glm::vec3(1.0, 0.07843137254, 0.57647058823)).Build();
+
+		m_ressources.insert(RessourceMetaMap::value_type(uuidGenerator.getUUID(), defaultMaterial));
+	}
 
 	RessourceManagerCore& RessourceManagerCore::instance()
 	{
@@ -117,7 +129,8 @@ namespace Client
 	{
 		auto ressourceMetaIt = FindRessource(p_ressourceUuid, SupportedFileType::MESH);
 
-		if (ressourceMetaIt == m_ressources.end()) return std::vector<std::shared_ptr<Mesh>>();
+		if (ressourceMetaIt == m_ressources.end())
+			return std::vector<std::shared_ptr<Mesh>>();
 
 		return ressourceMetaIt->second.meshes;
 	}
@@ -126,7 +139,8 @@ namespace Client
 	{
 		auto ressourceMetaIt = FindRessource(p_ressourceUuid, SupportedFileType::TEXTURE);
 
-		if (ressourceMetaIt == m_ressources.end()) return nullptr;
+		if (ressourceMetaIt == m_ressources.end())
+			return nullptr;
 
 		return ressourceMetaIt->second.texture;
 	}
@@ -135,7 +149,8 @@ namespace Client
 	{
 		auto ressourceMetaIt = FindRessource(p_ressourceUuid, SupportedFileType::MATERIAL);
 
-		if (ressourceMetaIt == m_ressources.end()) return nullptr;
+		if (ressourceMetaIt == m_ressources.end())
+			return m_ressources.begin()->second.material;
 
 		return ressourceMetaIt->second.material;
 	}
@@ -144,7 +159,8 @@ namespace Client
 	{
 		auto ressourceMetaIt = FindRessource(p_ressourceUuid, SupportedFileType::PREFAB);
 
-		if (ressourceMetaIt == m_ressources.end()) return nullptr;
+		if (ressourceMetaIt == m_ressources.end())
+			return nullptr;
 
 		return ressourceMetaIt->second.prefab;
 	}
@@ -153,11 +169,13 @@ namespace Client
 	{
 		auto ressourceMetaIt = m_ressources.find(p_ressourceUuid);
 
-		if (ressourceMetaIt == m_ressources.end()) return m_ressources.end();
+		if (ressourceMetaIt == m_ressources.end())
+			return m_ressources.end();
 
 		auto& ressourceMeta = ressourceMetaIt->second;
 
-		if (ressourceMeta.type != p_wantedRessourceType) return m_ressources.end();
+		if (ressourceMeta.type != p_wantedRessourceType)
+			return m_ressources.end();
 
 		if (!ressourceMeta.isAllocated)
 		{
@@ -171,15 +189,20 @@ namespace Client
 
 	int RessourceManagerCore::GetReferenceCount(const RessourceMeta& p_ressourceMeta)
 	{
-		if (!p_ressourceMeta.isAllocated) return 0;
+		if (!p_ressourceMeta.isAllocated)
+			return 0;
 
-		if (!p_ressourceMeta.meshes.empty()) return (int)p_ressourceMeta.meshes[0].use_count();
+		if (!p_ressourceMeta.meshes.empty())
+			return (int)p_ressourceMeta.meshes[0].use_count();
 
-		if (p_ressourceMeta.texture) return (int)p_ressourceMeta.texture.use_count();
+		if (p_ressourceMeta.texture)
+			return (int)p_ressourceMeta.texture.use_count();
 
-		if (p_ressourceMeta.material) return (int)p_ressourceMeta.material.use_count();
+		if (p_ressourceMeta.material)
+			return (int)p_ressourceMeta.material.use_count();
 
-		if (p_ressourceMeta.prefab) return (int)p_ressourceMeta.prefab.use_count();
+		if (p_ressourceMeta.prefab)
+			return (int)p_ressourceMeta.prefab.use_count();
 
 		return 0;
 	}
@@ -214,7 +237,7 @@ namespace Client
 
 		if (p_ressourceMeta.type == SupportedFileType::MATERIAL)
 		{
-			p_ressourceMeta.material = Material::Load(p_ressourceMeta.ressourcePath.string());
+			p_ressourceMeta.material = MaterialParser::Parse(p_ressourceMeta.ressourcePath);
 
 			if (p_ressourceMeta.material)
 			{
@@ -241,13 +264,17 @@ namespace Client
 
 	void RessourceManagerCore::DeallocRessource(RessourceMeta& p_ressourceMeta)
 	{
-		if (!p_ressourceMeta.meshes.empty()) p_ressourceMeta.meshes.clear();
+		if (!p_ressourceMeta.meshes.empty())
+			p_ressourceMeta.meshes.clear();
 
-		if (p_ressourceMeta.texture) p_ressourceMeta.texture = nullptr;
+		if (p_ressourceMeta.texture)
+			p_ressourceMeta.texture = nullptr;
 
-		if (p_ressourceMeta.material) p_ressourceMeta.material = nullptr;
+		if (p_ressourceMeta.material)
+			p_ressourceMeta.material = nullptr;
 
-		if (p_ressourceMeta.prefab) return;
+		if (p_ressourceMeta.prefab)
+			return;
 
 		p_ressourceMeta.isAllocated = false;
 	}

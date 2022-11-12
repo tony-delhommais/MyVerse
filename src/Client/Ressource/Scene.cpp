@@ -6,13 +6,7 @@
 
 #include "Client/Core/ApplicationCore.h"
 
-#include "Client/Factories/EntityFactory.h"
-
-#include "Client/Entity/EntityQuadTree.h"
-#include "Client/Entity/Camera.h"
-#include "Client/Entity/Player.h"
-
-#include "Client/Area/OrientationFixedRectangleArea.h"
+#include "Client/Entity/Entity.h"
 
 #ifdef _DEBUG
 #include "Client/Common/Debug.h"
@@ -21,17 +15,8 @@
 namespace Client
 {
 
-	Scene& Scene::instance()
+	/*void Scene::Initialize(const std::filesystem::path& p_scenePath)
 	{
-		static Scene instance;
-		return instance;
-	}
-
-	void Scene::Initialize(const std::filesystem::path& p_scenePath, std::shared_ptr<Camera> p_camera, std::shared_ptr<Player> p_player)
-	{
-		m_camera = p_camera;
-		m_player = p_player;
-
 		auto sceneJson = LoadJsonFile(p_scenePath);
 		if (sceneJson.empty())
 		{
@@ -59,6 +44,14 @@ namespace Client
 				AddLocalEntity(newLocalEntity);
 			}
 		}
+	}*/
+
+	Scene::Scene(std::string p_name, std::list<std::shared_ptr<Entity>> p_localEntities, std::shared_ptr<Camera> p_renderCamera) :
+		m_name(p_name),
+		m_localEntities(p_localEntities),
+		m_renderCamera(p_renderCamera)
+	{
+
 	}
 
 	void Scene::AddLocalEntity(std::shared_ptr<Entity> p_entity)
@@ -99,8 +92,6 @@ namespace Client
 
 	void Scene::UpdateExecution(float p_deltaTime)
 	{
-		m_player->UpdateExecution(p_deltaTime);
-
 		std::list<std::shared_ptr<Entity>>::iterator it = m_localEntities.begin();
 		while (it != m_localEntities.end())
 		{
@@ -115,35 +106,27 @@ namespace Client
 				m_localEntities.erase(entity);
 			}
 		}
-
-		m_camera->UpdateExecution(p_deltaTime);
 	}
 
 	void Scene::StopExecution()
 	{
-		m_player->DestroyEntity();
-
 		for(auto& entity : m_localEntities)
 		{
 			entity->DestroyEntity();
 		}
-
-		m_camera->DestroyEntity();
 	}
 
 	void Scene::Render()
 	{
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		glm::mat4 projection = m_camera->GetProjectionMatrix();
-		glm::mat4 view = m_camera->GetViewMatrix();
+		glm::mat4 projection = m_renderCamera->GetProjectionMatrix();
+		glm::mat4 view = m_renderCamera->GetViewMatrix();
 		glm::mat4 viewProjection = projection * view;
 
 		ApplicationCore::instance().GetActiveShader()->SetMatrixUniform(EnumMatrix::VIEW_MATRIX, view);
 		ApplicationCore::instance().GetActiveShader()->SetMatrixUniform(EnumMatrix::PROJECTION_MATRIX, projection);
 		ApplicationCore::instance().GetActiveShader()->SetMatrixUniform(EnumMatrix::VIEWPROJECTION_MATRIX, viewProjection);
-
-		m_player->Render(viewProjection);
 
 		for(auto& entity : m_localEntities)
 		{
@@ -151,28 +134,19 @@ namespace Client
 		}
 	}
 
+	std::string Scene::GetName()
+	{
+		return m_name;
+	}
+
 	bool Scene::IsStopped()
 	{
-		if (m_camera->GetCurrentEntityExecutionState() != EntityExecutionState::PostDestroy) return false;
-
-		if (m_player->GetCurrentEntityExecutionState() != EntityExecutionState::PostDestroy) return false;
-
 		for (auto& entity : m_localEntities)
 		{
 			if (entity->GetCurrentEntityExecutionState() != EntityExecutionState::PostDestroy) return false;
 		}
 
 		return true;
-	}
-
-	std::shared_ptr<Camera> Scene::GetCamera()
-	{
-		return m_camera;
-	}
-
-	std::shared_ptr<Player> Scene::GetPlayer()
-	{
-		return m_player;
 	}
 
 	bool Scene::HasLocalEntities()

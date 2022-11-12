@@ -4,18 +4,22 @@
 
 #include "Client/Entity/Entity.h"
 
-#include "Client/Factories/EntityFactory.h"
-
 #include "Client/Core/ApplicationCore.h"
 
 namespace Client
 {
 
-	Entity::Entity()
+	Entity::Entity(bool p_isActive, const std::string& p_tag, const UUIDv4::UUID& p_prefabReferenceUuid, std::shared_ptr<Transform> p_localTransform, std::shared_ptr<Camera> p_camera, std::shared_ptr<MeshRenderer> p_meshRenderer, std::list<std::shared_ptr<Script>> p_scripts) :
+		m_tag(p_tag),
+		m_prefabReferenceUuid(p_prefabReferenceUuid),
+		m_localTransform(p_localTransform),
+		m_camera(p_camera),
+		m_meshRenderer(p_meshRenderer),
+		m_scripts(p_scripts)
 	{
-		m_localTransform = glm::mat4(1.0);
+		SetActive(p_isActive);
 
-		RotateEuler(glm::vec3(0.0f, 180.0f, 0.0f));
+		m_localTransform->RotateEuler(glm::vec3(0.0f, 180.0f, 0.0f));
 	}
 
 	Entity::~Entity()
@@ -142,82 +146,6 @@ namespace Client
 		return foundEntities;
 	}
 
-	void Entity::Translate(const glm::vec3& p_position)
-	{
-		m_localTransform[3].xyz += p_position;
-	}
-
-	void Entity::Rotate(const glm::quat& p_rotation)
-	{
-		glm::vec3 position;
-		glm::quat rotation;
-		glm::vec3 scale;
-
-		DecomposeLocalMatrix(position, rotation, scale);
-
-		rotation *= p_rotation;
-
-		ComposeLocalMatrix(position, rotation, scale);
-	}
-
-	void Entity::RotateEuler(const glm::vec3& p_eulerRotation, bool p_useDegree)
-	{
-		if (p_useDegree)
-			Rotate(glm::quat(glm::radians(p_eulerRotation)));
-		else
-			Rotate(glm::quat(p_eulerRotation));
-	}
-
-	void Entity::Scale(const glm::vec3& p_scale)
-	{
-		glm::vec3 position;
-		glm::quat rotation;
-		glm::vec3 scale;
-
-		DecomposeLocalMatrix(position, rotation, scale);
-
-		scale *= p_scale;
-
-		ComposeLocalMatrix(position, rotation, scale);
-	}
-
-	glm::vec3 Entity::Forward()
-	{
-		
-		glm::quat worldRotation = GetModelRotation();
-
-		float x = worldRotation.x;
-		float y = worldRotation.y;
-		float z = worldRotation.z;
-		float w = worldRotation.w;
-
-		return glm::vec3(2 * (x * z + w * y), 2 * (y * z - w * x), 1 - 2 * (x * x + y * y));
-	}
-
-	glm::vec3 Entity::Right()
-	{
-		glm::quat worldRotation = GetModelRotation();
-
-		float x = worldRotation.x;
-		float y = worldRotation.y;
-		float z = worldRotation.z;
-		float w = worldRotation.w;
-
-		return glm::vec3(1 - 2 * (y * y + z * z), 2 * (x * y + w * z), 2 * (x * z - w * y)) * -1.0f;
-	}
-
-	glm::vec3 Entity::Up()
-	{
-		glm::quat worldRotation = GetModelRotation();
-
-		float x = worldRotation.x;
-		float y = worldRotation.y;
-		float z = worldRotation.z;
-		float w = worldRotation.w;
-
-		return glm::vec3(2 * (x * y - w * z), 1 - 2 * (x * x + z * z), 2 * (y * z + w * x));
-	}
-
 	void Entity::UpdateExecution(float p_deltaTime)
 	{
 		bool notEqual = m_currentEntityExecutionState != m_wantedEntityExecutionState;
@@ -225,32 +153,32 @@ namespace Client
 		switch (m_currentEntityExecutionState) {
 		case Awake:
 			if(notEqual)
-				if(m_script)
-					m_script->Awake();
+				for(std::shared_ptr<Script> script : m_scripts)
+					script->Awake();
 			break;
 		case OnEnable:
 			if(notEqual)
-				if (m_script)
-					m_script->OnEnable();
+				for (std::shared_ptr<Script> script : m_scripts)
+					script->OnEnable();
 			break;
 		case Start:
 			if(notEqual)
-				if (m_script)
-					m_script->Start();
+				for (std::shared_ptr<Script> script : m_scripts)
+					script->Start();
 			break;
 		case Update:
-			if (m_script)
-				m_script->Update(p_deltaTime);
+			for (std::shared_ptr<Script> script : m_scripts)
+				script->Update(p_deltaTime);
 			break;
 		case OnDisable:
 			if(notEqual)
-				if (m_script)
-					m_script->OnDisable();
+				for (std::shared_ptr<Script> script : m_scripts)
+					script->OnDisable();
 			break;
 		case Destroy:
 			if(notEqual)
-				if (m_script)
-					m_script->Destroy();
+				for (std::shared_ptr<Script> script : m_scripts)
+					script->Destroy();
 			break;
 		default:
 			break;
@@ -278,7 +206,7 @@ namespace Client
 	{
 		if (m_isActive)
 		{
-			glm::mat4 MVP = p_MVPParent * m_localTransform;
+			glm::mat4 MVP = p_MVPParent * m_localTransform->GetLocalTransform();
 
 			if (m_meshRenderer)
 			{
@@ -340,124 +268,12 @@ namespace Client
 		return prefabRefStruct != nullptr;
 	}
 
-	void Entity::SetLocalTransform(const glm::mat4& p_localTransform)
-	{
-		m_localTransform = p_localTransform;
-	}
-
-	glm::mat4 Entity::GetLocalTransform()
+	std::shared_ptr<Transform> Entity::GetTransform()
 	{
 		return m_localTransform;
 	}
 
-	glm::mat4 Entity::GetModelMatrix()
-	{
-		if (GetParent())
-		{
-			return GetParent()->GetModelMatrix() * m_localTransform;
-		}
-
-		return m_localTransform;
-	}
-
-	glm::vec3 Entity::GetModelPosition()
-	{
-		return GetModelMatrix()[3].xyz;
-	}
-
-	glm::quat Entity::GetModelRotation()
-	{
-		return glm::toQuat(GetModelMatrix());
-	}
-
-	glm::vec3 Entity::GetModelEulerRotation(bool p_useDegree)
-	{
-		if (p_useDegree) return glm::degrees(glm::eulerAngles(GetModelRotation()));
-		else return glm::eulerAngles(GetModelRotation());
-	}
-
-	glm::vec3 Entity::GetModelScale()
-	{
-		return glm::vec3(glm::length(glm::vec3(GetModelMatrix()[0])), glm::length(glm::vec3(GetModelMatrix()[1])), glm::length(glm::vec3(GetModelMatrix()[2])));
-	}
-
-	void Entity::SetPosition(const glm::vec3& p_position)
-	{
-		m_localTransform[3].xyz = p_position;
-	}
-
-	glm::vec3 Entity::GetPosition()
-	{
-		glm::vec3 position;
-		glm::quat rotation;
-		glm::vec3 scale;
-
-		DecomposeLocalMatrix(position, rotation, scale);
-
-		return position;
-	}
-
-	void Entity::SetRotation(const glm::quat& p_rotation)
-	{
-		glm::vec3 position;
-		glm::quat rotation;
-		glm::vec3 scale;
-
-		DecomposeLocalMatrix(position, rotation, scale);
-
-		rotation = p_rotation;
-
-		ComposeLocalMatrix(position, rotation, scale);
-	}
-
-	glm::quat Entity::GetRotation()
-	{
-		glm::vec3 position;
-		glm::quat rotation;
-		glm::vec3 scale;
-
-		DecomposeLocalMatrix(position, rotation, scale);
-
-		return rotation;
-	}
-
-	void Entity::SetEulerRotation(const glm::vec3& p_eulerRotation, bool p_useDegree)
-	{
-		if(p_useDegree) SetRotation(glm::quat(glm::degrees(p_eulerRotation)));
-		else SetRotation(glm::quat(p_eulerRotation));
-	}
-
-	glm::vec3 Entity::GetEulerRotation(bool p_useDegree)
-	{
-		if (p_useDegree) return glm::degrees(glm::eulerAngles(GetRotation()));
-		else return glm::eulerAngles(GetRotation());
-	}
-
-	void Entity::SetScale(const glm::vec3& p_scale)
-	{
-		glm::vec3 position;
-		glm::quat rotation;
-		glm::vec3 scale;
-
-		DecomposeLocalMatrix(position, rotation, scale);
-
-		scale = p_scale;
-
-		ComposeLocalMatrix(position, rotation, scale);
-	}
-
-	glm::vec3 Entity::GetScale()
-	{
-		glm::vec3 position;
-		glm::quat rotation;
-		glm::vec3 scale;
-
-		DecomposeLocalMatrix(position, rotation, scale);
-
-		return scale;
-	}
-
-	void Entity::SetMeshRenderer(std::shared_ptr<MeshRenderer> p_meshRenderer)
+	/*void Entity::SetMeshRenderer(std::shared_ptr<MeshRenderer> p_meshRenderer)
 	{
 		if (p_meshRenderer)
 			p_meshRenderer->SetEntity(shared_from_this());
@@ -471,7 +287,7 @@ namespace Client
 			p_script->SetEntity(shared_from_this());
 
 		m_script = p_script;
-	}
+	}*/
 
 	bool Entity::IsChildOf(std::shared_ptr<Entity> p_testEntity)
 	{
@@ -519,104 +335,5 @@ namespace Client
 			}
 		}
 	}
-
-	void Entity::DecomposeLocalMatrix(glm::vec3& p_position, glm::quat& p_rotation, glm::vec3& p_scale)
-	{
-		Math::DecomposeMatrix(m_localTransform, p_position, p_rotation, p_scale);
-	}
-
-	void Entity::ComposeLocalMatrix(glm::vec3& p_position, glm::quat& p_rotation, glm::vec3& p_scale)
-	{
-		Math::ComposeMatrix(m_localTransform, p_position, p_rotation, p_scale);
-	}
-
-	bool Entity::s_isEntityMakerRegistered = EntityFactory::instance().Register("Entity", [](JsonObject& p_entityParameters) -> std::shared_ptr<Entity> {
-		// Test if object have a Type Entity
-		if (GetParameterFromJsonObject(p_entityParameters, "Type", "Null") != "Entity")
-		{
-#ifdef _DEBUG
-			Debug::LogWarning("[Entity] Try to parse an Entity, but type is invalid");
-#endif
-			return nullptr;
-		}
-
-		auto newEntity = std::make_shared<Entity>();
-
-		// Set if Entity is active
-		newEntity->SetActive(GetParameterFromJsonObject(p_entityParameters, "IsActive", true));
-
-		// Set the Tag of the Entity
-		newEntity->SetTag(GetParameterFromJsonObject(p_entityParameters, "Tag", "Standard"));
-
-		bool transformIsValid = true;
-
-		JsonObject& position = GetParameterFromJsonObject(p_entityParameters, "Position", true, false);
-		if (position == p_entityParameters || position.size() != 3)
-			transformIsValid = false;
-
-		JsonObject& rotation = GetParameterFromJsonObject(p_entityParameters, "Rotation", true, false);
-		if (rotation == p_entityParameters || rotation.size() != 3)
-			transformIsValid = false;
-
-		JsonObject& scale = GetParameterFromJsonObject(p_entityParameters, "Scale", true, false);
-		if (scale == p_entityParameters || rotation.size() != 3)
-			transformIsValid = false;
-
-		if (transformIsValid)
-		{
-			newEntity->Translate(glm::vec3(position[0], position[1], position[2]));
-			newEntity->RotateEuler(glm::vec3(rotation[0], rotation[1], rotation[2]));
-			newEntity->Scale(glm::vec3(scale[0], scale[1], scale[2]));
-		}
-#ifdef _DEBUG
-		else
-		{
-			Debug::LogWarning("[Entity] Failed to parse a Transform, some invalid data");
-		}
-#endif
-
-		// Add components to the new Entity
-		JsonObject& componentsArray = GetParameterFromJsonObject(p_entityParameters, "Components", true, false);
-
-		if (componentsArray != p_entityParameters)
-		{
-			for (auto& componentProprety : componentsArray)
-			{
-				auto componentType = GetParameterFromJsonObject(componentProprety, "Type", "Null");
-
-				if (componentType == "MeshRenderer")
-				{
-					newEntity->SetMeshRenderer(MeshRenderer::Make(componentProprety));
-				}
-				else if (componentType == "Script")
-				{
-					newEntity->SetScript(ScriptFactory::instance().Make(componentProprety));
-				}
-			}
-		}
-
-		// Add childs to the new Entity
-		JsonObject& childs_array = GetParameterFromJsonObject(p_entityParameters, "Childs", true, false);
-
-		if (childs_array != p_entityParameters && !childs_array.empty())
-		{
-			for (JsonObject& jsonChild : childs_array)
-			{
-				auto newChild = EntityFactory::instance().Make<Entity>(jsonChild);
-
-				if (!newChild)
-				{
-#ifdef _DEBUG
-					Debug::LogWarning("[Entity] Failed to parse a Child for an Entity");
-#endif
-					continue;
-				}
-
-				newEntity->AddChild(newChild);
-			}
-		}
-
-		return newEntity;
-	});
 
 } // Client

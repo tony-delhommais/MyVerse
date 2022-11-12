@@ -23,6 +23,18 @@ namespace Client
 		return jsonObject;
 	}
 
+	bool WriteJsonFile(const std::filesystem::path& p_jsonFilePath, JsonObject& p_data)
+	{
+		std::fstream jsonFile;
+		jsonFile.open(p_jsonFilePath.c_str(), std::ios::out);
+
+		jsonFile << p_data.dump(2);
+
+		jsonFile.close();
+
+		return true;
+	}
+
 	int GetParameterFromJsonObject(JsonObject& p_jsonObject, const char* p_parameter, int p_default)
 	{
 		return GetParameterFromJsonObject(p_jsonObject, std::string(p_parameter), p_default);

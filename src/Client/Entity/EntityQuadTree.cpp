@@ -189,7 +189,7 @@ namespace Client
 
 	void EntityQuadTree::AddEntityToCardinal(std::shared_ptr<Entity> p_entity)
 	{
-		auto entityLocalPosition = p_entity->GetModelPosition();
+		auto entityLocalPosition = p_entity->GetTransform()->GetModelPosition();
 		auto areaPosition = m_area->GetPosition();
 
 		bool entityIsOnNorth = entityLocalPosition.z > areaPosition.z;

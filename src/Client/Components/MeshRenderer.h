@@ -5,14 +5,7 @@
 #ifndef MYVERSE_MESH_RENDERER_H
 #define MYVERSE_MESH_RENDERER_H
 
-#include "Client/Utils/MathUtils.h"
-#include "Client/Utils/JsonUtils.h"
-
 #include "Client/Components/Component.h"
-
-#include "Client/Common/RessourceManager.h"
-
-#include "Client/Ressource/Shader.h"
 
 namespace Client
 {
@@ -20,41 +13,19 @@ namespace Client
 	class Mesh;
 	class Material;
 
-	typedef struct
-	{
-		std::shared_ptr<Mesh> mesh;
-		std::shared_ptr<Material> material;
-		//todo animator
-	} LinkMeshMaterial;
-
 	class MeshRenderer : public Component
 	{
 	public:
-		MeshRenderer() = default;
+		MeshRenderer(std::shared_ptr<Entity> p_entity, std::vector<std::shared_ptr<Mesh>> p_subMeshes, std::vector<std::shared_ptr<Material>> p_materials);
 		~MeshRenderer() = default;
-
-	public:
-		static std::shared_ptr<MeshRenderer> Make(JsonObject& p_componentProprety);
-
-	private:
-		void FindMeshRef();
-		void FindMaterialRef(int p_meshId);
 
 	public:
 		void Render();
 
 	private:
-		void SetMeshes(std::vector<std::shared_ptr<Mesh>> p_meshes);
-		void SetRenderMaterial(std::shared_ptr<Material> p_material, int p_assignedMeshPos = 0);
 
-	public:
-		int GetMeshesCount();
-
-	private:
-		UUIDv4::UUID m_meshesUuid;
-		std::vector<LinkMeshMaterial> m_meshesMaterials;
-
-		std::map<int, UUIDv4::UUID> m_usedMaterialsUuid;
+		std::vector<std::shared_ptr<Mesh>> m_subMeshes;
+		std::vector<std::shared_ptr<Material>> m_materials;
 	};
 
 } // Client

@@ -40,7 +40,7 @@ namespace Client
 	class RessourceManagerCore
 	{
 	private:
-		RessourceManagerCore() = default;
+		RessourceManagerCore();
 		~RessourceManagerCore() = default;
 
 	public:
@@ -67,7 +67,7 @@ namespace Client
 		void DeallocRessource(RessourceMeta& p_ressourceMeta);
 
 	private:
-		RessourceMetaMap m_ressources;
+		RessourceMetaMap m_ressources; //todo split for each resources type
 	};
 
 } // Client

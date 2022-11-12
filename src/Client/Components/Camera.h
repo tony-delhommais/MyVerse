@@ -7,20 +7,24 @@
 
 #include "Client/Utils/Utils.h"
 #include "Client/Utils/MathUtils.h"
-#include "Client/Utils/JsonUtils.h"
 
-#include "Client/Entity/Entity.h"
+#include "Client/Components/Component.h"
 
 namespace Client
 {
 
-	class Camera : public Entity
+	class Entity;
+
+	class Camera : public Component
 	{
 	public:
-		Camera();
+		Camera(std::shared_ptr<Entity> p_entity, float p_fov, const glm::vec2& p_nearFar);
 		~Camera() = default;
 
 	public:
+		float GetFov();
+		glm::vec2 GetNearFar();
+
 		glm::mat4 GetViewMatrix();
 		glm::mat4 GetProjectionMatrix();
 		glm::mat4 GetViewProjectionMatrix();
@@ -28,12 +32,13 @@ namespace Client
 	private:
 		void UpdateProjectionMatrix();
 
-	private:
-		static bool s_isCameraMakerRegistered;
+	public:
+		static float DEFAULT_FOV();
+		static glm::vec2 DEFAULT_NEAR_FAR();
 
+	private:
 		float m_fov = 60.0f;
-		float m_nearPlan = 0.01f;
-		float m_farPlan = 100.0f;
+		glm::vec2 m_nearFar = glm::vec2(0.01f, 100.0f);
 
 		glm::mat4 m_projectionMatrix = glm::mat4(1.0);
 	};

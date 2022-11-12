@@ -11,21 +11,14 @@
 namespace Client
 {
 
-	class EntityQuadTree;
 	class Entity;
 	class Camera;
-	class Player;
 
 	class Scene
 	{
-	private:
-		Scene() = default;
-		virtual ~Scene() = default;
-
 	public:
-		static Scene& instance();
-
-		void Initialize(const std::filesystem::path& p_scenePath, std::shared_ptr<Camera> p_camera, std::shared_ptr<Player> p_player);
+		Scene(std::string p_name, std::list<std::shared_ptr<Entity>> p_localEntities, std::shared_ptr<Camera> p_renderCamera);
+		virtual ~Scene() = default;
 
 	public:
 		void AddLocalEntity(std::shared_ptr<Entity> p_entity);
@@ -40,20 +33,19 @@ namespace Client
 		void Render();
 
 	public:
+		std::string GetName();
+
+	public:
 		bool IsStopped();
-
-		std::shared_ptr<Camera> GetCamera();
-
-		std::shared_ptr<Player> GetPlayer();
 
 		bool HasLocalEntities();
 
 	private:
-		std::shared_ptr<Camera> m_camera = nullptr;
-
-		std::shared_ptr<Player> m_player = nullptr;
+		std::string m_name;
 
 		std::list<std::shared_ptr<Entity>> m_localEntities;
+
+		std::shared_ptr<Camera> m_renderCamera;
 	};
 
 } // Client

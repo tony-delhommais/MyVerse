@@ -4,10 +4,6 @@
 
 #include "Client/Components/Script.h"
 
-#ifdef _DEBUG
-#include "Client/Common/Debug.h"
-#endif
-
 namespace Client
 {
 

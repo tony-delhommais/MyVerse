@@ -14,6 +14,8 @@
 #include "Client/Ressource/Prefab.h"
 #include "Client/Ressource/Scene.h"
 
+#include "Client/Components/Transform.h"
+#include "Client/Components/Camera.h"
 #include "Client/Components/MeshRenderer.h"
 
 #include "Client/Factories/ScriptFactory.h"
@@ -26,7 +28,7 @@ namespace Client
 	class Entity : public std::enable_shared_from_this<Entity>
 	{
 	public:
-		Entity();
+		Entity(bool p_isActive, const std::string& p_tag, const UUIDv4::UUID& p_prefabReferenceUuid, std::shared_ptr<Transform> p_localTransform, std::shared_ptr<Camera> p_camera,  std::shared_ptr<MeshRenderer> p_meshRenderer, std::list<std::shared_ptr<Script>> p_scripts);
 		virtual ~Entity();
 
 		std::shared_ptr<Entity> InstantiatePrefab(const UUIDv4::UUID& p_prefabUuid);
@@ -44,15 +46,6 @@ namespace Client
 		std::shared_ptr<Entity> FindChildWithTag(const std::string& p_tag);
 		std::list<std::shared_ptr<Entity>> FindChildsWithTag(const std::string& p_tag);
 
-		void Translate(const glm::vec3& p_position);
-		void Rotate(const glm::quat& p_rotation);
-		void RotateEuler(const glm::vec3& p_eulerRotation, bool p_useDegree = true);
-		void Scale(const glm::vec3& p_scale);
-
-		glm::vec3 Forward();
-		glm::vec3 Right();
-		glm::vec3 Up();
-
 		void UpdateExecution(float p_deltaTime);
 		void Render(glm::mat4& p_MVPParent);
 
@@ -68,32 +61,13 @@ namespace Client
 		void SetPrefabReferenceUuid(const UUIDv4::UUID& p_prefabReferenceUuid);
 		bool IsEntityReferencedToAPrefab();
 
-		void SetLocalTransform(const glm::mat4& p_localTransform);
-		glm::mat4 GetLocalTransform();
+		std::shared_ptr<Transform> GetTransform();
 
-		glm::mat4 GetModelMatrix();
-		glm::vec3 GetModelPosition();
-		glm::quat GetModelRotation();
-		glm::vec3 GetModelEulerRotation(bool p_useDegree = true);
-		glm::vec3 GetModelScale();
+		//void SetMeshRenderer(std::shared_ptr<MeshRenderer> p_meshRenderer);
 
-		void SetPosition(const glm::vec3& p_position);
-		glm::vec3 GetPosition();
+		//void SetScript(std::shared_ptr<Script> p_script);
 
-		void SetRotation(const glm::quat& p_rotation);
-		glm::quat GetRotation();
-
-		void SetEulerRotation(const glm::vec3& p_eulerRotation, bool p_useDegree = true);
-		glm::vec3 GetEulerRotation(bool p_useDegree = true);
-
-		void SetScale(const glm::vec3& p_scale);
-		glm::vec3 GetScale();
-
-		void SetMeshRenderer(std::shared_ptr<MeshRenderer> p_meshRenderer);
-
-		void SetScript(std::shared_ptr<Script> p_script);
-
-		template<typename T>
+		/*template<typename T>
 		std::shared_ptr<T> GetScript()
 		{
 			static_assert(std::is_base_of<Script, T>::value, "GetScript parameter must inherit from type Script");
@@ -104,7 +78,7 @@ namespace Client
 				return std::dynamic_pointer_cast<T>(m_script);
 
 			return nullptr;
-		}
+		}*/
 
 	private:
 		bool IsChildOf(std::shared_ptr<Entity> p_testEntity);
@@ -112,12 +86,7 @@ namespace Client
 
 		void DetermineNextEntityState();
 
-		void DecomposeLocalMatrix(glm::vec3& p_position, glm::quat& p_rotation, glm::vec3& p_scale);
-		void ComposeLocalMatrix(glm::vec3& p_position, glm::quat& p_rotation, glm::vec3& p_scale);
-
 	private:
-		static bool s_isEntityMakerRegistered;
-
 		EntityExecutionState m_currentEntityExecutionState = EntityExecutionState::PreAwake;
 		EntityExecutionState m_wantedEntityExecutionState = EntityExecutionState::Update;
 
@@ -129,10 +98,12 @@ namespace Client
 
 		std::list<std::shared_ptr<Entity>> m_childrens;
 
-		glm::mat4 m_localTransform;
+		std::shared_ptr<Transform> m_localTransform;
+
+		std::shared_ptr<Camera> m_camera;
 
 		std::shared_ptr<MeshRenderer> m_meshRenderer;
-		std::shared_ptr<Script> m_script;
+		std::list<std::shared_ptr<Script>> m_scripts;
 	};
 
 } // Client
