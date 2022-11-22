@@ -47,8 +47,7 @@ namespace Client
 				}
 				else if (componentType == "Camera")
 				{
-					//todo add camera to builder
-					CameraParser::Parse(componentData);
+					builder.SetCamera(CameraParser::Parse(componentData));
 				}
 				else if (componentType == "MeshRenderer")
 				{
@@ -56,7 +55,7 @@ namespace Client
 				}
 				else if (componentType == "Script")
 				{
-					builder.SetScript(ScriptFactory::instance().Make(componentData));
+					builder.AddScript(ScriptFactory::instance().Make(componentData));
 				}
 			}
 		}

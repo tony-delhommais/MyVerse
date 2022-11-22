@@ -15,43 +15,17 @@
 namespace Client
 {
 
-	/*void Scene::Initialize(const std::filesystem::path& p_scenePath)
-	{
-		auto sceneJson = LoadJsonFile(p_scenePath);
-		if (sceneJson.empty())
-		{
-#ifdef _DEBUG
-			Debug::LogWarning("[SceneFactory] Unable to locate scene config file, trying at " + p_scenePath.string());
-#endif
-			return;
-		}
-
-		auto localEntitiesArray = GetParameterFromJsonObject(sceneJson, "LocalEntities", true, false);
-		if (localEntitiesArray != sceneJson)
-		{
-			for (auto& localEntityData : localEntitiesArray)
-			{
-				auto newLocalEntity = EntityFactory::instance().Make<Entity>(localEntityData);
-
-				if (!newLocalEntity)
-				{
-#ifdef _DEBUG
-					Debug::LogWarning("[SceneFactory] Failed to parse a local Entity");
-#endif
-					continue;
-				}
-
-				AddLocalEntity(newLocalEntity);
-			}
-		}
-	}*/
-
-	Scene::Scene(std::string p_name, std::list<std::shared_ptr<Entity>> p_localEntities, std::shared_ptr<Camera> p_renderCamera) :
+	Scene::Scene(std::string p_name, std::list<std::shared_ptr<Entity>> p_localEntities) :
 		m_name(p_name),
-		m_localEntities(p_localEntities),
-		m_renderCamera(p_renderCamera)
+		m_localEntities(p_localEntities)
 	{
+		std::list<std::shared_ptr<Camera>> cameras = FindAllCameras();
 
+		if (!cameras.empty())
+		{
+			m_renderCamera = cameras.front();
+			//todo improve with main camera
+		}
 	}
 
 	void Scene::AddLocalEntity(std::shared_ptr<Entity> p_entity)
@@ -152,6 +126,16 @@ namespace Client
 	bool Scene::HasLocalEntities()
 	{
 		return !m_localEntities.empty();
+	}
+
+	bool Scene::HasRenderCamera()
+	{
+		return m_renderCamera != nullptr;
+	}
+
+	std::list<std::shared_ptr<Camera>> Scene::FindAllCameras()
+	{
+		return std::list<std::shared_ptr<Camera>>(); //todo
 	}
 
 } // Client

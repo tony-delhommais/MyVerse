@@ -9,10 +9,10 @@
 #include "Client/Utils/MathUtils.h"
 #include "Client/Utils/JsonUtils.h"
 
+#include "Client/Common/SceneManager.h"
 #include "Client/Common/RessourceManager.h"
 
 #include "Client/Ressource/Prefab.h"
-#include "Client/Ressource/Scene.h"
 
 #include "Client/Components/Transform.h"
 #include "Client/Components/Camera.h"

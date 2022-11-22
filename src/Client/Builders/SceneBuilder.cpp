@@ -3,7 +3,6 @@
 //
 
 #include "Client/Builders/SceneBuilder.h"
-#include "SceneBuilder.h"
 
 namespace Client
 {
@@ -23,13 +22,6 @@ namespace Client
 	SceneBuilder& SceneBuilder::SetLocalEntities(std::list<std::shared_ptr<Entity>> p_localEntities)
 	{
 		m_localEntities = p_localEntities;
-
-		return *this;
-	}
-
-	SceneBuilder& SceneBuilder::SetRenderCamera(std::shared_ptr<Camera> p_renderCamera)
-	{
-		m_renderCamera = p_renderCamera;
 
 		return *this;
 	}

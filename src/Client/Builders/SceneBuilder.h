@@ -21,14 +21,11 @@ namespace Client
 
 		SceneBuilder& SetName(const std::string p_name);
 		SceneBuilder& SetLocalEntities(std::list<std::shared_ptr<Entity>> p_localEntities);
-		SceneBuilder& SetRenderCamera(std::shared_ptr<Camera> p_renderCamera);
 
 	private:
 		std::string m_name;
 
 		std::list<std::shared_ptr<Entity>> m_localEntities;
-
-		std::shared_ptr<Camera> m_renderCamera;
 	};
 
 } // Client

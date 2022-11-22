@@ -25,10 +25,11 @@ namespace Client
 		EntityBuilder& SetTag(const std::string& p_tag);
 		EntityBuilder& SetPrefabReferenceUuid(const std::string& p_prefabReferenceUuid);
 		EntityBuilder& SetPrefabReferenceUuid(const UUIDv4::UUID& p_prefabReferenceUuid);
-		EntityBuilder& SetLocalTransform(std::shared_ptr<Transform> p_localTransform);
-		EntityBuilder& SetMeshRenderer(std::shared_ptr<MeshRenderer> p_meshRenderer);
-		EntityBuilder& SetScript(std::shared_ptr<Script> p_script);
 		EntityBuilder& AddChild(std::shared_ptr<Entity> p_child);
+		EntityBuilder& SetLocalTransform(std::shared_ptr<Transform> p_localTransform);
+		EntityBuilder& SetCamera(std::shared_ptr<Camera> p_camera);
+		EntityBuilder& SetMeshRenderer(std::shared_ptr<MeshRenderer> p_meshRenderer);
+		EntityBuilder& AddScript(std::shared_ptr<Script> p_script);
 
 	private:
 		bool m_isActive = true;
@@ -39,8 +40,10 @@ namespace Client
 
 		std::shared_ptr<Transform> m_localTransform = nullptr;
 
+		std::shared_ptr<Camera> m_camera = nullptr;
+
 		std::shared_ptr<MeshRenderer> m_meshRenderer = nullptr;
-		std::shared_ptr<Script> m_script = nullptr;
+		std::list<std::shared_ptr<Script>> m_scripts;
 	};
 
 } // Client

@@ -14,7 +14,7 @@ namespace Client
 
 	std::shared_ptr<Entity> EntityBuilder::Build()
 	{
-		std::shared_ptr<Entity> entity = std::make_shared<Entity>(m_isActive, m_tag, m_prefabReferenceUuid, m_localTransform, m_meshRenderer, m_script);
+		std::shared_ptr<Entity> entity = std::make_shared<Entity>(m_isActive, m_tag, m_prefabReferenceUuid, m_localTransform, m_camera, m_meshRenderer, m_scripts);
 
 		for (std::shared_ptr<Entity> child : m_childrens)
 			entity->AddChild(child);
@@ -50,9 +50,23 @@ namespace Client
 		return *this;
 	}
 
+	EntityBuilder& EntityBuilder::AddChild(std::shared_ptr<Entity> p_child)
+	{
+		m_childrens.push_back(p_child);
+
+		return *this;
+	}
+
 	EntityBuilder& EntityBuilder::SetLocalTransform(std::shared_ptr<Transform> p_localTransform)
 	{
 		m_localTransform = p_localTransform;
+
+		return *this;
+	}
+
+	EntityBuilder& EntityBuilder::SetCamera(std::shared_ptr<Camera> p_camera)
+	{
+		m_camera = p_camera;
 
 		return *this;
 	}
@@ -64,16 +78,9 @@ namespace Client
 		return *this;
 	}
 
-	EntityBuilder& EntityBuilder::SetScript(std::shared_ptr<Script> p_script)
+	EntityBuilder& EntityBuilder::AddScript(std::shared_ptr<Script> p_script)
 	{
-		m_script = p_script;
-
-		return *this;
-	}
-
-	EntityBuilder& EntityBuilder::AddChild(std::shared_ptr<Entity> p_child)
-	{
-		m_childrens.push_back(p_child);
+		m_scripts.push_back(p_script);
 
 		return *this;
 	}

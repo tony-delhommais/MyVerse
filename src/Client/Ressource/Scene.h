@@ -17,7 +17,7 @@ namespace Client
 	class Scene
 	{
 	public:
-		Scene(std::string p_name, std::list<std::shared_ptr<Entity>> p_localEntities, std::shared_ptr<Camera> p_renderCamera);
+		Scene(std::string p_name, std::list<std::shared_ptr<Entity>> p_localEntities);
 		virtual ~Scene() = default;
 
 	public:
@@ -39,6 +39,11 @@ namespace Client
 		bool IsStopped();
 
 		bool HasLocalEntities();
+
+		bool HasRenderCamera();
+
+	private:
+		std::list<std::shared_ptr<Camera>> FindAllCameras();
 
 	private:
 		std::string m_name;

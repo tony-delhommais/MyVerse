@@ -5,6 +5,7 @@
 #include "Client/Entity/Entity.h"
 
 #include "Client/Core/ApplicationCore.h"
+#include "Client/Core/SceneManagerCore.h"
 
 namespace Client
 {
@@ -29,14 +30,16 @@ namespace Client
 
 	std::shared_ptr<Entity> Entity::InstantiatePrefab(const UUIDv4::UUID& p_prefabUuid)
 	{
-		auto prefab = RessourceManager::FindPrefab(p_prefabUuid);
+		/*auto prefab = RessourceManager::FindPrefab(p_prefabUuid);
 
 		std::shared_ptr<Entity> newChild = prefab->InstantiateNew();
 		newChild->SetPrefabReferenceUuid(p_prefabUuid);
 
 		AddChild(newChild);
 
-		return newChild;
+		return newChild;*/
+
+		return nullptr;
 	}
 
 	void Entity::DestroyEntity()
@@ -54,12 +57,12 @@ namespace Client
 		if(m_parent) // If this has a parent
 			m_parent->RemoveChild(shared_from_this());
 		else // Otherwise parent is the scene
-			Scene::instance().RemoveLocalEntity(shared_from_this());
+			SceneManagerCore::instance().GetLoadedScene()->RemoveLocalEntity(shared_from_this());
 
 		if(p_newParent) // If new parent is not Null
 			p_newParent->AddChild(shared_from_this());
 		else // Otherwise new parent is scene
-			Scene::instance().AddLocalEntity(shared_from_this());
+			SceneManagerCore::instance().GetLoadedScene()->AddLocalEntity(shared_from_this());
 
 		// Set the new parent
 		m_parent = p_newParent;

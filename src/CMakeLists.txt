@@ -18,6 +18,7 @@ set(CLIENT_SOURCES
 	Client/Common/Debug.cpp
 	Client/Common/Input.cpp
 	Client/Common/RessourceManager.cpp
+	Client/Common/SceneManager.cpp
 	
 	Client/Components/Camera.cpp
 	Client/Components/Component.cpp
@@ -28,6 +29,7 @@ set(CLIENT_SOURCES
 	Client/Core/ApplicationCore.cpp
 	Client/Core/InputCore.cpp
 	Client/Core/RessourceManagerCore.cpp
+	Client/Core/SceneManagerCore.cpp
 	
 	Client/Entity/Entity.cpp
 	Client/Entity/EntityQuadTree.cpp

@@ -18,7 +18,8 @@
 #include "Client/Common/Clock.h"
 #include "Client/Common/Input.h"
 
-#include "Client/Ressource/Scene.h"
+#include "Client/Core/SceneManagerCore.h"
+
 #include "Client/Ressource/Shader.h"
 
 #include "Client/Factories/ScriptFactory.h"

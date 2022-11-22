@@ -7,6 +7,12 @@
 namespace Client
 {
 
+	Script::Script() :
+		Component(ComponentType::SCRIPT, nullptr)
+	{
+
+	}
+
 	void Script::Awake() {}
 
 	void Script::OnEnable() {}

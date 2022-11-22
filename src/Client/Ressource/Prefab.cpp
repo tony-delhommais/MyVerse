@@ -4,8 +4,6 @@
 
 #include "Client/Ressource/Prefab.h"
 
-#include "Client/Factories/EntityFactory.h"
-
 namespace Client
 {
 
@@ -23,7 +21,7 @@ namespace Client
 		return prefab;
 	}
 
-	std::shared_ptr<Entity> Prefab::InstantiateNew()
+	/*std::shared_ptr<Entity> Prefab::InstantiateNew()
 	{
 		if (m_prefabStruct.empty()) return nullptr;
 
@@ -33,6 +31,6 @@ namespace Client
 		newEntity->SetPrefabReferenceUuid(m_prefabUuid);
 
 		return newEntity;
-	}
+	}*/
 
 } // Client

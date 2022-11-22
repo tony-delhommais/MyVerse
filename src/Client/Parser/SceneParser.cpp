@@ -20,6 +20,10 @@ namespace Client
 
 		sceneData["Type"] = "Scene";
 
+		sceneData["Name"] = p_scene->GetName();
+
+		//todo parse local entities
+
 		return sceneData;
 	}
 
@@ -36,12 +40,16 @@ namespace Client
 		if (GetParameterFromJsonObject(p_data, "Type", "Null") != "Scene")
 		{
 #ifdef _DEBUG
-			Debug::LogWarning("[SceneParser] Try to parse an Scene, but type is invalid");
+			Debug::LogWarning("[SceneParser] Try to parse a Scene, but type is invalid");
 #endif
 			return nullptr;
 		}
 
 		SceneBuilder builder;
+
+		builder.SetName(GetParameterFromJsonObject(p_data, "Name", "Default"));
+
+		//todo parse local entities
 
 		builder.Build();
 	}
