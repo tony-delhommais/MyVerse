@@ -20,9 +20,9 @@
 
 #include "Client/Core/SceneManagerCore.h"
 
-#include "Client/Ressource/Shader.h"
+#include "Client/Ressources/Shader/Shader.h"
 
-#include "Client/Factories/ScriptFactory.h"
+#include "Client/Components/Script/ScriptFactory.h"
 
 #ifdef _DEBUG
 #include "Client/Common/Debug.h"

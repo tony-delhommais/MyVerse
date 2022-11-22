@@ -7,7 +7,7 @@
 
 #include "Client/Utils/Utils.h"
 
-#include "Client/Ressource/Scene.h"
+#include "Client/Ressources/Scene/Scene.h"
 
 namespace Client
 {

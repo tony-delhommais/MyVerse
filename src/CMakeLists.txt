@@ -5,13 +5,6 @@ set(CLIENT_SOURCES
 	Client/Area/CircleArea.cpp
 	Client/Area/OrientationFixedRectangleArea.cpp
 
-	Client/Builders/CameraBuilder.cpp
-	Client/Builders/EntityBuilder.cpp
-	Client/Builders/MaterialBuilder.cpp
-	Client/Builders/MeshRendererBuilder.cpp
-	Client/Builders/SceneBuilder.cpp
-	Client/Builders/TransformBuilder.cpp
-
 	Client/Common/Application.cpp
 	Client/Common/AssetRepositoryAnalyzer.cpp
 	Client/Common/Clock.cpp
@@ -20,43 +13,57 @@ set(CLIENT_SOURCES
 	Client/Common/RessourceManager.cpp
 	Client/Common/SceneManager.cpp
 	
-	Client/Components/Camera.cpp
+	Client/Components/Camera/Camera.cpp
+	Client/Components/Camera/CameraBuilder.cpp
+	Client/Components/Camera/CameraParser.cpp
+
+	Client/Components/MeshRenderer/MeshRenderer.cpp
+	Client/Components/MeshRenderer/MeshRendererBuilder.cpp
+	Client/Components/MeshRenderer/MeshRendererParser.cpp
+
+	Client/Components/Script/Script.cpp
+	Client/Components/Script/ScriptFactory.cpp
+
+	Client/Components/Transform/Transform.cpp
+	Client/Components/Transform/TransformBuilder.cpp
+	Client/Components/Transform/TransformParser.cpp
+
 	Client/Components/Component.cpp
-	Client/Components/MeshRenderer.cpp
-	Client/Components/Script.cpp
-	Client/Components/Transform.cpp
 
 	Client/Core/ApplicationCore.cpp
 	Client/Core/InputCore.cpp
 	Client/Core/RessourceManagerCore.cpp
 	Client/Core/SceneManagerCore.cpp
 	
+	Client/Entity/EntityQuadTree/EntityQuadTree.cpp
+	
 	Client/Entity/Entity.cpp
-	Client/Entity/EntityQuadTree.cpp
-
-	Client/Factories/ScriptFactory.cpp
+	Client/Entity/EntityBuilder.cpp
+	Client/Entity/EntityParser.cpp
 
 	Client/GameScripts/Controllers/CameraController.cpp
 	Client/GameScripts/Controllers/PlayerController.cpp
+
 	Client/GameScripts/GameSettings.cpp
 	Client/GameScripts/Rotation.cpp
 	Client/GameScripts/SpawnTest.cpp
+	
+	Client/Ressources/Material/Material.cpp
+	Client/Ressources/Material/MaterialBuilder.cpp
+	Client/Ressources/Material/MaterialParser.cpp
+	
+	Client/Ressources/Mesh/Mesh.cpp
+	
+	Client/Ressources/Prefab/Prefab.cpp
 
-	Client/Parser/CameraParser.cpp
-	Client/Parser/EntityParser.cpp
-	Client/Parser/MaterialParser.cpp
-	Client/Parser/MeshRendererParser.cpp
-	Client/Parser/SceneParser.cpp
-	Client/Parser/TransformParser.cpp
+	Client/Ressources/Scene/Scene.cpp
 
-	Client/Ressource/Terrain/Chunck.cpp
-	Client/Ressource/Terrain/Terrain.cpp
-	Client/Ressource/Material.cpp
-	Client/Ressource/Mesh.cpp
-	Client/Ressource/Prefab.cpp
-	Client/Ressource/Scene.cpp
-	Client/Ressource/Shader.cpp
-	Client/Ressource/Texture.cpp
+	Client/Ressources/Shader/Shader.cpp
+
+	Client/Ressources/Terrain/Chunck.cpp
+	Client/Ressources/Terrain/Terrain.cpp
+
+	Client/Ressources/Texture/Texture.cpp
 
 	Client/Utils/JsonUtils.cpp
 	Client/Utils/MathUtils.cpp

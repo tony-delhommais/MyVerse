@@ -13,9 +13,9 @@
 
 #include "Client/Entity/Entity.h"
 
-#include "Client/Ressource/Scene.h"
+#include "Client/Ressources/Scene/Scene.h"
 
-#include "Client/Factories/ScriptFactory.h"
+#include "Client/Components/Script/ScriptFactory.h"
 
 #include "Client/Common/Debug.h"
 

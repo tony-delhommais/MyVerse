@@ -6,10 +6,10 @@
 
 #include "Client/Core/ApplicationCore.h"
 
-#include "Client/Parser/MaterialParser.h"
-#include "Client/Ressource/Mesh.h"
-#include "Client/Ressource/Prefab.h"
-#include "Client/Ressource/Texture.h"
+#include "Client/Ressources/Material/MaterialParser.h"
+#include "Client/Ressources/Mesh/Mesh.h"
+#include "Client/Ressources/Prefab/Prefab.h"
+#include "Client/Ressources/Texture/Texture.h"
 
 #ifdef _DEBUG
 #include "Client/Common/Debug.h"

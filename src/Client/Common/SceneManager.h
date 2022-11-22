@@ -5,7 +5,7 @@
 #ifndef MYVERSE_SCENE_MANAGER_H
 #define MYVERSE_SCENE_MANAGER_H
 
-#include "Client/Ressource/Scene.h"
+#include "Client/Ressources/Scene/Scene.h"
 
 namespace Client
 {

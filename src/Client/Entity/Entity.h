@@ -12,13 +12,13 @@
 #include "Client/Common/SceneManager.h"
 #include "Client/Common/RessourceManager.h"
 
-#include "Client/Ressource/Prefab.h"
+#include "Client/Ressources/Prefab/Prefab.h"
 
-#include "Client/Components/Transform.h"
-#include "Client/Components/Camera.h"
-#include "Client/Components/MeshRenderer.h"
+#include "Client/Components/Transform/Transform.h"
+#include "Client/Components/Camera/Camera.h"
+#include "Client/Components/MeshRenderer/MeshRenderer.h"
 
-#include "Client/Factories/ScriptFactory.h"
+#include "Client/Components/Script/ScriptFactory.h"
 
 #include "Client/Entity/EntityExecutionState.h"
 
