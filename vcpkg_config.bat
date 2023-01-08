@@ -1,0 +1,9 @@
+vcpkg integrate install
+vcpkg install glad[gl-api-32]:x64-windows
+vcpkg install glfw3:x64-windows
+vcpkg install glm:x64-windows
+vcpkg install grpc:x64-windows
+vcpkg install nlohmann-json:x64-windows
+vcpkg install tinyobjloader:x64-windows
+vcpkg install stb:x64-windows
+vcpkg install stduuid:x64-windows
