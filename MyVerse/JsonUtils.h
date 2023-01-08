@@ -17,6 +17,7 @@ namespace Client
 	typedef nlohmann::json JsonObject;
 
 	JsonObject LoadJsonFile(const std::filesystem::path& p_jsonFilePath);
+	bool WriteJsonFile(const std::filesystem::path& p_jsonFilePath, JsonObject& p_data);
 
 	int GetParameterFromJsonObject(JsonObject& p_jsonObject, const char* p_parameter, int p_default);
 	int GetParameterFromJsonObject(JsonObject& p_jsonObject, const std::string& p_parameter, int p_default);

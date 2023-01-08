@@ -5,9 +5,7 @@
 #ifndef MYVERSE_MATERIAL_H
 #define MYVERSE_MATERIAL_H
 
-#include "JsonUtils.h"
 #include "MathUtils.h"
-#include "GraphicsUtils.h"
 
 #include "Texture.h"
 
@@ -23,14 +21,26 @@ namespace Client
 	class Material
 	{
 	public:
-		Material() = default;
+		Material(bool p_useSolidColor, const glm::vec3& p_solidColor, bool p_invertTexture, std::shared_ptr<Texture> p_diffuseTexture);
 		~Material() = default;
 
 	public:
-		static std::shared_ptr<Material> Load(const std::filesystem::path& p_path);
+		bool IsUsingSolidColor();
+		glm::vec3 GetSolidColor();
+		bool IsInvertingTextures();
+		//todo get diffuse texture
 
+	public:
 		void Use();
 		void Unuse();
+
+	public:
+		static bool DEFAULT_USE_SOLID_COLOR();
+		static glm::vec3 DEFAULT_SOLID_COLOR();
+
+		static bool DEFAULT_INVERT_TEXTURE();
+
+		static std::shared_ptr<Texture> DEFAULT_DIFFUSE_TEXTURE();
 
 	private:
 		bool m_useSolidColor = true;
@@ -38,8 +48,6 @@ namespace Client
 
 		bool m_invertTextures = true;
 
-		bool m_isDiffuseTextureSet = false;
-		uuids::uuid m_diffuseTextureUuid;
 		std::shared_ptr<Texture> m_diffuseTexture = nullptr;
 	};
 

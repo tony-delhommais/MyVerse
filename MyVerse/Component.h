@@ -11,20 +11,32 @@
 namespace Client
 {
 
+	enum ComponentType
+	{
+		TRANSFORM,
+		CAMERA,
+		MESH_RENDERER,
+		SCRIPT
+	};
+
 	class Entity;
 
 	class Component
 	{
 	public:
-		Component() = default;
+		Component(ComponentType p_componentType, std::shared_ptr<Entity> p_entity);
 		virtual ~Component() = default;
 
 	public:
+		ComponentType GetComponentType();
+
 		void SetEntity(std::shared_ptr<Entity> p_entity);
 		std::shared_ptr<Entity> GetEntity();
 
 	private:
-		std::shared_ptr<Entity> m_entity = nullptr;
+		ComponentType m_componentType;
+
+		std::shared_ptr<Entity> m_entity;
 	};
 
 } // Client

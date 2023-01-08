@@ -43,7 +43,7 @@ void PlayerController::Update(float p_deltaTime)
 
 	//Debug::LogInfo(std::to_string(playerRotationVelocity));
 
-	GetEntity()->RotateEuler(glm::vec3(0.0f, playerRotationVelocity, 0.0f) * p_deltaTime);
+	GetEntity()->GetTransform()->RotateEuler(glm::vec3(0.0f, playerRotationVelocity, 0.0f) * p_deltaTime);
 	////////// Rotation //////////
 
 	////////// Translation //////////
@@ -59,7 +59,7 @@ void PlayerController::Update(float p_deltaTime)
 
 	playerVelocity = Math::Lerp(playerVelocity, previousTargetDirectionalSpeed, lerpUpdateTime);
 
-	GetEntity()->Translate(GetEntity()->Forward() * playerVelocity * p_deltaTime);
+	GetEntity()->GetTransform()->Translate(GetEntity()->GetTransform()->Forward() * playerVelocity * p_deltaTime);
 	////////// Translation //////////
 }
 

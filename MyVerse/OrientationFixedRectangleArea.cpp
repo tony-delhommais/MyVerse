@@ -29,7 +29,7 @@ namespace Client
 
 	bool OrientationFixedRectangleArea::IntersectWithEntity(std::shared_ptr<Entity> p_entity)
 	{
-		auto entityPosition = p_entity->GetModelPosition();
+		auto entityPosition = p_entity->GetTransform()->GetModelPosition();
 
 		return entityPosition.x >= m_topLeftX &&
 			entityPosition.x <= m_bottomRightX &&

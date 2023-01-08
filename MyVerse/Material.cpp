@@ -5,39 +5,33 @@
 #include "Material.h"
 #include "Shader.h"
 
-#include "RessourceManager.h"
-
 #include "ApplicationCore.h"
 
 namespace Client
 {
 
-	std::shared_ptr<Material> Material::Load(const std::filesystem::path& p_path)
+	Material::Material(bool p_useSolidColor, const glm::vec3& p_solidColor, bool p_invertTexture, std::shared_ptr<Texture> p_diffuseTexture) :
+		m_useSolidColor(p_useSolidColor),
+		m_solidColor(p_solidColor),
+		m_invertTextures(p_invertTexture),
+		m_diffuseTexture(p_diffuseTexture)
 	{
-		JsonObject materialStruct = LoadJsonFile(p_path);
 
-		if (materialStruct.empty()) return nullptr;
+	}
 
-		if (GetParameterFromJsonObject(materialStruct, "Type", "Null") != "Material") return nullptr;
+	bool Material::IsUsingSolidColor()
+	{
+		return m_useSolidColor;
+	}
 
-		auto material = std::make_shared<Material>();
+	glm::vec3 Material::GetSolidColor()
+	{
+		return m_solidColor;
+	}
 
-		material->m_useSolidColor = GetParameterFromJsonObject(materialStruct, "UseSolidColor", material->m_useSolidColor);
-
-		auto solidColor = GetParameterFromJsonObject(materialStruct, "SolidColor", true, false);
-
-		if (solidColor != materialStruct && solidColor.size() == 3 && solidColor[0].is_number_float()) material->m_solidColor = glm::vec3(solidColor[0], solidColor[1], solidColor[2]);
-
-		material->m_invertTextures = GetParameterFromJsonObject(materialStruct, "InvertTextures", material->m_invertTextures);
-
-		std::string diffuseTextureUuid = GetParameterFromJsonObject(materialStruct, "DiffuseTexture", "Null");
-		if (diffuseTextureUuid != "Null")
-		{
-			material->m_diffuseTextureUuid = uuids::uuid::from_string(diffuseTextureUuid).value();
-			material->m_isDiffuseTextureSet = true;
-		}
-
-		return material;
+	bool Material::IsInvertingTextures()
+	{
+		return m_invertTextures;
 	}
 
 	void Material::Use()
@@ -56,10 +50,6 @@ namespace Client
 			{
 				m_diffuseTexture->Use();
 			}
-			else if (m_isDiffuseTextureSet)
-			{
-				m_diffuseTexture = RessourceManager::FindTexture(m_diffuseTextureUuid);
-			}
 		}
 	}
 
@@ -67,7 +57,27 @@ namespace Client
 	{
 		ApplicationCore::instance().GetActiveShader()->SetUserUniform(EnumUser::USE_SOLID_COLOR, true);
 
-		ApplicationCore::instance().GetActiveShader()->SetUserUniform(EnumUser::SOLID_COLOR, glm::vec3(0.95f));
+		ApplicationCore::instance().GetActiveShader()->SetUserUniform(EnumUser::SOLID_COLOR, Material::DEFAULT_SOLID_COLOR());
+	}
+
+	bool Material::DEFAULT_USE_SOLID_COLOR()
+	{
+		return true;
+	}
+
+	glm::vec3 Material::DEFAULT_SOLID_COLOR()
+	{
+		return glm::vec3(0.95f);
+	}
+
+	bool Material::DEFAULT_INVERT_TEXTURE()
+	{
+		return true;
+	}
+
+	std::shared_ptr<Texture> Material::DEFAULT_DIFFUSE_TEXTURE()
+	{
+		return nullptr;
 	}
 
 } // Client

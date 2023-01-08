@@ -26,7 +26,7 @@ namespace Client
 	public:
 		static std::shared_ptr<Prefab> Load(const uuids::uuid& p_uuid, const std::filesystem::path& p_path);
 
-		std::shared_ptr<Entity> InstantiateNew();
+		//std::shared_ptr<Entity> InstantiateNew();
 
 	private:
 		uuids::uuid m_prefabUuid;

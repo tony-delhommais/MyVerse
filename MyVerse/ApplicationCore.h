@@ -18,7 +18,8 @@
 #include "Clock.h"
 #include "Input.h"
 
-#include "Scene.h"
+#include "SceneManagerCore.h"
+
 #include "Shader.h"
 
 #include "ScriptFactory.h"

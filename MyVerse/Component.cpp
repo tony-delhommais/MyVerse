@@ -7,6 +7,18 @@
 namespace Client
 {
 
+	Component::Component(ComponentType p_componentType, std::shared_ptr<Entity> p_entity) :
+		m_componentType(p_componentType),
+		m_entity(p_entity)
+	{
+
+	}
+
+	ComponentType Component::GetComponentType()
+	{
+		return m_componentType;
+	}
+
 	void Component::SetEntity(std::shared_ptr<Entity> p_entity)
 	{
 		m_entity = p_entity;

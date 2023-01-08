@@ -4,13 +4,7 @@
 
 #include "Camera.h"
 
-#include "EntityFactory.h"
-
-#include "ApplicationCore.h"
-
-#include "Shader.h"
-
-#include "ScriptFactory.h"
+#include "Entity.h"
 
 #ifdef _DEBUG
 #include "Debug.h"
@@ -19,14 +13,27 @@
 namespace Client
 {
 
-	Camera::Camera()
+	Camera::Camera(std::shared_ptr<Entity> p_entity, float p_fov, const glm::vec2& p_nearFar) :
+		Component(ComponentType::CAMERA, p_entity),
+		m_fov(p_fov),
+		m_nearFar(p_nearFar)
 	{
 		UpdateProjectionMatrix();
 	}
 
+	float Camera::GetFov()
+	{
+		return m_fov;
+	}
+
+	glm::vec2 Camera::GetNearFar()
+	{
+		return m_nearFar;
+	}
+
 	glm::mat4 Camera::GetViewMatrix()
 	{
-		return glm::inverse(GetModelMatrix());
+		return glm::inverse(GetEntity()->GetTransform()->GetModelMatrix());
 	}
 
 	glm::mat4 Camera::GetProjectionMatrix()
@@ -44,37 +51,19 @@ namespace Client
 		m_projectionMatrix = glm::perspective(
 			glm::radians(m_fov),
 			16.0f / 9.0f,
-			m_nearPlan,
-			m_farPlan
+			m_nearFar[0],
+			m_nearFar[1]
 		);
 	}
 
-	bool Camera::s_isCameraMakerRegistered = EntityFactory::instance().Register("Camera", [](JsonObject& p_entityParameters) -> std::shared_ptr<Entity> {
-		auto camera = std::make_shared<Camera>();
+	float Camera::DEFAULT_FOV()
+	{
+		return 60.0f;
+	}
 
-		camera->SetTag("MainCamera");
-
-		camera->m_fov = GetParameterFromJsonObject(p_entityParameters, "Fov", camera->m_fov);
-		camera->m_nearPlan = GetParameterFromJsonObject(p_entityParameters, "Near", camera->m_nearPlan);
-		camera->m_farPlan = GetParameterFromJsonObject(p_entityParameters, "Far", camera->m_farPlan);
-
-		camera->UpdateProjectionMatrix();
-
-		auto& cameraControllerScriptData = GetParameterFromJsonObject(p_entityParameters, "CameraControllerScript", false, true);
-		if (cameraControllerScriptData != p_entityParameters)
-		{
-			auto cameraControllerScript = ScriptFactory::instance().Make(cameraControllerScriptData);
-
-			camera->SetScript(cameraControllerScript);
-		}
-#ifdef _DEBUG
-		else
-		{
-			Debug::LogWarning("[Camera] No Camera Controller Script set!");
-		}
-#endif
-
-		return camera;
-	});
+	glm::vec2 Camera::DEFAULT_NEAR_FAR()
+	{
+		return glm::vec2(0.01f, 100.0f);
+	}
 
 } // Client

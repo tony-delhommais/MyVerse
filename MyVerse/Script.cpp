@@ -4,12 +4,14 @@
 
 #include "Script.h"
 
-#ifdef _DEBUG
-#include "Debug.h"
-#endif
-
 namespace Client
 {
+
+	Script::Script() :
+		Component(ComponentType::SCRIPT, nullptr)
+	{
+
+	}
 
 	void Script::Awake() {}
 

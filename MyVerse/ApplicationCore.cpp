@@ -4,13 +4,8 @@
 
 #include "ApplicationCore.h"
 
-#include "EntityFactory.h"
-
 #include "InputCore.h"
 #include "RessourceManagerCore.h"
-
-#include "Camera.h"
-#include "Player.h"
 
 namespace Client
 {
@@ -56,7 +51,7 @@ namespace Client
 
 		auto cameraSettings = LoadJsonFile(std::filesystem::path("./ProjectSettings" + std::string("./CameraSettings.json")));
 
-		auto camera = EntityFactory::instance().Make<Camera>(cameraSettings);
+		/*auto camera = EntityFactory::instance().Make<Camera>(cameraSettings);
 		if (!camera)
 		{
 			return 0;
@@ -68,9 +63,9 @@ namespace Client
 		if (!player)
 		{
 			return 0;
-		}
+		}*/
 
-		Scene::instance().Initialize(std::filesystem::path("./ProjectSettings" + std::string("./SceneSettings.json")), camera, player);
+		//Scene::instance().Initialize(std::filesystem::path(PROJECT_SETTINGS_PATH + std::string("./SceneSettings.json")));
 
 		return 1;
 	}
@@ -89,7 +84,7 @@ namespace Client
 	void ApplicationCore::RenderLoop()
 	{
 #ifdef _DEBUG
-		long long debugUpdaterameCount = 0;
+		long long debugUpdateframeCount = 0;
 
 		long long deltaMainLoop = 0;
 		long long deltaRessourceManagementLoop = 0;
@@ -108,7 +103,7 @@ namespace Client
 			glfwPollEvents();
 
 			if (glfwWindowShouldClose(m_window))
-				Scene::instance().StopExecution();
+				SceneManagerCore::instance().GetLoadedScene()->StopExecution();
 
 #ifdef _DEBUG
 			Clock::instance().ResetStopWatch("RessourceManagementLoop");
@@ -121,7 +116,7 @@ namespace Client
 #ifdef _DEBUG
 			Clock::instance().ResetStopWatch("UpdateExecution");
 #endif
-			Scene::instance().UpdateExecution(secondDeltaTime);
+			SceneManagerCore::instance().GetLoadedScene()->UpdateExecution(secondDeltaTime);
 #ifdef _DEBUG
 			deltaUpdateExecution += Clock::instance().GetMicrosecondStopWatchTime("UpdateExecution");
 #endif
@@ -129,7 +124,7 @@ namespace Client
 #ifdef _DEBUG
 			Clock::instance().ResetStopWatch("Render");
 #endif
-			Scene::instance().Render();
+			SceneManagerCore::instance().GetLoadedScene()->Render();
 #ifdef _DEBUG
 			deltaRender += Clock::instance().GetMicrosecondStopWatchTime("Render");
 #endif
@@ -137,7 +132,7 @@ namespace Client
 			glfwSwapBuffers(m_window);
 
 #ifdef _DEBUG
-			debugUpdaterameCount++;
+			debugUpdateframeCount++;
 
 			deltaMainLoop += deltaTime;
 
@@ -145,19 +140,19 @@ namespace Client
 			{
 				Clock::instance().ResetStopWatch("MainLoopDebugUpdate");
 
-				if (debugUpdaterameCount != 0)
+				if (debugUpdateframeCount != 0)
 				{
-					float l_deltaMainLoop = (int)(deltaMainLoop / (float)(debugUpdaterameCount)) / 1000.0f;
-					float l_deltaRessourceManagementLoop = (int)(deltaRessourceManagementLoop / (float)(debugUpdaterameCount)) / 1000.0f;
-					float l_deltaUpdateExecution = (int)(deltaUpdateExecution / (float)(debugUpdaterameCount)) / 1000.0f;
-					float l_deltaRender = (int)(deltaRender / (float)(debugUpdaterameCount)) / 1000.0f;
+					float l_deltaMainLoop = (int)(deltaMainLoop / (float)(debugUpdateframeCount)) / 1000.0f;
+					float l_deltaRessourceManagementLoop = (int)(deltaRessourceManagementLoop / (float)(debugUpdateframeCount)) / 1000.0f;
+					float l_deltaUpdateExecution = (int)(deltaUpdateExecution / (float)(debugUpdateframeCount)) / 1000.0f;
+					float l_deltaRender = (int)(deltaRender / (float)(debugUpdateframeCount)) / 1000.0f;
 
-					float l_total = (int)((deltaRessourceManagementLoop + deltaUpdateExecution + deltaRender) / (float)(debugUpdaterameCount)) / 1000.0f;
+					float l_total = (int)((deltaRessourceManagementLoop + deltaUpdateExecution + deltaRender) / (float)(debugUpdateframeCount)) / 1000.0f;
 
 					std::cout << "\rFU: " << l_deltaMainLoop << "  ML: " << l_deltaRessourceManagementLoop << "  U: " << l_deltaUpdateExecution << "  R: " << l_deltaRender << "  TT: " << l_total << "                  ";
 				}
 
-				debugUpdaterameCount = 0;
+				debugUpdateframeCount = 0;
 
 				deltaMainLoop = 0;
 				deltaRessourceManagementLoop = 0;
@@ -166,7 +161,7 @@ namespace Client
 			}
 #endif
 
-		} while (!glfwWindowShouldClose(m_window) || !Scene::instance().IsStopped());
+		} while (!glfwWindowShouldClose(m_window) || !SceneManagerCore::instance().GetLoadedScene()->IsStopped());
 
 #ifdef _DEBUG
 		std::cout << std::endl;

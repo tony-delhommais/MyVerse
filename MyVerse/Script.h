@@ -15,7 +15,7 @@ namespace Client
 	class Script : public Component
 	{
 	public:
-		Script() = default;
+		Script();
 		virtual ~Script() = default;
 
 		virtual void Awake();

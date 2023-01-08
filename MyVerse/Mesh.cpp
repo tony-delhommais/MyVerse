@@ -99,7 +99,7 @@ namespace Client
 	std::shared_ptr<Mesh> Mesh::LoadFromChunckData(JsonObject& p_chunckData)
 	{
 		JsonObject meshData = GetParameterFromJsonObject(p_chunckData, "Land", true, false);
-		if(meshData == p_chunckData)
+		if (meshData == p_chunckData)
 			return nullptr;
 
 		auto mesh = std::make_shared<Mesh>();
@@ -207,7 +207,7 @@ namespace Client
 		glBindVertexArray(m_VAO_id);
 		glBindBuffer(GL_ARRAY_BUFFER, m_VBO_id);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO_id);
-		
+
 		OpenGLAttributesStride();
 
 		glBindVertexArray(0);

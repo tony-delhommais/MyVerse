@@ -18,9 +18,9 @@ void SpawnTest::Start()
 		{
 			for (int j = 0; j < y; j++)
 			{
-				auto newTest = prefab->InstantiateNew();
+				/*auto newTest = prefab->InstantiateNew();
 
-				newTest->SetPosition(glm::vec3(-((x - 1) / 2) + i * 1, 0.0, -((y - 1) / 2) + j * 1));
+				newTest->GetTransform()->SetPosition(glm::vec3(-((x - 1) / 2) + i * 1, 0.0, -((y - 1) / 2) + j * 1));
 
 				auto rotation = newTest->GetScript<Rotation>();
 
@@ -28,7 +28,7 @@ void SpawnTest::Start()
 				{
 					if((i + j) % 2 == 0) rotation->SetIndice(1.0f);
 					else rotation->SetIndice(-1.0f);
-				}
+				}*/
 			}
 		}
 	}

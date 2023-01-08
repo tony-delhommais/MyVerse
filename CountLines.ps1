@@ -1,4 +1,4 @@
-cd src
+cd MyVerse
 
 $Total = 0
 
